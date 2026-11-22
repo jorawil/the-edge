@@ -16,6 +16,11 @@ on:
         required: true
         default: "2026-10-01"
         type: string
+      season_types:
+        description: "ESPN season type IDs: 1=preseason, 2=regular, 3=postseason"
+        required: true
+        default: "2"
+        type: string
       end_date:
         description: "End date (YYYY-MM-DD)"
         required: true
@@ -49,8 +54,9 @@ jobs:
           SPORT: ${{ inputs.sport }}
           START_DATE: ${{ inputs.start_date }}
           END_DATE: ${{ inputs.end_date }}
+          SEASON_TYPES: ${{ inputs.season_types }}
         run: |
-          python scripts/backfill_espn.py "$SPORT" --start "$START_DATE" --end "$END_DATE"
+          python scripts/backfill_espn.py "$SPORT" --start "$START_DATE" --end "$END_DATE" --season-types "$SEASON_TYPES"
 
       - name: Upload historical data
         if: always()
