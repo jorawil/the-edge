@@ -2,7 +2,13 @@
 import json
 from pathlib import Path
 
-from scripts.compare_projection_methods import run_comparison
+import importlib.util
+
+_SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "compare_projection_methods.py"
+_SPEC = importlib.util.spec_from_file_location("compare_projection_methods", _SCRIPT)
+_MODULE = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(_MODULE)
+run_comparison = _MODULE.run_comparison
 
 
 def _write(root: Path, years=None):
