@@ -7,6 +7,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
       - name: Check out repository
@@ -15,15 +19,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest numpy
+          # nba_api is only needed for the optional recent-average helper and is
+          # not imported by the test suite. --no-deps keeps CI off that download.
+          pip install pytest numpy requests
+          pip install -e . --no-deps
 
       - name: Run tests
-        run: |
-          mv __init__.py __init__.py.disabled
-          trap 'mv __init__.py.disabled __init__.py' EXIT
-          pytest -q
+        run: pytest -q

@@ -14,9 +14,15 @@ dependencies = [
   "nba_api>=1.4",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
 [project.scripts]
 betting-model = "betting_model.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["betting_model*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

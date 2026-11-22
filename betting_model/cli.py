@@ -1,4 +1,8 @@
-"""CLI: python -m betting_model.cli evaluate --props PATH"""
+"""CLI: python -m betting_model.cli evaluate --props PATH
+
+Writes ./out/edges_latest.json and ./out/edges_latest.md
+(the folder you run the command from).
+"""
 
 from __future__ import annotations
 
@@ -14,7 +18,8 @@ from .books import BOOKS
 from .sports import evaluate_prop
 
 ET = ZoneInfo("America/New_York")
-DEFAULT_OUT_DIR = Path("/workspace/betting_model/out")
+# Writes next to the directory you run the command from, not a hardcoded machine path.
+DEFAULT_OUT_DIR = Path.cwd() / "out"
 
 
 def _side_label(is_over: bool) -> str:
