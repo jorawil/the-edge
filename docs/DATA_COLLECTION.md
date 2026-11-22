@@ -52,6 +52,13 @@ A missing market stays missing. It is not graded as a loss. Two different values
 
 If the archived event id is not on ESPN, grading will use a game only when both teams and the start time (within two minutes) identify one event. Otherwise it stops.
 
+
+### Backfill season filtering
+
+`scripts/backfill_espn.py` defaults to ESPN season type `2` (regular season). Preseason (`1`), postseason (`3`), and events with missing/unrecognized season metadata are excluded by default. Each stored game records `season_year`, `season_type_id`, and `season_type_name`; the report lists excluded events under `skipped_season_type`.
+
+To include postseason deliberately, pass `--season-types 2,3`. To collect preseason only, pass `--season-types 1`. The GitHub Actions backfill workflow exposes the same `season_types` input and defaults it to `2`. Do not combine preseason, regular season, and postseason in one training sample without explicitly deciding that the model should learn across those competition phases.
+
 ## Commands
 
 ```bash
