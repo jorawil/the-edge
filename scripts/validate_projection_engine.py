@@ -56,6 +56,8 @@ def validate(
         raise ValueError(f"unsupported sport: {sport}")
     if not windows or any(value < 1 for value in windows):
         raise ValueError("windows must be positive integers")
+    if not isinstance(min_history, int) or isinstance(min_history, bool) or min_history < 3:
+        raise ValueError("min_history must be at least 3 for the projection engine")
     if not shrinkage_values or any(not math.isfinite(value) or value < 0 for value in shrinkage_values):
         raise ValueError("shrinkage values must be finite and non-negative")
 
