@@ -137,11 +137,37 @@ ESPN box scores are not in this repository. Rebuild them, when you want, from th
 python scripts/backfill_espn.py nba --start 2026-10-24 --end 2026-10-31
 ```
 
-With no dates, the script uses October 24–31, 2026, which is the original window. It is safe to rerun: events that already have players are skipped. A missing stat is not stored as zero.
+With no dates, the script uses October 24–31, 2026, which is the original window. It is safe to rerun: a complete game is skipped, and an incomplete box is fetched again. A missing stat is not stored as zero.
 
 Calibration does **not** run off those box scores alone. It needs a projection that was saved before the game. Nothing in the current files is that archive, so there is no calibrated sigma and no claim that the model wins money.
 
 The functions are `betting_model.calibration` and `betting_model.backtest`. They refuse a projection timestamp that is not before the game, they do not edit an old snapshot, and they do not change `SIGMA_DEFAULTS`.
+
+## Pregame archive
+
+The archive is a local SQLite file of evaluations saved **before** the game starts. It is the record you will need later to see whether projections and edges were any good. Saving a row does not make the model calibrated, and it does not make a Screen pass into Qualified.
+
+What is saved, when you supply it: the player, event, market, side, line, your projection and where it came from, the price and when you copied it, the legacy edge, the no-vig numbers when both sides were present, and the screening grade. What you do not supply is stored as empty, not as zero. A FanDuel price is not marked as a verified Indiana price unless you also give `region`, `region_source`, and `region_verified: true`.
+
+Timestamps are stored in UTC. The original text you typed is kept beside them. `archived_at` is the clock time of the save. You cannot set it. The projection time must be before the game, not after the save, and not more than six hours before the save. That blocks backdating a projection after you already know the result. If the game has started, the save is refused.
+
+The same observation saved twice is rejected and the first row is left as it was. A later line or price is a new snapshot, so 24.5 at -110 and 25.5 at -115 are two records.
+
+Results are attached afterward. They never edit the snapshot. A result time before kickoff is refused. A missing stat stays missing. A did-not-play, postponement, or cancellation is Void, not zero. An incomplete or suspended game stays Unknown until it is final. If a file contains both the Over and the Under for the same player, game, line, and book at nearly the same time, the no-vig price is stored. Otherwise that field stays empty. A whole-number counting stat that lands on the line is a Push. A second result is added beside the first; it does not delete it. A correction note works the same way: the original number stays, and the note sits next to it.
+
+```bash
+python -m betting_model.cli archive add --props pregame.json
+python -m betting_model.cli archive list --player "Example Player"
+python -m betting_model.cli archive show --id <archive-id>
+python -m betting_model.cli archive attach-result --id <archive-id> \
+  --game-status final --actual 18 --source "ESPN box" \
+  --retrieved-at 2026-11-24T05:00:00Z
+python -m betting_model.cli archive incomplete
+python -m betting_model.cli archive export --out archive.json
+python -m betting_model.cli archive stats
+```
+
+The default file is `data/pregame_archive.sqlite`. Pass `--db` to use another path. `pregame.json` must include `event_id`, `event_start`, `projection_at`, `projection_source`, `retrieved_at`, and `book`, plus the usual prop fields. There is no historical archive in this repository. Nothing here was reconstructed from old averages.
 
 ## What this version does not do
 

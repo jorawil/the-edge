@@ -15,11 +15,24 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from .archive import (
+    add_correction,
+    archive_many,
+    archive_stats,
+    attach_result,
+    default_db_path,
+    export_archive,
+    get_snapshot,
+    import_archive,
+    list_snapshots,
+    list_ungraded,
+    load_props_file,
+)
 from .books import BOOKS
 from .pairing import attach_opposites
 from .parlays import evaluate_parlay
 from .reports import group_rows, plain_header
-from .core import parse_side
+from .core import parse_finite_number, parse_side
 from .sports import evaluate_prop
 from .version import MODEL_VERSION
 
@@ -244,6 +257,133 @@ def _parlay_command(args: argparse.Namespace) -> int:
     return 0
 
 
+def _add_archive_parser(sub: argparse._SubParsersAction) -> None:
+    archive = sub.add_parser("archive", help="Save pregame evaluations and attach results later")
+    commands = archive.add_subparsers(dest="archive_cmd", required=True)
+    add = commands.add_parser("add", help="Archive props from a JSON file before the game starts")
+    add.add_argument("--props", required=True, type=Path)
+    add.add_argument("--db", type=Path, default=None)
+    show = commands.add_parser("show", help="Show one archived snapshot, its results, and corrections")
+    show.add_argument("--id", required=True)
+    show.add_argument("--db", type=Path, default=None)
+    listed = commands.add_parser("list", help="List snapshots for a player, game, or date")
+    listed.add_argument("--db", type=Path, default=None)
+    listed.add_argument("--player", default=None)
+    listed.add_argument("--event", default=None)
+    listed.add_argument("--sport", default=None)
+    listed.add_argument("--market", default=None)
+    listed.add_argument("--book", default=None)
+    listed.add_argument("--date", default=None, help="Event date in UTC, YYYY-MM-DD")
+    attach = commands.add_parser("attach-result", help="Append a final result without editing the snapshot")
+    attach.add_argument("--id", required=True)
+    attach.add_argument("--db", type=Path, default=None)
+    attach.add_argument("--game-status", required=True)
+    attach.add_argument("--source", required=True)
+    attach.add_argument("--retrieved-at", required=True)
+    attach.add_argument("--actual", default=None, help="Omit when the stat is missing. 0 is a real zero.")
+    incomplete = commands.add_parser("incomplete", help="List snapshots that are not graded Win, Loss, Push, or Void")
+    incomplete.add_argument("--db", type=Path, default=None)
+    exported = commands.add_parser("export", help="Write a JSON or CSV copy of the archive")
+    exported.add_argument("--db", type=Path, default=None)
+    exported.add_argument("--out", required=True, type=Path)
+    exported.add_argument("--format", default="json", choices=("json", "csv"))
+    imported = commands.add_parser("import", help="Restore an exported JSON archive without overwriting rows")
+    imported.add_argument("--db", type=Path, default=None)
+    imported.add_argument("--from", dest="source", required=True, type=Path)
+    correct = commands.add_parser("correct", help="Record a correction beside a snapshot; the original stays")
+    correct.add_argument("--id", required=True)
+    correct.add_argument("--db", type=Path, default=None)
+    correct.add_argument("--field", required=True)
+    correct.add_argument("--value", required=True)
+    correct.add_argument("--reason", required=True)
+    correct.add_argument("--source", default=None)
+    stats = commands.add_parser("stats", help="Counts only. This does not claim the model is accurate.")
+    stats.add_argument("--db", type=Path, default=None)
+
+
+def _db_path(args: argparse.Namespace) -> Path:
+    return args.db if args.db is not None else default_db_path()
+
+
+def _archive_command(args: argparse.Namespace) -> int:
+    database = _db_path(args)
+    if args.archive_cmd == "add":
+        try:
+            props = load_props_file(args.props)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"Could not read props: {exc}", file=sys.stderr)
+            return 2
+        results = archive_many(database, props)
+        stored = sum(1 for item in results if item.get("stored"))
+        print(json.dumps({"stored": stored, "results": results}, indent=2))
+        return 0 if stored or not results else 2
+    if args.archive_cmd == "show":
+        snapshot = get_snapshot(database, args.id)
+        if snapshot is None:
+            print("No snapshot with that id.", file=sys.stderr)
+            return 2
+        print(json.dumps(snapshot, indent=2))
+        return 0
+    if args.archive_cmd == "list":
+        rows = list_snapshots(
+            database,
+            sport=args.sport,
+            player=args.player,
+            event_id=args.event,
+            market=args.market,
+            sportsbook=args.book,
+            event_date=args.date,
+        )
+        print(json.dumps(rows, indent=2))
+        return 0
+    if args.archive_cmd == "attach-result":
+        provided = args.actual is not None
+        actual = None
+        if provided:
+            try:
+                actual = parse_finite_number(args.actual, "actual")
+            except ValueError as exc:
+                print(json.dumps({"ok": False, "reason": str(exc)}))
+                return 2
+        result = attach_result(
+            database,
+            args.id,
+            game_status=args.game_status,
+            result_source=args.source,
+            result_retrieved_at=args.retrieved_at,
+            actual=actual,
+            actual_provided=provided,
+        )
+        print(json.dumps(result, indent=2))
+        return 0 if result.get("ok") else 2
+    if args.archive_cmd == "incomplete":
+        print(json.dumps(list_ungraded(database), indent=2))
+        return 0
+    if args.archive_cmd == "export":
+        result = export_archive(database, args.out, file_format=args.format)
+        print(json.dumps(result, indent=2))
+        return 0 if result.get("ok") else 2
+    if args.archive_cmd == "import":
+        result = import_archive(database, args.source)
+        print(json.dumps(result, indent=2))
+        return 0 if result.get("ok") else 2
+    if args.archive_cmd == "correct":
+        result = add_correction(
+            database,
+            args.id,
+            field_name=args.field,
+            corrected_value=args.value,
+            reason=args.reason,
+            source=args.source,
+        )
+        print(json.dumps(result, indent=2))
+        return 0 if result.get("ok") else 2
+    if args.archive_cmd == "stats":
+        print(json.dumps(archive_stats(database), indent=2))
+        return 0
+    return 2
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="betting_model", description="Probability-first edge screening")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -269,9 +409,13 @@ def main(argv: list[str] | None = None) -> int:
     parlay.add_argument("--ticket", required=True, type=Path, help="JSON with legs and optional quoted_american_odds")
     parlay.add_argument("--out", type=Path, default=None, help="Output directory. Default is ./out")
 
+    _add_archive_parser(sub)
+
     args = parser.parse_args(argv)
     if args.cmd == "parlay":
         return _parlay_command(args)
+    if args.cmd == "archive":
+        return _archive_command(args)
     if args.cmd == "evaluate":
         try:
             save_as = safe_save_name(args.save_as) if args.save_as else None
