@@ -86,3 +86,11 @@ python -m betting_model.cli archive analyze
 ## Environment
 
 `ODDS_API_KEY` is the only secret, and only for a live collect. ESPN does not need one. Nothing in this repository is a key.
+
+## Durable historical game-log storage
+
+The manual GitHub Actions workflow stores collected game logs on a separate `historical-data` branch. This keeps generated data out of the application source branch while preserving it across workflow runs. Each run first restores existing data from that branch, adds or repairs the requested date range, then commits the updated data and reports back to the branch. A backup artifact is also retained for 30 days.
+
+The repository is public, so the `historical-data` branch and its game logs are public too. These are historical sports results and player statistics. Do not put sportsbook credentials, personal account data, or API keys in this branch. The backfill uses ESPN's public scoreboard and box-score endpoints and does not need the Odds API secret.
+
+The workflow serializes runs to prevent two backfills from overwriting one another. Use the same date range again to repair incomplete records; complete records are skipped. The script's `EDGE_DATA_DIR` environment override lets the workflow keep its working data separate from the source checkout.
