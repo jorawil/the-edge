@@ -1,4 +1,10 @@
-"""Read-only calibration and projection report for the SQLite pregame archive.
+"""Calibration and projection report for the SQLite pregame archive.
+
+The report does not modify archived snapshots, results, or corrections.
+Opening an existing database uses the same connection as the other archive
+commands, and that connection can apply a pending schema migration. A missing
+file is not created. The operation is not strictly read-only when a migration
+is pending.
 
 The JSON helpers in ``calibration`` stay the scorer for that older snapshot
 file. This module does not archive a second copy and does not recompute a
@@ -8,8 +14,9 @@ on the snapshot and the settlement that was attached later.
 Conditional win probability is win / (win + loss). Pushes are left out of
 that score. Unconditional win, loss, and push probabilities are scored on
 their own, and expected value stays with those unconditional probabilities.
-Projection error is a third report. Markets and settlement types are not
-pooled into one calibration group.
+Projection error is a third report. Markets, settlement types, and archived
+model versions are not pooled into one calibration group. A snapshot with
+more than one result that nobody superseded is not scored.
 
 Events are ordered by kickoff and kept whole, so a later game cannot land in
 an earlier slice. Nothing in this module is fit on the train slice, and a
@@ -84,6 +91,12 @@ REASON_BAD_INPUT_TIME = "projection input timestamp is not a timestamp"
 REASON_EVENT_CONFLICT = "event start disagrees across snapshots for one event"
 REASON_CONFLICTING_ACTUALS = "conflicting actuals for one projection"
 REASON_RESULT_HISTORY = "the result history has no current result, so it was not scored"
+REASON_AMBIGUOUS = (
+    "more than one current result exists and none superseded the others, "
+    "so the snapshot was not scored"
+)
+# A blank or missing snapshot model_version. It must not join a real version.
+MODEL_VERSION_NOT_RECORDED = "not recorded"
 
 CONDITIONAL_DEFINITION = (
     "Conditional win probability, win / (win + loss), stored before the event. "
@@ -175,7 +188,9 @@ LIMITATIONS = [
     "A group below the minimum sample is shown with a warning. It is not evidence that the model is calibrated.",
     "Qualified is unchanged. This report does not lower the 3-point edge threshold and does not place a bet.",
     "Corrections are counted and are not applied. Superseded results are counted and are not scored.",
-    "Opening an existing archive applies the same pending schema migration as the other archive commands. Snapshot rows are not rewritten. A missing file is not created.",
+    "A snapshot with more than one result that nobody superseded is ambiguous. None of those results is scored.",
+    "Groups stay split by the model version stored on the snapshot. A missing version is labeled 'not recorded' and is not combined with a known version.",
+    "Archived snapshots, results, and corrections are not modified. Opening an existing database can apply a pending schema migration, the same way the other archive commands do, so this is not strictly read-only when a migration is pending. A missing file is not created.",
 ]
 
 
@@ -185,6 +200,16 @@ def _unique(items: list[str]) -> list[str]:
         if item not in seen:
             seen.append(item)
     return seen
+
+
+def _archived_model_version(value: object) -> str:
+    """Label stored on every scored row. Blank versions stay out of known ones."""
+    if value is None:
+        return MODEL_VERSION_NOT_RECORDED
+    text = str(value).strip()
+    if not text:
+        return MODEL_VERSION_NOT_RECORDED
+    return text
 
 
 def _number(value: object) -> float | None:
@@ -215,13 +240,15 @@ def _row_dict(row: sqlite3.Row) -> dict[str, Any]:
     return {key: row[key] for key in row.keys()}
 
 
-def select_current_result(results: list[dict[str, Any]]) -> tuple[dict[str, Any] | None, int, int]:
-    """Return the current result, how many older results were set aside, and extras.
+def select_current_result(
+    results: list[dict[str, Any]],
+) -> tuple[dict[str, Any] | None, int, int]:
+    """Return the one current result, the superseded count, and the live count.
 
-    This follows ``archive._current_result``. A result named by
-    ``supersedes_result_id`` is history. Among the rest, the latest
-    ``attached_at`` and then ``result_id`` is current. When every row is
-    history, nothing is guessed.
+    A result named by ``supersedes_result_id`` is history. Exactly one result
+    that nobody superseded is the current result. More than one such result
+    is ambiguous: nothing is chosen, including the row attached last. A cycle
+    where every row is history also returns no current result.
     """
     if not results:
         return None, 0, 0
@@ -230,10 +257,9 @@ def select_current_result(results: list[dict[str, Any]]) -> tuple[dict[str, Any]
     }
     history = [row for row in results if row.get("result_id") in superseded_ids]
     current = [row for row in results if row.get("result_id") not in superseded_ids]
-    if not current:
-        return None, len(history), 0
-    chosen = max(current, key=lambda row: (row.get("attached_at") or "", row.get("result_id") or ""))
-    return chosen, len(history), len(current) - 1
+    if len(current) == 1:
+        return current[0], len(history), 1
+    return None, len(history), len(current)
 
 
 def multiclass_brier(
@@ -581,6 +607,7 @@ def _normalize(
         "p_under": _number(snapshot.get("p_under")),
         "expected_value_per_unit": _number(snapshot.get("expected_value_per_unit")),
         "qualified": snapshot.get("qualified") == 1 or snapshot.get("qualified") is True,
+        "archived_model_version": _archived_model_version(snapshot.get("model_version")),
         "push_handling": _push_handling(snapshot),
         "settlement": settlement,
         "settlement_reason": settlement_reason,
@@ -628,6 +655,7 @@ def _projection_key(row: dict[str, Any]) -> tuple[Any, ...]:
         row.get("event_id"),
         _player_key(row),
         row.get("canonical_market"),
+        row.get("archived_model_version"),
         row.get("projection_created_at"),
         round(float(row["projected_value"]), 6),
     )
@@ -814,6 +842,7 @@ def _probability_group(
         "market": first["canonical_market"],
         "source_markets": sorted({str(row["market"]) for row in rows}),
         "line_family": first["line_family"],
+        "archived_model_version": first["archived_model_version"],
         "push_handling": sorted({row["push_handling"] or "not_stored" for row in rows}),
         "score_type": score_type,
         "probability_definition": definition,
@@ -870,6 +899,7 @@ def _projection_group(rows: list[dict[str, Any]], *, min_group: int) -> dict[str
         "sport": first["sport"],
         "market": first["canonical_market"],
         "source_markets": sorted({str(row["market"]) for row in rows}),
+        "archived_model_version": first["archived_model_version"],
         "definition": PROJECTION_DEFINITION,
         "sample_size": sample,
         "source_rows": sample + len(collapsed),
@@ -901,7 +931,16 @@ def _group_by(rows: list[dict[str, Any]], keyfn: Any, builder: Any) -> list[dict
 
 
 def _prob_key(row: dict[str, Any]) -> tuple[Any, ...]:
-    return (row.get("sport"), row.get("canonical_market"), row.get("line_family"))
+    return (
+        row.get("sport"),
+        row.get("canonical_market"),
+        row.get("line_family"),
+        row.get("archived_model_version"),
+    )
+
+
+def _projection_group_key(row: dict[str, Any]) -> tuple[Any, ...]:
+    return (row.get("sport"), row.get("canonical_market"), row.get("archived_model_version"))
 
 
 def _slice_report(
@@ -950,7 +989,7 @@ def _slice_report(
         ),
         "projection_groups": _group_by(
             kept,
-            lambda row: (row.get("sport"), row.get("canonical_market")),
+            _projection_group_key,
             lambda items: _projection_group(items, min_group=min_group),
         ),
     }
@@ -966,6 +1005,7 @@ def _ev_group(rows: list[dict[str, Any]], min_group: int) -> dict[str, Any]:
         "sport": first["sport"],
         "market": first["canonical_market"],
         "line_family": first["line_family"],
+        "archived_model_version": first["archived_model_version"],
         "sample_size": len(rows),
         "event_count": len(events),
         "mean_archived_expected_value_per_unit": _r6(_mean(values)),
@@ -1035,6 +1075,7 @@ def _enough(groups: list[dict[str, Any]], *, projection: bool) -> list[dict[str,
             "market": group["market"],
             "sample_size": group["sample_size"],
             "event_count": group["event_count"],
+            "archived_model_version": group.get("archived_model_version"),
         }
         if not projection:
             item["line_family"] = group["line_family"]
@@ -1177,7 +1218,8 @@ def _build(
         "profit_reason": PROFIT_REASON,
         "corrections_not_applied": meta["corrections"],
         "superseded_results_not_scored": meta["superseded"],
-        "additional_unsuperseded_results_not_scored": meta["extra_current"],
+        "ambiguous_snapshots": meta["ambiguous_snapshots"],
+        "additional_unsuperseded_results_not_scored": meta["ambiguous_results"],
         "orphan_results": meta["orphan_results"],
         "minimum_sample": {
             "per_group": min_group,
@@ -1212,7 +1254,8 @@ def _empty_meta() -> dict[str, Any]:
         "schema_version": None,
         "corrections": 0,
         "superseded": 0,
-        "extra_current": 0,
+        "ambiguous_snapshots": 0,
+        "ambiguous_results": 0,
         "orphan_results": 0,
     }
 
@@ -1240,20 +1283,29 @@ def _load(path: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     known = {row["archive_id"] for row in snapshots}
     records = []
     superseded = 0
-    extra = 0
+    ambiguous_snapshots = 0
+    ambiguous_results = 0
     for snapshot in snapshots:
         attached = by_archive.get(snapshot["archive_id"], [])
-        current, history, extra_here = select_current_result(attached)
+        current, history, live = select_current_result(attached)
         superseded += history
-        extra += extra_here
-        problem = REASON_RESULT_HISTORY if attached and current is None else None
+        if live > 1:
+            ambiguous_snapshots += 1
+            ambiguous_results += live
+            problem = REASON_AMBIGUOUS
+            current = None
+        elif attached and current is None:
+            problem = REASON_RESULT_HISTORY
+        else:
+            problem = None
         records.append(_normalize(snapshot, current, problem))
     meta = {
         "exists": True,
         "schema_version": version,
         "corrections": corrections,
         "superseded": superseded,
-        "extra_current": extra,
+        "ambiguous_snapshots": ambiguous_snapshots,
+        "ambiguous_results": ambiguous_results,
         "orphan_results": sum(1 for row in results if row["archive_id"] not in known),
     }
     return records, meta
@@ -1284,6 +1336,9 @@ def analyze_archive(
     min_bin_sample: int | None = None,
 ) -> dict[str, Any]:
     """Score one SQLite archive. A missing file is an empty report and is not created.
+
+    Archived snapshots, results, and corrections are not modified. Opening an
+    existing database can apply a pending schema migration.
 
     ``min_group_sample`` only changes the warning label. It does not claim the
     model is calibrated and it does not change Qualified. The command-line
@@ -1361,7 +1416,7 @@ def _metric_lines(groups: list[dict[str, Any]]) -> list[str]:
     for group in groups:
         family = str(group["line_family"]).replace("_", " ")
         lines.append(
-            f"**{group['sport']} {group['market']}** ({family}): "
+            f"**{group['sport']} {group['market']}** ({family}, model {group['archived_model_version']}): "
             f"sample size {group['sample_size']}, events {group['event_count']}, "
             f"predicted {_fmt(group['mean_predicted'])}, observed {_fmt(group['observed_rate'])}, "
             f"Brier {_fmt(group['brier_score'])}, log loss {_fmt(group['log_loss'])}."
@@ -1392,13 +1447,14 @@ def _projection_lines(groups: list[dict[str, Any]]) -> list[str]:
     if not groups:
         return ["_No scored projections in this slice._", ""]
     lines = [
-        "| Sport | Market | Sample size | Events | MAE | RMSE | Bias | Enough to read |",
-        "|---|---|---:|---:|---:|---:|---:|---|",
+        "| Sport | Market | Model version | Sample size | Events | MAE | RMSE | Bias | Enough to read |",
+        "|---|---|---|---:|---:|---:|---:|---:|---|",
     ]
     notes = []
     for group in groups:
         lines.append(
-            f"| {group['sport']} | {group['market']} | {group['sample_size']} | {group['event_count']} | "
+            f"| {group['sport']} | {group['market']} | {group['archived_model_version']} | "
+            f"{group['sample_size']} | {group['event_count']} | "
             f"{_fmt(group['mae'])} | {_fmt(group['rmse'])} | {_fmt(group['mean_signed_error'])} | "
             f"{'yes' if group['enough_to_evaluate'] else 'no'} |"
         )
@@ -1421,10 +1477,12 @@ def _market_lines(items: list[dict[str, Any]]) -> list[str]:
         return ["**none**."]
     lines = []
     for item in items:
+        version = item.get("archived_model_version")
+        version_text = f", model {version}" if version else ""
         family = item.get("line_family")
         suffix = f", {str(family).replace('_', ' ')}" if family else ""
         lines.append(
-            f"- {item['sport']} {item['market']}{suffix}: "
+            f"- {item['sport']} {item['market']}{suffix}{version_text}: "
             f"sample size {item['sample_size']}, events {item['event_count']}"
         )
     return lines
@@ -1500,7 +1558,9 @@ def render_markdown(report: dict[str, Any]) -> str:
             "This report did not change them.",
             f"- Corrections recorded and not applied: {report['corrections_not_applied']}.",
             f"- Superseded results not scored: {report['superseded_results_not_scored']}.",
-            f"- Extra current results not scored: {report['additional_unsuperseded_results_not_scored']}.",
+            f"- Snapshots with more than one current result, left unscored: {report['ambiguous_snapshots']}.",
+            f"- Current results on those snapshots, none of them scored: "
+            f"{report['additional_unsuperseded_results_not_scored']}.",
             "",
             coverage["settled_definition"],
             "",
@@ -1577,7 +1637,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         for group in expected["groups"]:
             family = str(group["line_family"]).replace("_", " ")
             lines.append(
-                f"**{group['sport']} {group['market']}** ({family}): "
+                f"**{group['sport']} {group['market']}** ({family}, model {group['archived_model_version']}): "
                 f"sample size {group['sample_size']}, events {group['event_count']}, "
                 f"mean archived expected value {_fmt(group['mean_archived_expected_value_per_unit'])}. "
                 "Not profit."

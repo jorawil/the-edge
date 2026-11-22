@@ -17,6 +17,7 @@ from betting_model.archive_analysis import (
     MIN_BIN_SAMPLE,
     MIN_CALIBRATION_CLAIM_EVENTS,
     MIN_GROUP_SAMPLE,
+    MODEL_VERSION_NOT_RECORDED,
     analyze_archive,
     describe_reliability,
     multiclass_brier,
@@ -28,6 +29,7 @@ from betting_model.books import BOOKS
 from betting_model.calibration import MIN_MARKET_SAMPLE, brier_score, log_loss
 from betting_model.cli import main
 from betting_model.core import EDGE_THRESHOLD, SIGMA_DEFAULTS
+from betting_model.version import MODEL_VERSION
 
 
 @pytest.fixture(autouse=True)
@@ -118,6 +120,35 @@ def _reason_ids(report, track, text):
     return found
 
 
+def _insert_result(
+    database: Path,
+    archive_id: str,
+    result_id: str,
+    *,
+    settlement: str,
+    actual: float,
+    retrieved: str,
+    attached: str,
+    supersedes: str | None = None,
+) -> None:
+    conn = sqlite3.connect(database)
+    try:
+        conn.execute(
+            """
+            INSERT INTO results (
+                result_id, archive_id, attached_at, actual_stat, actual_missing, settlement,
+                settlement_reason, game_status, result_source, result_retrieved_at,
+                result_retrieved_at_source, supersedes_result_id
+            ) VALUES (?, ?, ?, ?, 0, ?, 'unit-test fixture, not a real result', 'final',
+                      'unit test', ?, ?, ?)
+            """,
+            (result_id, archive_id, attached, actual, settlement, retrieved, retrieved, supersedes),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
 def _insert_snapshot(database: Path, source_id: str, **changes) -> None:
     source = get_snapshot(database, source_id)
     row = {key: value for key, value in source.items() if key not in {"results", "corrections"}}
@@ -187,7 +218,7 @@ def test_probability_ranges_count_every_row_and_warn_when_small():
     assert large_enough[2]["warning"] is None
 
 
-def test_current_result_uses_the_latest_and_does_not_guess_a_cycle():
+def test_current_result_keeps_a_successor_and_rejects_a_tie():
     older = {
         "result_id": "a",
         "attached_at": "2026-02-02T00:00:00Z",
@@ -200,16 +231,16 @@ def test_current_result_uses_the_latest_and_does_not_guess_a_cycle():
         "supersedes_result_id": "a",
         "settlement": "Loss",
     }
-    current, history, extra = select_current_result([newer, older])
+    current, history, live = select_current_result([newer, older])
     assert current["settlement"] == "Loss"
     assert history == 1
-    assert extra == 0
+    assert live == 1
     first = {"result_id": "a", "attached_at": "2026-02-02T00:00:00Z", "supersedes_result_id": None}
     second = {"result_id": "b", "attached_at": "2026-02-03T00:00:00Z", "supersedes_result_id": None}
-    current, history, extra = select_current_result([first, second])
-    assert current["result_id"] == "b"
+    current, history, live = select_current_result([first, second])
+    assert current is None
     assert history == 0
-    assert extra == 1
+    assert live == 2
     cycle_a = {"result_id": "a", "attached_at": "2026-02-02T00:00:00Z", "supersedes_result_id": "b"}
     cycle_b = {"result_id": "b", "attached_at": "2026-02-03T00:00:00Z", "supersedes_result_id": "a"}
     assert select_current_result([cycle_a, cycle_b]) == (None, 2, 0)
@@ -671,6 +702,178 @@ def test_binary_probability_on_a_whole_line_is_not_mixed_in(tmp_path: Path, cloc
         "conditional_exclusions",
         "stored push handling does not match the market and line",
     )
+
+
+def test_conflicting_unsuperseded_results_are_excluded(tmp_path: Path, clock):
+    database = tmp_path / "ambiguous.sqlite"
+    win_loss = _save(clock, database, 2, projected=10, line=5.5)
+    stats = _save(clock, database, 4, projected=10, line=5.5)
+    chained = _save(clock, database, 6, projected=10, line=5.5)
+    retrieved = _iso(_when(2, 23))
+    _insert_result(
+        database,
+        win_loss,
+        "win-row",
+        settlement="Win",
+        actual=20,
+        retrieved=retrieved,
+        attached=_iso(_when(2, 23, 10)),
+    )
+    _insert_result(
+        database,
+        win_loss,
+        "loss-row",
+        settlement="Loss",
+        actual=5,
+        retrieved=retrieved,
+        attached=_iso(_when(2, 23, 40)),
+    )
+    _insert_result(
+        database,
+        stats,
+        "actual-low",
+        settlement="Win",
+        actual=11,
+        retrieved=_iso(_when(4, 23)),
+        attached=_iso(_when(4, 23, 10)),
+    )
+    _insert_result(
+        database,
+        stats,
+        "actual-high",
+        settlement="Win",
+        actual=40,
+        retrieved=_iso(_when(4, 23)),
+        attached=_iso(_when(4, 23, 40)),
+    )
+    _settle(clock, database, chained, 6, actual=18)
+    clock["moment"] = _when(7, 12)
+    successor = attach_result(
+        database,
+        chained,
+        game_status="final",
+        result_source="unit-test fixture, a later result",
+        result_retrieved_at=_iso(_when(7, 11)),
+        actual=4,
+        actual_provided=True,
+    )
+    assert successor["ok"] is True, successor
+    assert successor["settlement"] == "Loss"
+    before_conflict = get_snapshot(database, win_loss)
+    before_stats = get_snapshot(database, stats)
+    report = analyze_archive(database)
+    assert get_snapshot(database, win_loss) == before_conflict
+    assert get_snapshot(database, stats) == before_stats
+    assert len(before_conflict["results"]) == 2
+    assert len(before_stats["results"]) == 2
+    for archive_id in (win_loss, stats):
+        assert archive_id not in _ids(report, "conditional_groups")
+        assert archive_id not in _ids(report, "unconditional_groups")
+        assert archive_id not in _ids(report, "projection_groups")
+        for track in (
+            "conditional_exclusions",
+            "unconditional_exclusions",
+            "projection_exclusions",
+        ):
+            assert archive_id in _reason_ids(report, track, "more than one current result")
+    assert report["ambiguous_snapshots"] == 2
+    assert report["additional_unsuperseded_results_not_scored"] == 4
+    assert report["superseded_results_not_scored"] == 1
+    coverage = report["coverage"]
+    assert coverage["usable_conditional_calibration"] + coverage["conditional_exclusions"]["rows"] == 3
+    assert coverage["usable_projection_rows"] + coverage["projection_exclusions"]["rows"] == 3
+    reason_rows = [
+        item
+        for item in coverage["conditional_exclusions"]["reasons"]
+        if "more than one current result" in item["reason"]
+    ]
+    assert len(reason_rows) == 1
+    assert reason_rows[0]["count"] == 2
+    assert set(reason_rows[0]["archive_ids"]) == {win_loss, stats}
+    scored = _find(report, "conditional_groups", market="PASS_YDS", line_family="half_point")
+    assert len(scored) == 1
+    assert scored[0]["archive_ids"] == [chained]
+    assert scored[0]["outcome_counts"] == {"win": 0, "loss": 1, "push": 0}
+    assert scored[0]["sample_size"] == 1
+    projection = _find(report, "projection_groups", market="PASS_YDS")
+    assert len(projection) == 1
+    assert projection[0]["archive_ids"] == [chained]
+    assert projection[0]["mean_signed_error"] == pytest.approx(-6.0)
+    assert projection[0]["mae"] == pytest.approx(6.0)
+    text = render_markdown(report)
+    assert "more than one current result" in text
+    assert "left unscored: 2" in text
+
+
+def test_model_versions_stay_in_separate_groups(tmp_path: Path, clock):
+    database = tmp_path / "versions.sqlite"
+    current = _save(clock, database, 2, projected=10, line=5.5)
+    _settle(clock, database, current, 2, actual=16)
+    stored_version = get_snapshot(database, current)["model_version"]
+    assert stored_version == MODEL_VERSION
+    _insert_snapshot(
+        database,
+        current,
+        archive_id="version-0-9",
+        observation_key="version-0-9-observation",
+        event_id="game-version-0-9",
+        model_version="0.9.0",
+    )
+    _insert_snapshot(
+        database,
+        current,
+        archive_id="version-blank",
+        observation_key="version-blank-observation",
+        event_id="game-version-blank",
+        model_version="",
+    )
+    for archive_id, result_id, actual in (
+        ("version-0-9", "result-0-9", 12),
+        ("version-blank", "result-blank", 8),
+    ):
+        _insert_result(
+            database,
+            archive_id,
+            result_id,
+            settlement="Win",
+            actual=actual,
+            retrieved=_iso(_when(2, 23)),
+            attached=_iso(_when(2, 23, 15)),
+        )
+    report = analyze_archive(database)
+    text = render_markdown(report)
+    for kind in ("conditional_groups", "projection_groups"):
+        groups = _find(report, kind, market="PASS_YDS")
+        by_version = {group["archived_model_version"]: group for group in groups}
+        assert set(by_version) == {stored_version, "0.9.0", MODEL_VERSION_NOT_RECORDED}
+        assert MODEL_VERSION_NOT_RECORDED == "not recorded"
+        assert stored_version != MODEL_VERSION_NOT_RECORDED
+        assert all(group["sample_size"] == 1 for group in groups)
+        assert all(group["event_count"] == 1 for group in groups)
+        assert sum(group["sample_size"] for group in groups) == 3
+        assert by_version[stored_version]["archive_ids"] == [current]
+        assert by_version["0.9.0"]["archive_ids"] == ["version-0-9"]
+        assert by_version[MODEL_VERSION_NOT_RECORDED]["archive_ids"] == ["version-blank"]
+    conditional = {
+        group["archived_model_version"]: group
+        for group in _find(report, "conditional_groups", market="PASS_YDS", line_family="half_point")
+    }
+    for version, group in conditional.items():
+        assert group["line_family"] == "half_point"
+        assert group["sport"] == "nfl"
+        assert {book["sportsbook"] for book in group["sportsbooks"]} == {"draftkings"}
+        assert group["sportsbooks"][0]["archived_model_version"] == version
+        assert group["sportsbooks"][0]["line_family"] == "half_point"
+        assert group["sportsbooks"][0]["sample_size"] == 1
+    blank_projection = _find(report, "projection_groups", market="PASS_YDS")
+    blank = next(group for group in blank_projection if group["archived_model_version"] == "not recorded")
+    known = next(group for group in blank_projection if group["archived_model_version"] == "0.9.0")
+    assert blank["mean_signed_error"] == pytest.approx(-2.0)
+    assert known["mean_signed_error"] == pytest.approx(2.0)
+    assert f"model {stored_version}" in text
+    assert "model 0.9.0" in text
+    assert "model not recorded" in text
+    assert report["calibration_claimed"] is False
 
 
 def test_cli_analyze_writes_the_report_and_leaves_existing_commands(tmp_path: Path, clock, capsys):
