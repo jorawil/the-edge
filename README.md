@@ -172,6 +172,28 @@ python -m betting_model.cli archive analyze --format json
 
 The default file is `data/pregame_archive.sqlite`. Pass `--db` to use another path. `pregame.json` must include `event_id`, `event_start`, `projection_at`, `projection_source`, `retrieved_at`, and `book`, plus the usual prop fields. There is no historical archive in this repository. Nothing here was reconstructed from old averages.
 
+## Collect prices and grade results
+
+Collection writes the same archive. It does not place a bet, and a successful collection is not a claim that the model is calibrated or profitable. Details and provider limits are in `docs/DATA_COLLECTION.md`.
+
+```bash
+python -m betting_model.cli archive collect --props pregame.json
+python -m betting_model.cli archive grade --results-fixture results.json
+python -m betting_model.cli archive quality
+python -m betting_model.cli archive analyze
+```
+
+`archive grade` without `--results-fixture` reads public ESPN box scores. That source needs no key. It does not turn a missing stat into zero, and it does not grade a game that is not final. A FanDuel price from The Odds API is stored as FanDuel, not as FanDuel Indiana, unless the prop itself includes a verified Indiana region and a source for that check.
+
+Live current props, only when you already have a key:
+
+```bash
+python -m betting_model.cli archive collect --projections projections.json \
+  --odds-live --sport-key basketball_nba --event EVENT_ID --markets player_points
+```
+
+The historical odds endpoints are paid and are not called. The archive would reject a backdated projection anyway. `archive run-once --config schedule.json` runs at most one pass and only when the file says `"enabled": true`. It does not start a background service.
+
 ## What this version does not do
 
 - It does not place a bet or log in to a sportsbook.
