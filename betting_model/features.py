@@ -66,6 +66,10 @@ def _market_values(sport: str, market: str, player_rows: list[dict[str, Any]]) -
         stats = (row or {}).get("stats") or {}
         actual_keys = {"PTS": ("points", "PTS"), "REB": ("rebounds", "REB"),
                        "AST": ("assists", "AST")}
+        if market == "PRA":
+            components = [_number(stats.get(key)) for key in ("points", "rebounds", "assists")]
+            actual = sum(components) if all(value is not None for value in components) else None
+            return actual, _minutes(stats.get("minutes"))
         if market in actual_keys:
             actual = next((_number(stats.get(key)) for key in actual_keys[market]
                            if stats.get(key) is not None), None)
