@@ -263,6 +263,16 @@ def attach_forecast_result(
         event_start = parse_aware_datetime(snapshot["event_start"])
         if event_start is None or retrieved <= event_start.astimezone(timezone.utc):
             return {"ok": False, "reason": "result retrieval must be after event start"}
+        if retrieved > _now() + CLOCK_SKEW:
+            return {"ok": False, "reason": "result retrieval timestamp is in the future"}
+        active = conn.execute(
+            """SELECT result_id FROM forecast_results r
+               WHERE r.snapshot_id=? AND NOT EXISTS (
+                 SELECT 1 FROM forecast_results newer WHERE newer.supersedes_result_id=r.result_id
+               )""", (snapshot_id,)
+        ).fetchall()
+        if active and not supersedes_result_id:
+            return {"ok": False, "reason": "a result already exists; corrections must supersede it"}
         if supersedes_result_id:
             prior = conn.execute(
                 "SELECT snapshot_id FROM forecast_results WHERE result_id=?",
