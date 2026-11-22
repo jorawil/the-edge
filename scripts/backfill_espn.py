@@ -136,7 +136,7 @@ def run(sport, start, end, fetcher=None, season_types=(2,)):
     path.write_text(json.dumps(store, indent=1))
     rep = {"sport": sport, "events_in_window": len(seen), "selected_season_types": sorted(allowed_season_types), "skipped_season_type": skipped_season,
            "final": len(seen) - len(skipped_season) - sum(1 for m in missing if m["reason"].startswith("not final")),
-           "already_covered": len([g for g in seen if g in pre and record_is_complete(store["games"].get(g, {}))]),
+           "already_covered": len([g for g, event in seen.items() if _season_metadata(event)["season_type_id"] in allowed_season_types and g in pre and record_is_complete(store["games"].get(g, {}))]),
            "added": len(added), "repaired": len(repaired), "missing": missing}
     print(json.dumps({k: v for k, v in rep.items() if k != "missing"}), len(missing))
     return rep
