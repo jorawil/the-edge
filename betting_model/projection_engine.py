@@ -50,7 +50,11 @@ def _project(
 ) -> dict[str, Any]:
     if market not in allowed:
         raise ValueError(f"unsupported market: {market}")
-    if not math.isfinite(float(shrinkage_strength)) or shrinkage_strength < 0:
+    try:
+        strength = float(shrinkage_strength)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError("shrinkage_strength must be a finite non-negative number") from exc
+    if not math.isfinite(strength) or strength < 0:
         raise ValueError("shrinkage_strength must be a finite non-negative number")
     rows = _clean_history(history)
     context = context or {}
@@ -74,16 +78,12 @@ def _project(
     prior_rate = _finite_nonnegative(context.get("prior_efficiency"))
     total_actual = sum(actual for actual, _ in rows)
     if prior_rate is None:
-        # Do not silently invent a league prior. A raw rate is still useful as
-        # a transparent baseline, but it is not shrunk or calibration-ready.
         efficiency = total_actual / total_opportunity
         effective_opportunity = total_opportunity
         warnings.append("no pre-event league/position efficiency prior; shrinkage not applied")
     else:
-        efficiency = (total_actual + shrinkage_strength * prior_rate) / (
-            total_opportunity + shrinkage_strength
-        )
-        effective_opportunity = total_opportunity + shrinkage_strength
+        efficiency = (total_actual + strength * prior_rate) / (total_opportunity + strength)
+        effective_opportunity = total_opportunity + strength
 
     projected_opportunity = sum(opportunities) / len(opportunities)
     projected_value = projected_opportunity * efficiency
@@ -110,7 +110,7 @@ def _project(
         "n_opportunity": len(rows),
         "total_historical_opportunity": total_opportunity,
         "effective_opportunity_after_shrinkage": effective_opportunity,
-        "shrinkage_strength": shrinkage_strength if prior_rate is not None else None,
+        "shrinkage_strength": strength if prior_rate is not None else None,
         "prior_efficiency": prior_rate,
         "model_version": MODEL_VERSION,
         "calibrated": False,
