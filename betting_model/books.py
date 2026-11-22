@@ -12,8 +12,16 @@ BOOKS: list[tuple[str, str]] = [
 BOOK_KEYS = [k for k, _ in BOOKS]
 BOOK_LABELS = dict(BOOKS)
 
-# The Odds API bookmaker keys (bet365 is not offered in the Odds API US region).
-ODDS_API_BOOKMAKERS = {"fanduel_in": "fanduel", "draftkings": "draftkings", "bet365": "bet365", "fanatics": "fanatics"}
+# Historical map kept for older callers. The live client does not send these
+# blindly. As of the provider bookmaker list checked on 2026-11-22:
+# fanduel is the US feed, not an Indiana price; fanatics is paid-only;
+# there is no US/UK/EU bet365 key (bet365_au is paid and limited to AFL/NRL).
+ODDS_API_BOOKMAKERS = {
+    "fanduel_in": "fanduel",
+    "draftkings": "draftkings",
+    "bet365": "bet365",
+    "fanatics": "fanatics",
+}
 
 _ALIASES = {
     "fd": "fanduel_in", "fanduel": "fanduel_in", "fanduel_in": "fanduel_in", "fanduel indiana": "fanduel_in", "fd in": "fanduel_in",

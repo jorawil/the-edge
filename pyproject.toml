@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "betting-model"
-version = "0.1.0"
+version = "0.2.0"
 description = "Probability-first betting edge screening for Joey Wills desks"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -14,9 +14,15 @@ dependencies = [
   "nba_api>=1.4",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
 [project.scripts]
 betting-model = "betting_model.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["betting_model*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,44 @@
+# Odds provider notes
+
+Checked on November 22, 2026 from the public pages below. No API key was used and no live prices were downloaded.
+
+- https://the-odds-api.com/liveapi/guides/v4/
+- https://the-odds-api.com/sports-odds-data/betting-markets.html
+- https://www.the-odds-api.com/sports-odds-data/bookmaker-apis.html
+
+## What the featured odds endpoint returns
+
+`GET /v4/sports/{sport}/odds` documents these markets: `h2h`, `spreads`, `totals`, `outrights`.
+
+That is the call `fetch_live_odds` makes. It does not return player props. If you ask it for a `player_` market, the client refuses the call so a key is not spent on the wrong endpoint.
+
+## Where player props actually are
+
+`GET /v4/sports/{sport}/events/{eventId}/odds`, one event at a time.
+
+The docs list player-prop keys for NFL, NBA, WNBA, MLB, and NHL (for example `player_points`, `player_pass_yds`, `player_reception_yds`). Coverage still depends on the plan, the sport, and the book. A market that is missing from a response is "not available from this source." It is not proof that the sportsbook has no line.
+
+`fetch_event_player_props` calls this endpoint. Tests use a fake response. It has not been run against a live key in this upgrade.
+
+## Books
+
+| Book you asked for | What the provider list shows | What this program does |
+|---|---|---|
+| FanDuel Indiana | US key `fanduel` only. No Indiana key. | Can request `fanduel`. Every record says the state is not verified. A user-typed FanDuel IN price is kept and labeled as coming from the file. |
+| DraftKings | US key `draftkings`. No paid-only note on the bookmaker table. | Requested by default with FanDuel. State is not verified. |
+| bet365 | No `bet365` key in the US, UK, or EU tables. `bet365_au` is paid and limited to h2h, spreads, and totals for AFL and NRL. | Not sent. Sending an unknown key can make the provider reject the whole request. |
+| Fanatics | US key `fanatics`. Note: only on paid subscriptions. | Not requested unless you pass `bookmakers="fanatics"`. A paid plan was not added. |
+
+Hard Rock has an Indiana note on the same page. That is a different book. It is not used as a stand-in for FanDuel Indiana.
+
+## Quota and secrets
+
+The key stays in the `ODDS_API_KEY` environment variable. Error text is scrubbed so a URL that contains `apiKey=` is stored as `REDACTED`. Quota headers (`x-requests-remaining`, `x-requests-used`) are kept when the provider sends them. The key is not copied into the report.
+
+## Still unknown until you use a key
+
+- Whether your plan includes player props.
+- Whether Fanatics returns data on that plan.
+- Whether any returned FanDuel number matches the Indiana app.
+
+Those need a key and a side-by-side check against the book. This upgrade does not do that check.
