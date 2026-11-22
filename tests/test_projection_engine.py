@@ -85,9 +85,24 @@ def test_features_exclude_target_and_future_games_and_keep_dnp_out():
     assert result["history"][0]["actual"] == 20
     assert result["history"][0]["opportunity"] == 30
     assert result["projection_input_at"] is None
+    with_input_time = build_player_history(
+        games, sport="nba", player_id="7", market="PTS",
+        before_event_time="2026-01-02T20:00:00Z",
+        data_updated_at="2026-01-02T19:00:00Z",
+        data_updated_source="games.json updated field",
+    )
+    assert with_input_time["projection_input_at"] == "2026-01-02T19:00:00Z"
+    assert with_input_time["projection_input_source"] == "games.json updated field"
 
 
 def test_feature_builder_requires_timezone_aware_cutoff():
     with pytest.raises(ValueError):
         build_player_history({}, sport="nba", player_id="1", market="PTS",
                              before_event_time=datetime(2026, 1, 1))
+
+
+def test_feature_builder_rejects_data_update_after_target_event():
+    with pytest.raises(ValueError, match="after the target event"):
+        build_player_history({}, sport="nba", player_id="1", market="PTS",
+                             before_event_time="2026-01-01T20:00:00Z",
+                             data_updated_at="2026-01-02T20:00:00Z")
