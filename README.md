@@ -139,11 +139,12 @@ python scripts/backfill_espn.py nba --start 2026-10-24 --end 2026-10-31
 
 With no dates, the script uses October 24–31, 2026, which is the original window. It is safe to rerun: a complete game is skipped, and an incomplete box is fetched again. A missing stat is not stored as zero.
 
-A separate baseline benchmark is available for NBA and NFL historical game logs. It generates rolling-mean forecasts using only a player's earlier appearances and reports chronological train/validation/test MAE, RMSE, and signed error. It is a benchmark—not a calibrated model—and does not use odds, calculate EV, or evaluate profitability:
+Historical projection benchmarks are available for NBA and NFL game logs. The original rolling-mean benchmark remains available, and the comparative benchmark evaluates rolling means (5/10/20 by default), season-to-date means, and a linearly recency-weighted mean over up to ten prior appearances. It reports chronological train/validation/test MAE, RMSE, and signed error. Method rankings are based on validation MAE only; the held-out test split is never used to select a method. Season-to-date history resets by ESPN season year. These are forecast baselines—not calibrated betting projections—and do not use odds, calculate EV, or evaluate profitability:
 
 ```bash
 python scripts/walk_forward_backtest.py nba
 python scripts/walk_forward_backtest.py nfl --windows 5,10,20 --min-history 3 --out out/nfl_baseline.json
+python scripts/compare_projection_methods.py nba --windows 5,10,20 --min-history 3 --out out/nba_comparison.json
 ```
 
 The benchmark requires explicit ESPN regular-season metadata (`season_type_id=2`), timezone-aware event timestamps, and stable athlete IDs. Missing or unknown season metadata, DNPs, missing IDs, and missing stat values are not converted to zero. Events with the same kickoff timestamp stay together in one chronological split, and all same-time forecasts are generated before any actual from that timestamp is added to history. Multiple fixed windows are reported separately; the held-out test slice is not used to select a winner. The JSON report flags test metrics with fewer than 30 events as descriptive only, not evidence of predictive skill. Even larger samples do not establish calibration or profitability.
@@ -213,7 +214,7 @@ These workflows are designed to run in GitHub without a local computer. They bec
 4. After both sport folders exist on `historical-data`, choose **Historical Baseline Benchmark** and run **both**.
 5. Open the completed benchmark run to view its artifact. The JSON reports are also committed under `reports/` on the `historical-data` branch.
 
-The benchmark compares fixed 5-, 10-, and 20-game rolling averages by default. It is a historical baseline only—not a calibrated player projection, sportsbook edge, EV, or profit test. Empty or small samples must not be treated as evidence of predictive skill. The benchmark workflow requires the historical-data branch and the selected sport's game file; run backfill first.
+The workflow now produces both the original rolling-window report and a comparative projection-method report for each selected sport. The comparison includes rolling means, season-to-date means, and recency-weighted means. It ranks methods on validation MAE, while reporting test results separately without using them for selection. These remain historical baselines—not calibrated player projections, sportsbook edge, EV, or profit tests. Empty or small samples must not be treated as evidence of predictive skill. The workflow requires the historical-data branch and the selected sport's game file; run backfill first.
 
 ## What this version does not do
 
