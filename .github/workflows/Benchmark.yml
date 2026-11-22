@@ -1,0 +1,125 @@
+name: Historical Baseline Benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      sport:
+        description: "Which historical benchmark to run"
+        required: true
+        type: choice
+        options:
+          - both
+          - nba
+          - nfl
+        default: both
+      windows:
+        description: "Prior-game windows to compare"
+        required: true
+        default: "5,10,20"
+        type: string
+      min_history:
+        description: "Minimum prior appearances required"
+        required: true
+        default: "3"
+        type: string
+
+permissions:
+  contents: write
+
+# Serialize writes with the historical backfill workflow.
+concurrency:
+  group: historical-data-backfill
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out model code
+        uses: actions/checkout@v4
+
+      - name: Check out durable historical data
+        uses: actions/checkout@v4
+        with:
+          ref: historical-data
+          path: historical-data
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy requests
+          pip install -e . --no-deps
+
+      - name: Validate inputs and historical data
+        env:
+          SPORT: ${{ inputs.sport }}
+          WINDOWS: ${{ inputs.windows }}
+          MIN_HISTORY: ${{ inputs.min_history }}
+        run: |
+          python - <<'PY'
+          import os
+          windows = [int(value.strip()) for value in os.environ["WINDOWS"].split(",") if value.strip()]
+          minimum = int(os.environ["MIN_HISTORY"])
+          if not windows or any(value < 1 for value in windows):
+              raise SystemExit("windows must be positive comma-separated integers")
+          if minimum < 1:
+              raise SystemExit("minimum history must be positive")
+          selected = ["nba", "nfl"] if os.environ["SPORT"] == "both" else [os.environ["SPORT"]]
+          for sport in selected:
+              path = f"historical-data/data/{sport}/games.json"
+              if not os.path.isfile(path):
+                  raise SystemExit(f"Missing {path}. Run Historical Data Backfill first.")
+          PY
+
+      - name: Run selected benchmarks
+        env:
+          SPORT: ${{ inputs.sport }}
+          WINDOWS: ${{ inputs.windows }}
+          MIN_HISTORY: ${{ inputs.min_history }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          mkdir -p benchmark-reports
+          if [ "$SPORT" = "both" ]; then
+            SPORTS="nba nfl"
+          else
+            SPORTS="$SPORT"
+          fi
+          for sport in $SPORTS; do
+            python scripts/walk_forward_backtest.py "$sport" \
+              --data-root historical-data/data \
+              --windows "$WINDOWS" \
+              --min-history "$MIN_HISTORY" \
+              --out "benchmark-reports/baseline_${sport}_${RUN_ID}.json"
+          done
+
+      - name: Save benchmark reports to durable branch
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          mkdir -p historical-data/reports
+          cp benchmark-reports/*.json historical-data/reports/
+          cd historical-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          if git diff --cached --quiet; then
+            echo "No benchmark report changes to commit."
+          else
+            git commit -m "Add historical baseline benchmark reports"
+            git push origin HEAD:historical-data
+          fi
+
+      - name: Upload benchmark reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edge-historical-benchmark-${{ github.run_id }}
+          path: benchmark-reports/
+          if-no-files-found: warn
+          retention-days: 90
