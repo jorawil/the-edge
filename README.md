@@ -218,6 +218,15 @@ The workflow produces rolling-window reports, comparative method reports, and fi
 
 The opportunity-aware benchmark additionally tests lagged opportunity/rate projections: NBA points, rebounds, and assists use prior minutes and per-minute production; NBA 3-pointers use prior three-point attempts and makes per attempt; NFL passing yards use prior pass attempts and yards per attempt; receptions and receiving yards use prior targets and catch/yard rates; rushing yards use prior rush attempts and yards per attempt. It compares each candidate with a rolling-mean baseline on the exact same eligible player-game sample for each market and window. It only uses prior appearances, groups simultaneous games before adding outcomes, and reports validation rankings separately from held-out test results. Historical opportunity is not a live pregame minutes/targets/attempts projection, and the method is not calibrated.
 
+The new v1 projection engine is a separate candidate model. It forecasts opportunity from prior player games and multiplies by an efficiency rate, with an optional league-rate shrinkage prior. Its validation script compares it with a rolling-mean baseline on identical eligible samples, chooses parameters on validation only, and reports held-out test results separately:
+
+```bash
+python scripts/validate_projection_engine.py --sport nba --data-root data
+python scripts/validate_projection_engine.py --sport nfl --data-root data
+```
+
+This v1 engine does not apply opponent, rest, home/away, injury, lineup, or role adjustments. It can produce a PRA point estimate from PTS + REB + AST, but does not model their joint residual covariance or PRA uncertainty. It does not create intervals, estimate calibrated probabilities, or qualify bets. Full methodology and limitations: `docs/PROJECTION_ENGINE_V1.md`.
+
 ## What this version does not do
 
 - It does not place a bet or log in to a sportsbook.
