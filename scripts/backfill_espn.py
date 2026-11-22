@@ -68,7 +68,7 @@ def record_is_complete(record) -> bool:
     scores = record.get("scores")
     if not isinstance(scores, dict) or not scores:
         return False
-    if any(score is None for score in scores.values()):
+    if any(_score(score) is None for score in scores.values()):
         return False
     for player in players:
         if not isinstance(player, dict):
@@ -143,10 +143,13 @@ def run(sport, start, end, fetcher=None, season_types=(2,)):
     return rep
 
 def _score(value):
-    """A missing score stays missing. A real zero stays zero."""
-    if value is None or value == "":
+    """Return an integer score, preserving zero and rejecting invalid values."""
+    if value is None or value == "" or isinstance(value, bool):
         return None
-    return int(value)
+    try:
+        return int(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
 
 
 def main(argv=None):
