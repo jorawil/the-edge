@@ -52,6 +52,13 @@ A missing market stays missing. It is not graded as a loss. Two different values
 
 If the archived event id is not on ESPN, grading will use a game only when both teams and the start time (within two minutes) identify one event. Otherwise it stops.
 
+
+### Backfill season filtering
+
+`scripts/backfill_espn.py` defaults to ESPN season type `2` (regular season). Preseason (`1`), postseason (`3`), and events with missing/unrecognized season metadata are excluded by default. Each stored game records `season_year`, `season_type_id`, and `season_type_name`; the report lists excluded events under `skipped_season_type`.
+
+To include postseason deliberately, pass `--season-types 2,3`. To collect preseason only, pass `--season-types 1`. The GitHub Actions backfill workflow exposes the same `season_types` input and defaults it to `2`. Do not combine preseason, regular season, and postseason in one training sample without explicitly deciding that the model should learn across those competition phases.
+
 ## Commands
 
 ```bash
@@ -79,3 +86,11 @@ python -m betting_model.cli archive analyze
 ## Environment
 
 `ODDS_API_KEY` is the only secret, and only for a live collect. ESPN does not need one. Nothing in this repository is a key.
+
+## Durable historical game-log storage
+
+The manual GitHub Actions workflow stores collected game logs on a separate `historical-data` branch. This keeps generated data out of the application source branch while preserving it across workflow runs. Each run first restores existing data from that branch, adds or repairs the requested date range, then commits the updated data and reports back to the branch. A backup artifact is also retained for 30 days.
+
+The repository is public, so the `historical-data` branch and its game logs are public too. These are historical sports results and player statistics. Do not put sportsbook credentials, personal account data, or API keys in this branch. The backfill uses ESPN's public scoreboard and box-score endpoints and does not need the Odds API secret.
+
+The workflow serializes runs to prevent two backfills from overwriting one another. Use the same date range again to repair incomplete records; complete records are skipped. The script's `EDGE_DATA_DIR` environment override lets the workflow keep its working data separate from the source checkout.

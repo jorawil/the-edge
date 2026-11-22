@@ -92,8 +92,12 @@ def test_rerun_repairs_an_incomplete_box_and_skips_a_complete_one(tmp_path, monk
     assert sum(1 for url in calls if "summary?event=401" in url) == 1
 
 
-def _event(event_id, away, home):
-    return {
+def _event(event_id, away, home, season_type_id=2):
+    season_type = None if season_type_id is None else {
+        "id": str(season_type_id),
+        "name": {1: "Preseason", 2: "Regular Season", 3: "Postseason"}[season_type_id],
+    }
+    event = {
         "id": event_id,
         "date": "2026-01-02T00:00:00Z",
         "name": f"{away} at {home}",
@@ -107,6 +111,43 @@ def _event(event_id, away, home):
                 ]
             }
         ],
+    }
+    if season_type is not None:
+        event["season"] = {"year": 2026, "type": season_type}
+    return event
+
+
+def test_backfill_excludes_preseason_postseason_and_unknown_by_default(tmp_path, monkeypatch):
+    module = _load()
+    monkeypatch.setattr(module, "DATA", tmp_path)
+    events = [
+        _event("regular", "A", "B", 2),
+        _event("preseason", "C", "D", 1),
+        _event("postseason", "E", "F", 3),
+        _event("unknown", "G", "H", None),
+    ]
+    summary_calls = []
+
+    def fake_fetch(url):
+        if "scoreboard" in url:
+            return {"events": events}
+        summary_calls.append(url)
+        return {"boxscore": {"players": [{
+            "team": {"abbreviation": "B"},
+            "statistics": [{"name": "starters", "keys": ["points"], "athletes": [{
+                "athlete": {"displayName": "Example", "id": "1"},
+                "stats": ["10"], "didNotPlay": False,
+            }]}],
+        }], "teams": []}}
+
+    report = module.run("nba", module.dt.date(2026, 1, 2), module.dt.date(2026, 1, 2),
+                        fetcher=fake_fetch)
+    stored = json.loads((tmp_path / "nba" / "games.json").read_text(encoding="utf-8"))
+    assert set(stored["games"]) == {"regular"}
+    assert stored["games"]["regular"]["season_type_id"] == 2
+    assert len(summary_calls) == 1
+    assert {item["id"] for item in report["skipped_season_type"]} == {
+        "preseason", "postseason", "unknown"
     }
 
 

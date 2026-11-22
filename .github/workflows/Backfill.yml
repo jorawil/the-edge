@@ -1,4 +1,3 @@
-
 name: Historical Data Backfill
 
 on:
@@ -14,16 +13,25 @@ on:
       start_date:
         description: "Start date (YYYY-MM-DD)"
         required: true
-        default: "2026-10-01"
+        default: "2026-09-01"
+        type: string
+      season_types:
+        description: "ESPN season type IDs: 1=preseason, 2=regular, 3=postseason"
+        required: true
+        default: "2"
         type: string
       end_date:
         description: "End date (YYYY-MM-DD)"
         required: true
-        default: "2026-10-31"
+        default: "2026-11-22"
         type: string
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: historical-data-backfill
+  cancel-in-progress: false
 
 jobs:
   backfill:
@@ -32,6 +40,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -44,21 +54,53 @@ jobs:
           pip install pytest numpy requests
           pip install -e . --no-deps
 
+      - name: Prepare durable historical-data branch
+        env:
+          EDGE_DATA_DIR: ${{ runner.temp }}/edge-data
+        run: |
+          mkdir -p "$EDGE_DATA_DIR"
+          if git ls-remote --exit-code --heads origin historical-data >/dev/null 2>&1; then
+            git fetch origin historical-data
+            git worktree add "$RUNNER_TEMP/historical-data" origin/historical-data
+            if [ -d "$RUNNER_TEMP/historical-data/data" ]; then
+              cp -a "$RUNNER_TEMP/historical-data/data/." "$EDGE_DATA_DIR/"
+            fi
+          else
+            git worktree add -b historical-data "$RUNNER_TEMP/historical-data"
+          fi
+
       - name: Run historical backfill
         env:
           SPORT: ${{ inputs.sport }}
           START_DATE: ${{ inputs.start_date }}
           END_DATE: ${{ inputs.end_date }}
+          SEASON_TYPES: ${{ inputs.season_types }}
+          EDGE_DATA_DIR: ${{ runner.temp }}/edge-data
         run: |
-          python scripts/backfill_espn.py "$SPORT" --start "$START_DATE" --end "$END_DATE"
+          python scripts/backfill_espn.py "$SPORT" --start "$START_DATE" --end "$END_DATE" --season-types "$SEASON_TYPES"
 
-      - name: Upload historical data
+      - name: Save data to durable branch
+        env:
+          EDGE_DATA_DIR: ${{ runner.temp }}/edge-data
+        run: |
+          mkdir -p "$RUNNER_TEMP/historical-data/data"
+          cp -a "$EDGE_DATA_DIR/." "$RUNNER_TEMP/historical-data/data/"
+          cd "$RUNNER_TEMP/historical-data"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No historical data changes to commit."
+          else
+            git commit -m "Backfill ${{ inputs.sport }} historical game data"
+            git push origin HEAD:historical-data
+          fi
+
+      - name: Upload backup artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: edge-${{ inputs.sport }}-historical-data
-          path: |
-            data/${{ inputs.sport }}/games.json
-            data/backfill_report_*.json
+          path: ${{ runner.temp }}/edge-data/
           if-no-files-found: warn
           retention-days: 30
