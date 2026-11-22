@@ -1,0 +1,1836 @@
+[
+ {
+  "sport": "nfl",
+  "events_in_window": 1501,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [
+   {
+    "id": "401438000",
+    "name": "Seattle Seahawks at San Francisco 49ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401437998",
+    "name": "Los Angeles Chargers at Jacksonville Jaguars",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438002",
+    "name": "Miami Dolphins at Buffalo Bills",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438001",
+    "name": "New York Giants at Minnesota Vikings",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401437999",
+    "name": "Baltimore Ravens at Cincinnati Bengals",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438003",
+    "name": "Dallas Cowboys at Tampa Bay Buccaneers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438005",
+    "name": "Jacksonville Jaguars at Kansas City Chiefs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438004",
+    "name": "New York Giants at Philadelphia Eagles",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438007",
+    "name": "Cincinnati Bengals at Buffalo Bills",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438006",
+    "name": "Dallas Cowboys at San Francisco 49ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438009",
+    "name": "San Francisco 49ers at Philadelphia Eagles",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438008",
+    "name": "Cincinnati Bengals at Kansas City Chiefs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401492629",
+    "name": "AFC  at NFC ",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401438030",
+    "name": "Kansas City Chiefs at Philadelphia Eagles",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547654",
+    "name": "New York Jets at Cleveland Browns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548631",
+    "name": "Houston Texans at New England Patriots",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550740",
+    "name": "Minnesota Vikings at Seattle Seahawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548624",
+    "name": "Green Bay Packers at Cincinnati Bengals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550739",
+    "name": "New York Giants at Detroit Lions",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548626",
+    "name": "Atlanta Falcons at Miami Dolphins",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550178",
+    "name": "Pittsburgh Steelers at Tampa Bay Buccaneers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401549309",
+    "name": "Washington Commanders at Cleveland Browns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548496",
+    "name": "Denver Broncos at Arizona Cardinals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547663",
+    "name": "Indianapolis Colts at Buffalo Bills",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548411",
+    "name": "Tennessee Titans at Chicago Bears",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550833",
+    "name": "New York Jets at Carolina Panthers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548620",
+    "name": "Jacksonville Jaguars at Dallas Cowboys",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547659",
+    "name": "Philadelphia Eagles at Baltimore Ravens",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547666",
+    "name": "Los Angeles Chargers at Los Angeles Rams",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548628",
+    "name": "Kansas City Chiefs at New Orleans Saints",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550918",
+    "name": "San Francisco 49ers at Las Vegas Raiders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547661",
+    "name": "Cleveland Browns at Philadelphia Eagles",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550834",
+    "name": "Carolina Panthers at New York Giants",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548625",
+    "name": "Cincinnati Bengals at Atlanta Falcons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548621",
+    "name": "Jacksonville Jaguars at Detroit Lions",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547665",
+    "name": "Miami Dolphins at Houston Texans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547662",
+    "name": "Buffalo Bills at Pittsburgh Steelers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547664",
+    "name": "Chicago Bears at Indianapolis Colts",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550836",
+    "name": "Tampa Bay Buccaneers at New York Jets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401549211",
+    "name": "New England Patriots at Green Bay Packers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548507",
+    "name": "Tennessee Titans at Minnesota Vikings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548497",
+    "name": "Kansas City Chiefs at Arizona Cardinals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548509",
+    "name": "Denver Broncos at San Francisco 49ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547668",
+    "name": "Las Vegas Raiders at Los Angeles Rams",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550161",
+    "name": "Dallas Cowboys at Seattle Seahawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547667",
+    "name": "New Orleans Saints at Los Angeles Chargers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547655",
+    "name": "Baltimore Ravens at Washington Commanders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548627",
+    "name": "Pittsburgh Steelers at Atlanta Falcons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547656",
+    "name": "Indianapolis Colts at Philadelphia Eagles",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547657",
+    "name": "Detroit Lions at Carolina Panthers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548508",
+    "name": "New England Patriots at Tennessee Titans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548510",
+    "name": "Los Angeles Chargers at San Francisco 49ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548412",
+    "name": "Buffalo Bills at Chicago Bears",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401549212",
+    "name": "Seattle Seahawks at Green Bay Packers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548629",
+    "name": "Cleveland Browns at Kansas City Chiefs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548498",
+    "name": "Arizona Cardinals at Minnesota Vikings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550835",
+    "name": "New York Jets at New York Giants",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548623",
+    "name": "Cincinnati Bengals at Washington Commanders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547660",
+    "name": "Baltimore Ravens at Tampa Bay Buccaneers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401548622",
+    "name": "Miami Dolphins at Jacksonville Jaguars",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401550167",
+    "name": "Las Vegas Raiders at Dallas Cowboys",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547669",
+    "name": "Los Angeles Rams at Denver Broncos",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547658",
+    "name": "Houston Texans at New Orleans Saints",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547749",
+    "name": "Cleveland Browns at Houston Texans",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547750",
+    "name": "Miami Dolphins at Kansas City Chiefs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547752",
+    "name": "Green Bay Packers at Dallas Cowboys",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547753",
+    "name": "Los Angeles Rams at Detroit Lions",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547751",
+    "name": "Pittsburgh Steelers at Buffalo Bills",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547754",
+    "name": "Philadelphia Eagles at Tampa Bay Buccaneers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547755",
+    "name": "Houston Texans at Baltimore Ravens",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547756",
+    "name": "Green Bay Packers at San Francisco 49ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547757",
+    "name": "Tampa Bay Buccaneers at Detroit Lions",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547758",
+    "name": "Kansas City Chiefs at Buffalo Bills",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547379",
+    "name": "Kansas City Chiefs at Baltimore Ravens",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547380",
+    "name": "Detroit Lions at San Francisco 49ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401616889",
+    "name": "NFC  at AFC ",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547378",
+    "name": "San Francisco 49ers at Kansas City Chiefs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671610",
+    "name": "Houston Texans at Chicago Bears",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671918",
+    "name": "Carolina Panthers at New England Patriots",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401673457",
+    "name": "Detroit Lions at New York Giants",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671915",
+    "name": "Atlanta Falcons at Miami Dolphins",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671905",
+    "name": "Houston Texans at Pittsburgh Steelers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671897",
+    "name": "Philadelphia Eagles at Baltimore Ravens",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401673171",
+    "name": "Washington Commanders at New York Jets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671615",
+    "name": "Chicago Bears at Buffalo Bills",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672005",
+    "name": "Las Vegas Raiders at Minnesota Vikings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671902",
+    "name": "Green Bay Packers at Cleveland Browns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671900",
+    "name": "Tampa Bay Buccaneers at Cincinnati Bengals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401673472",
+    "name": "San Francisco 49ers at Tennessee Titans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671910",
+    "name": "Kansas City Chiefs at Jacksonville Jaguars",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671907",
+    "name": "Seattle Seahawks at Los Angeles Chargers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401673456",
+    "name": "New Orleans Saints at Arizona Cardinals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671920",
+    "name": "Denver Broncos at Indianapolis Colts",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671913",
+    "name": "Dallas Cowboys at Los Angeles Rams",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671919",
+    "name": "Philadelphia Eagles at New England Patriots",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671898",
+    "name": "Atlanta Falcons at Baltimore Ravens",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671901",
+    "name": "Cincinnati Bengals at Chicago Bears",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671924",
+    "name": "New York Giants at Houston Texans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671911",
+    "name": "Detroit Lions at Kansas City Chiefs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671903",
+    "name": "Minnesota Vikings at Cleveland Browns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401673562",
+    "name": "Seattle Seahawks at Tennessee Titans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671936",
+    "name": "Arizona Cardinals at Indianapolis Colts",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671916",
+    "name": "Washington Commanders at Miami Dolphins",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671906",
+    "name": "Buffalo Bills at Pittsburgh Steelers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401676591",
+    "name": "New York Jets at Carolina Panthers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671908",
+    "name": "Los Angeles Rams at Los Angeles Chargers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671925",
+    "name": "Tampa Bay Buccaneers at Jacksonville Jaguars",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672897",
+    "name": "Dallas Cowboys at Las Vegas Raiders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671921",
+    "name": "Green Bay Packers at Denver Broncos",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671611",
+    "name": "New Orleans Saints at San Francisco 49ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671612",
+    "name": "Indianapolis Colts at Cincinnati Bengals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671912",
+    "name": "Chicago Bears at Kansas City Chiefs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671922",
+    "name": "Jacksonville Jaguars at Atlanta Falcons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671917",
+    "name": "Miami Dolphins at Tampa Bay Buccaneers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672898",
+    "name": "San Francisco 49ers at Las Vegas Raiders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671896",
+    "name": "Carolina Panthers at Buffalo Bills",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401673458",
+    "name": "Pittsburgh Steelers at Detroit Lions",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671899",
+    "name": "Baltimore Ravens at Green Bay Packers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672006",
+    "name": "Minnesota Vikings at Philadelphia Eagles",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671914",
+    "name": "Los Angeles Rams at Houston Texans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671909",
+    "name": "Los Angeles Chargers at Dallas Cowboys",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401673172",
+    "name": "New York Giants at New York Jets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671904",
+    "name": "Cleveland Browns at Seattle Seahawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401673561",
+    "name": "Tennessee Titans at New Orleans Saints",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671613",
+    "name": "Arizona Cardinals at Denver Broncos",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671614",
+    "name": "New England Patriots at Washington Commanders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671878",
+    "name": "Los Angeles Chargers at Houston Texans",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671879",
+    "name": "Pittsburgh Steelers at Baltimore Ravens",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671881",
+    "name": "Denver Broncos at Buffalo Bills",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671880",
+    "name": "Green Bay Packers at Philadelphia Eagles",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671883",
+    "name": "Washington Commanders at Tampa Bay Buccaneers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671882",
+    "name": "Minnesota Vikings at Los Angeles Rams",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671884",
+    "name": "Houston Texans at Kansas City Chiefs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671885",
+    "name": "Washington Commanders at Detroit Lions",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671937",
+    "name": "Los Angeles Rams at Philadelphia Eagles",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671886",
+    "name": "Baltimore Ravens at Buffalo Bills",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671888",
+    "name": "Washington Commanders at Philadelphia Eagles",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671887",
+    "name": "Buffalo Bills at Kansas City Chiefs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401701113",
+    "name": "AFC  at NFC ",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671889",
+    "name": "Kansas City Chiefs at Philadelphia Eagles",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772971",
+    "name": "Los Angeles Chargers at Detroit Lions",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773001",
+    "name": "Indianapolis Colts at Baltimore Ravens",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773005",
+    "name": "Cincinnati Bengals at Philadelphia Eagles",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401774568",
+    "name": "Las Vegas Raiders at Seattle Seahawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773016",
+    "name": "Detroit Lions at Atlanta Falcons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773018",
+    "name": "Cleveland Browns at Carolina Panthers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772996",
+    "name": "Washington Commanders at New England Patriots",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401776263",
+    "name": "New York Giants at Buffalo Bills",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773012",
+    "name": "Houston Texans at Minnesota Vikings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773020",
+    "name": "Dallas Cowboys at Los Angeles Rams",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773002",
+    "name": "Pittsburgh Steelers at Jacksonville Jaguars",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401774029",
+    "name": "Tennessee Titans at Tampa Bay Buccaneers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773010",
+    "name": "New York Jets at Green Bay Packers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401774636",
+    "name": "Kansas City Chiefs at Arizona Cardinals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401776566",
+    "name": "Denver Broncos at San Francisco 49ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401776564",
+    "name": "Miami Dolphins at Chicago Bears",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773026",
+    "name": "New Orleans Saints at Los Angeles Chargers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773017",
+    "name": "Tennessee Titans at Atlanta Falcons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401774591",
+    "name": "Kansas City Chiefs at Seattle Seahawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401776264",
+    "name": "Miami Dolphins at Detroit Lions",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773003",
+    "name": "Green Bay Packers at Indianapolis Colts",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773013",
+    "name": "New England Patriots at Minnesota Vikings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773006",
+    "name": "Cleveland Browns at Philadelphia Eagles",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773027",
+    "name": "Carolina Panthers at Houston Texans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401774569",
+    "name": "San Francisco 49ers at Las Vegas Raiders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773007",
+    "name": "Baltimore Ravens at Dallas Cowboys",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773021",
+    "name": "Los Angeles Chargers at Los Angeles Rams",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773009",
+    "name": "New York Jets at New York Giants",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773000",
+    "name": "Tampa Bay Buccaneers at Pittsburgh Steelers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401774637",
+    "name": "Arizona Cardinals at Denver Broncos",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773014",
+    "name": "Jacksonville Jaguars at New Orleans Saints",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772972",
+    "name": "Buffalo Bills at Chicago Bears",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772973",
+    "name": "Cincinnati Bengals at Washington Commanders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773019",
+    "name": "Pittsburgh Steelers at Carolina Panthers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772974",
+    "name": "New England Patriots at New York Giants",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772997",
+    "name": "Philadelphia Eagles at New York Jets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773008",
+    "name": "Atlanta Falcons at Dallas Cowboys",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772975",
+    "name": "Minnesota Vikings at Tennessee Titans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773004",
+    "name": "Chicago Bears at Kansas City Chiefs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401777124",
+    "name": "Baltimore Ravens at Washington Commanders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772998",
+    "name": "Indianapolis Colts at Cincinnati Bengals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772999",
+    "name": "Los Angeles Rams at Cleveland Browns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401776265",
+    "name": "Houston Texans at Detroit Lions",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773015",
+    "name": "Denver Broncos at New Orleans Saints",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773011",
+    "name": "Seattle Seahawks at Green Bay Packers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401776565",
+    "name": "Jacksonville Jaguars at Miami Dolphins",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401774030",
+    "name": "Buffalo Bills at Tampa Bay Buccaneers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401776567",
+    "name": "Los Angeles Chargers at San Francisco 49ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401774590",
+    "name": "Las Vegas Raiders at Arizona Cardinals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772979",
+    "name": "Los Angeles Rams at Carolina Panthers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772981",
+    "name": "Green Bay Packers at Chicago Bears",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772977",
+    "name": "Buffalo Bills at Jacksonville Jaguars",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772980",
+    "name": "San Francisco 49ers at Philadelphia Eagles",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772978",
+    "name": "Los Angeles Chargers at New England Patriots",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772976",
+    "name": "Houston Texans at Pittsburgh Steelers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772982",
+    "name": "Buffalo Bills at Denver Broncos",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772984",
+    "name": "San Francisco 49ers at Seattle Seahawks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772983",
+    "name": "Houston Texans at New England Patriots",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772985",
+    "name": "Los Angeles Rams at Chicago Bears",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772986",
+    "name": "New England Patriots at Denver Broncos",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772987",
+    "name": "Los Angeles Rams at Seattle Seahawks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401831718",
+    "name": "NFC  at AFC ",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772988",
+    "name": "Seattle Seahawks at New England Patriots",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873271",
+    "name": "Carolina Panthers at Arizona Cardinals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873272",
+    "name": "Detroit Lions at Cincinnati Bengals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873275",
+    "name": "Green Bay Packers at Pittsburgh Steelers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873273",
+    "name": "Indianapolis Colts at New England Patriots",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873640",
+    "name": "Arizona Cardinals at Las Vegas Raiders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873274",
+    "name": "Los Angeles Chargers at Houston Texans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401874392",
+    "name": "Tennessee Titans at San Francisco 49ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873278",
+    "name": "Denver Broncos at Atlanta Falcons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873276",
+    "name": "Tampa Bay Buccaneers at New York Jets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873277",
+    "name": "Miami Dolphins at Washington Commanders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873282",
+    "name": "Carolina Panthers at Buffalo Bills",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401874393",
+    "name": "Cleveland Browns at Chicago Bears",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873280",
+    "name": "Minnesota Vikings at New York Giants",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873283",
+    "name": "Los Angeles Rams at Kansas City Chiefs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873281",
+    "name": "Jacksonville Jaguars at New Orleans Saints",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873284",
+    "name": "Philadelphia Eagles at Baltimore Ravens",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873279",
+    "name": "Dallas Cowboys at Seattle Seahawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873286",
+    "name": "Las Vegas Raiders at Houston Texans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873285",
+    "name": "San Francisco 49ers at Los Angeles Chargers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873288",
+    "name": "New York Jets at Pittsburgh Steelers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873287",
+    "name": "Carolina Panthers at Jacksonville Jaguars",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873613",
+    "name": "Green Bay Packers at Denver Broncos",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873601",
+    "name": "Washington Commanders at Detroit Lions",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873294",
+    "name": "Buffalo Bills at Cleveland Browns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873295",
+    "name": "Atlanta Falcons at Indianapolis Colts",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873291",
+    "name": "Baltimore Ravens at Minnesota Vikings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873290",
+    "name": "New Orleans Saints at Los Angeles Rams",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873292",
+    "name": "New York Giants at Miami Dolphins",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873289",
+    "name": "Chicago Bears at Cincinnati Bengals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873293",
+    "name": "Philadelphia Eagles at New England Patriots",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873296",
+    "name": "Kansas City Chiefs at Tampa Bay Buccaneers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401874101",
+    "name": "Dallas Cowboys at Arizona Cardinals",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873297",
+    "name": "Seattle Seahawks at Tennessee Titans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873298",
+    "name": "Pittsburgh Steelers at Buffalo Bills",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873299",
+    "name": "New England Patriots at Cleveland Browns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873641",
+    "name": "San Francisco 49ers at Las Vegas Raiders",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873300",
+    "name": "Los Angeles Rams at Los Angeles Chargers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873302",
+    "name": "Washington Commanders at Baltimore Ravens",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873304",
+    "name": "Atlanta Falcons at Miami Dolphins",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873307",
+    "name": "Houston Texans at Carolina Panthers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873303",
+    "name": "New York Giants at New York Jets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873306",
+    "name": "Tampa Bay Buccaneers at Jacksonville Jaguars",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401874048",
+    "name": "New Orleans Saints at Dallas Cowboys",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401874102",
+    "name": "Arizona Cardinals at Green Bay Packers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873305",
+    "name": "Seattle Seahawks at Kansas City Chiefs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873301",
+    "name": "Cincinnati Bengals at Philadelphia Eagles",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873614",
+    "name": "Minnesota Vikings at Denver Broncos",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873308",
+    "name": "Detroit Lions at Indianapolis Colts",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401874394",
+    "name": "Chicago Bears at Tennessee Titans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   }
+  ],
+  "final": 1238,
+  "already_covered": 151,
+  "added": 1087,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401873070",
+    "name": "Miami Dolphins at Buffalo Bills",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873071",
+    "name": "New Orleans Saints at Chicago Bears",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873073",
+    "name": "Tennessee Titans at Dallas Cowboys",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873072",
+    "name": "Tampa Bay Buccaneers at Detroit Lions",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873067",
+    "name": "Arizona Cardinals at Kansas City Chiefs",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873076",
+    "name": "Pittsburgh Steelers at Philadelphia Eagles",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873068",
+    "name": "Baltimore Ravens at Carolina Panthers",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873074",
+    "name": "New York Jets at Los Angeles Chargers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873075",
+    "name": "Las Vegas Raiders at Denver Broncos",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873069",
+    "name": "Jacksonville Jaguars at New York Giants",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873077",
+    "name": "Minnesota Vikings at San Francisco 49ers",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]
