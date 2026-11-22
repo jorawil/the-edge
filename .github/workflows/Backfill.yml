@@ -13,7 +13,7 @@ on:
       start_date:
         description: "Start date (YYYY-MM-DD)"
         required: true
-        default: "2026-10-01"
+        default: "2026-09-01"
         type: string
       season_types:
         description: "ESPN season type IDs: 1=preseason, 2=regular, 3=postseason"
@@ -23,7 +23,7 @@ on:
       end_date:
         description: "End date (YYYY-MM-DD)"
         required: true
-        default: "2026-10-31"
+        default: "2026-11-22"
         type: string
 
 permissions:
