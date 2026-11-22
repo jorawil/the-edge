@@ -15,6 +15,7 @@ from itertools import groupby
 from pathlib import Path
 from typing import Any
 
+from betting_model.features import _market_values
 from betting_model.projection_engine import project_nba, project_nfl
 
 _BASELINE_PATH = Path(__file__).with_name("walk_forward_backtest.py")
@@ -73,6 +74,28 @@ def validate(
         return {"ok": False, "reason": "invalid_shape", "detail": "games file has no games object"}
 
     target_rows, exclusions = _BASELINE._game_rows(sport, games)
+    if sport == "nba":
+        # PRA is a point-estimate market built from the three source components.
+        # Its joint uncertainty remains unavailable until residual covariance is validated.
+        for event_id, game in games.items():
+            if not isinstance(game, dict) or game.get("season_type_id") != 2:
+                continue
+            event_time = _BASELINE._event_time(game)
+            if event_time is None:
+                continue
+            grouped_players: dict[str, list[dict[str, Any]]] = defaultdict(list)
+            for player in game.get("players") or []:
+                if isinstance(player, dict) and not player.get("dnp") and player.get("athlete_id") is not None:
+                    grouped_players[str(player["athlete_id"])].append(player)
+            for player_id, player_rows in grouped_players.items():
+                actual, _ = _market_values("nba", "PRA", player_rows)
+                if actual is not None:
+                    target_rows.append({
+                        "event_id": str(event_id), "event_time": event_time,
+                        "player_id": player_id,
+                        "player": next((item.get("player") for item in player_rows if item.get("player")), None),
+                        "market": "PRA", "actual": actual,
+                    })
     player_rows_by_event: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for event_id, game in games.items():
         if not isinstance(game, dict) or game.get("season_type_id") != 2:
@@ -86,7 +109,9 @@ def validate(
     for row in target_rows:
         coverage[row["market"]]["target_rows"] += 1
         player_rows = player_rows_by_event.get((row["event_id"], row["player_id"]), [])
-        opportunity = _OPP._opportunity(sport, row["market"], player_rows)
+        opportunity = (_OPP._minutes((player_rows[0].get("stats") or {}).get("minutes"))
+                       if sport == "nba" and row["market"] == "PRA" and player_rows
+                       else _OPP._opportunity(sport, row["market"], player_rows))
         if opportunity is None or (opportunity == 0 and row["actual"] > 0):
             continue
         coverage[row["market"]]["with_opportunity"] += 1
