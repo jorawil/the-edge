@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -15,11 +16,17 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from .books import BOOKS
+from .pairing import attach_opposites
+from .reports import group_rows, plain_header
 from .sports import evaluate_prop
+from .version import MODEL_VERSION
 
 ET = ZoneInfo("America/New_York")
-# Writes next to the directory you run the command from, not a hardcoded machine path.
-DEFAULT_OUT_DIR = Path.cwd() / "out"
+
+
+def default_out_dir() -> Path:
+    """./out in the directory the command is run from."""
+    return Path.cwd() / "out"
 
 
 def _side_label(is_over: bool) -> str:
@@ -32,7 +39,22 @@ def _rank_key(row: dict[str, Any]) -> float:
     return float(row.get("edge") or -999.0)
 
 
-def evaluate_props_file(props_path: Path, out_dir: Path, n: int = 10) -> dict[str, Any]:
+def safe_save_name(name: str) -> str:
+    """A plain file name. Rejects paths so --save-as cannot write outside the output folder."""
+    if Path(name).name != name or name in {".", ".."}:
+        raise ValueError("--save-as must be a file name, not a path")
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,80}", name):
+        raise ValueError("--save-as may use letters, numbers, dot, underscore, and hyphen only")
+    return name
+
+
+def evaluate_props_file(
+    props_path: Path,
+    out_dir: Path,
+    n: int = 10,
+    *,
+    threshold: float | None = None,
+) -> dict[str, Any]:
     raw = json.loads(props_path.read_text(encoding="utf-8"))
     if isinstance(raw, dict) and "props" in raw:
         props = raw["props"]
@@ -43,16 +65,21 @@ def evaluate_props_file(props_path: Path, out_dir: Path, n: int = 10) -> dict[st
     else:
         raise ValueError("props JSON must be a list or {props: [...]}")
 
-    results = [evaluate_prop(p, n=n) for p in props]
+    props = attach_opposites(props)
+    results = [
+        evaluate_prop(p, n=n, file_meta=meta, threshold=threshold) for p in props
+    ]
     ranked = sorted(results, key=_rank_key, reverse=True)
     positive = [r for r in ranked if r.get("positive_edge")]
     evaluated = [r for r in ranked if r.get("evaluated")]
     skipped = [r for r in ranked if r.get("skipped")]
+    groups = group_rows(ranked)
 
     now = datetime.now(ET)
     payload = {
         "generated_at": now.isoformat(),
         "timezone": "America/New_York",
+        "model_version": MODEL_VERSION,
         "props_path": str(props_path),
         "meta": meta,
         "summary": {
@@ -60,7 +87,20 @@ def evaluate_props_file(props_path: Path, out_dir: Path, n: int = 10) -> dict[st
             "evaluated": len(evaluated),
             "skipped": len(skipped),
             "positive_edge": len(positive),
+            "qualified": len(groups["QUALIFIED"]),
+            "watch": len(groups["WATCH"]),
+            "rejected": len(groups["REJECTED"]),
+            "not_evaluable": len(groups["NOT_EVALUABLE"]),
+            "edge_threshold": threshold if threshold is not None else 0.03,
+            "note": (
+                "positive_edge is the older vig-inclusive screen. "
+                "qualified is the stricter grade. Neither one places a bet."
+            ),
         },
+        "qualified": groups["QUALIFIED"],
+        "watch": groups["WATCH"],
+        "rejected": groups["REJECTED"],
+        "not_evaluable": groups["NOT_EVALUABLE"],
         "positive_edges": positive,
         "all": ranked,
     }
@@ -78,6 +118,7 @@ def evaluate_props_file(props_path: Path, out_dir: Path, n: int = 10) -> dict[st
 def _to_markdown(payload: dict[str, Any]) -> str:
     s = payload["summary"]
     lines = [
+        plain_header(payload),
         "# Edges latest (probability-first)",
         "",
         f"- Generated: **{payload['generated_at']}** ({payload['timezone']})",
@@ -180,18 +221,35 @@ def main(argv: list[str] | None = None) -> int:
 
     ev = sub.add_parser("evaluate", help="Evaluate a props JSON shortlist")
     ev.add_argument("--props", required=True, type=Path, help="Path to props JSON")
-    ev.add_argument("--out", type=Path, default=DEFAULT_OUT_DIR, help="Output directory")
+    ev.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="Output directory. Default is ./out in the current directory.",
+    )
     ev.add_argument("--save-as", type=str, default=None, help="Also save md/json copies as out/<name>.md/.json")
     ev.add_argument("--n", type=int, default=10, help="NBA recent games window")
+    ev.add_argument(
+        "--threshold",
+        type=float,
+        default=None,
+        help="Edge threshold in probability points. Default is 0.03 (3 percentage points).",
+    )
 
     args = parser.parse_args(argv)
     if args.cmd == "evaluate":
-        payload = evaluate_props_file(args.props, args.out, n=args.n)
-        if args.save_as:
+        try:
+            save_as = safe_save_name(args.save_as) if args.save_as else None
+        except ValueError as exc:
+            print(exc, file=sys.stderr)
+            return 2
+        out_dir = args.out if args.out is not None else default_out_dir()
+        payload = evaluate_props_file(args.props, out_dir, n=args.n, threshold=args.threshold)
+        if save_as:
             import shutil
             for ext in ("md", "json"):
-                shutil.copyfile(args.out / f"edges_latest.{ext}", args.out / f"{args.save_as}.{ext}")
-                print(f"Wrote {args.out / f'{args.save_as}.{ext}'}")
+                shutil.copyfile(args.out / f"edges_latest.{ext}", args.out / f"{save_as}.{ext}")
+                print(f"Wrote {args.out / f'{save_as}.{ext}'}")
         print(f"Wrote {payload['out_json']}")
         print(f"Wrote {payload['out_md']}")
         print(

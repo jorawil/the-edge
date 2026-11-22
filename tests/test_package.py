@@ -11,7 +11,7 @@ from betting_model.data_store import DATA_DIR
 
 def test_public_imports():
     assert betting_model.implied_probability(-110) == pytest.approx(110 / 210)
-    assert betting_model.__version__ == "0.1.0"
+    assert betting_model.__version__ == "0.2.0"
 
 
 def test_data_dir_is_inside_the_repo():
