@@ -188,3 +188,29 @@ def test_box_without_a_stat_does_not_invent_one():
     )
     assert players[0]["stats"] == {"points": "10", "rebounds": "0"}
     assert "assists" not in players[0]["stats"]
+
+
+def test_invalid_score_values_are_missing_not_fatal():
+    module = _load()
+    assert module._score(None) is None
+    assert module._score("") is None
+    assert module._score("—") is None
+    assert module._score("not-a-score") is None
+    assert module._score(True) is None
+    assert module._score(0) == 0
+    assert module._score("17") == 17
+
+
+def test_record_with_malformed_score_is_not_considered_complete():
+    module = _load()
+    record = {
+        "date_utc": "2026-01-02T00:00:00Z",
+        "source": "ESPN",
+        "scores": {"AWY": "—", "HME": "17"},
+        "players": [
+            {"player": "Example", "dnp": False, "stats": {"points": "10"}}
+        ],
+    }
+    assert not module.record_is_complete(record)
+    record["scores"]["AWY"] = "0"
+    assert module.record_is_complete(record)
