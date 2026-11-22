@@ -39,16 +39,22 @@ def parse_box(summ):
     return players, teams
 
 def _season_metadata(event):
-    """Return ESPN season type ID/name/year; None ID means unclassified."""
+    """Return ESPN season type ID/name/year across object and scalar API shapes."""
     season = event.get("season") or {}
-    season_type = season.get("type") or {}
-    raw_id = season_type.get("id")
+    season_type = season.get("type")
+    if isinstance(season_type, dict):
+        raw_id = season_type.get("id")
+        type_name = season_type.get("name") or season_type.get("abbreviation")
+    else:
+        # ESPN scoreboards may return type as an integer (or numeric string).
+        raw_id = season_type
+        type_name = None
     try:
-        type_id = int(raw_id) if raw_id is not None else None
-    except (TypeError, ValueError):
+        type_id = int(raw_id) if raw_id is not None and not isinstance(raw_id, bool) else None
+    except (TypeError, ValueError, OverflowError):
         type_id = None
     return {"season_year": season.get("year"), "season_type_id": type_id,
-            "season_type_name": season_type.get("name") or season_type.get("abbreviation")}
+            "season_type_name": type_name}
 
 
 def record_is_complete(record) -> bool:
