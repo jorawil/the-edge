@@ -40,5 +40,5 @@ def test_projection_validation_selects_on_validation_and_reports_test_separately
     assert pts["selected"] is not None
     assert pts["held_out_test"]["split"] == "test"
     assert pts["held_out_test"]["n"] > 0
-    assert "PRA" not in {row["market"] for row in result["metrics"]}
+    assert "PRA" in {row["market"] for row in result["metrics"]}
     assert any("PRA is not included" in item for item in result["limitations"])
