@@ -5,9 +5,10 @@ import json
 import sys
 import time
 import datetime as dt
+import os
 import urllib.request
 from pathlib import Path
-DATA = Path(__file__).resolve().parents[1] / "data"
+DATA = Path(os.environ.get("EDGE_DATA_DIR", Path(__file__).resolve().parents[1] / "data"))
 SPORTS = {"nba": "basketball/nba", "nhl": "hockey/nhl", "nfl": "football/nfl", "cfb": "football/college-football"}
 BASE = "https://site.api.espn.com/apis/site/v2/sports/"
 
