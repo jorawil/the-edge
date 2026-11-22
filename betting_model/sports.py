@@ -4,44 +4,135 @@ from __future__ import annotations
 
 from typing import Any
 
-from .core import EDGE_THRESHOLD, calculate_edge, implied_probability
 from .books import BOOK_KEYS, BOOK_LABELS, normalize_book
+from .core import (
+    EDGE_THRESHOLD,
+    calculate_edge,
+    clears_threshold,
+    expected_value_per_unit,
+    explain_sigma,
+    fair_probability_for_side,
+    implied_probability,
+    parse_american_odds,
+    parse_finite_number,
+    parse_side,
+)
 from .nba import get_nba_player_recent_avg, map_market_to_avg
+from .validation import price_errors, prop_label
+
+
+def _opposite_kwargs(prop: dict[str, Any]) -> dict[str, Any]:
+    opposite = prop.get("opposite")
+    kwargs: dict[str, Any] = {}
+    if prop.get("retrieved_at"):
+        kwargs["price_retrieved_at"] = prop.get("retrieved_at")
+    if prop.get("threshold") is not None:
+        kwargs["threshold"] = prop.get("threshold")
+    if isinstance(opposite, dict):
+        kwargs["opposite_odds"] = opposite.get("odds")
+        kwargs["opposite_line"] = opposite.get("line", prop.get("line"))
+        kwargs["opposite_retrieved_at"] = opposite.get("retrieved_at")
+    return kwargs
 
 
 def _edge_from_prop(prop: dict[str, Any], projected: float) -> dict[str, Any]:
     """Honor eval_mode=binary_ml (win_prob - implied) and optional sigma."""
     mode = str(prop.get("eval_mode") or "").strip().lower()
-    odds = int(prop["odds"])
-    line = float(prop["line"])
-    is_over = bool(prop["is_over"])
+    is_over = parse_side(prop["is_over"])
     market = str(prop.get("market") or "")
     sigma = prop.get("sigma")
+    extra = _opposite_kwargs(prop)
     if mode == "binary_ml":
-        # projected is already a win probability in [0,1]
-        win_p = float(projected)
-        if win_p > 1.0:
-            win_p = win_p / 100.0
-        implied = implied_probability(odds)
-        edge = win_p - implied
-        return {
-            "projected": float(projected) if float(projected) <= 1.0 else win_p,
-            "line": line,
-            "odds": odds,
-            "is_over": is_over,
-            "implied_prob": round(implied, 6),
-            "model_prob": round(win_p, 6),
-            "edge": round(edge, 6),
-            "positive_edge": bool(edge > EDGE_THRESHOLD),
-            "sigma": None,
-            "market": market,
-            "edge_threshold": EDGE_THRESHOLD,
-            "eval_mode": "binary_ml",
-        }
-    kw = {"market": market}
+        return _binary_edge(prop, float(projected), is_over=is_over, extra=extra)
+    kw: dict[str, Any] = {"market": market, **extra}
     if sigma is not None:
-        kw["sigma"] = float(sigma)
-    return calculate_edge(float(projected), line, odds, is_over, **kw)
+        kw["sigma"] = sigma
+    return calculate_edge(float(projected), prop["line"], prop["odds"], is_over, **kw)
+
+
+def _binary_edge(
+    prop: dict[str, Any],
+    projected: float,
+    *,
+    is_over: bool,
+    extra: dict[str, Any],
+) -> dict[str, Any]:
+    """A supplied win probability. Assumes no push, and says so."""
+    supplied = parse_finite_number(projected, "projected")
+    win_p = supplied
+    if win_p > 1.0:
+        if win_p > 100.0:
+            raise ValueError(
+                f"{prop_label(prop)}: binary win probability {supplied} is above 100"
+            )
+        win_p = win_p / 100.0
+    if win_p < 0.0 or win_p > 1.0:
+        raise ValueError(
+            f"{prop_label(prop)}: binary win probability must be between 0 and 1"
+        )
+    odds = parse_american_odds(prop["odds"])
+    line = parse_finite_number(prop["line"], "line")
+    threshold = extra.get("threshold", EDGE_THRESHOLD)
+    implied = implied_probability(odds)
+    edge = win_p - implied
+    fair, fair_reason, fair_extra = fair_probability_for_side(
+        odds=odds,
+        line=line,
+        opposite_odds=extra.get("opposite_odds"),
+        opposite_line=extra.get("opposite_line"),
+        price_retrieved_at=extra.get("price_retrieved_at"),
+        opposite_retrieved_at=extra.get("opposite_retrieved_at"),
+    )
+    fair_edge = None if fair is None else win_p - fair
+    ev = expected_value_per_unit(win_p, 1.0 - win_p, 0.0, odds)
+    if fair_edge is not None:
+        threshold_edge, threshold_metric = fair_edge, "edge_vs_fair_market"
+    else:
+        threshold_edge, threshold_metric = edge, "edge_vs_raw_implied"
+    sigma_info = explain_sigma(str(prop.get("market") or ""), None)
+    shown = supplied if supplied <= 1.0 else win_p
+    return {
+        "projected": shown,
+        "line": line,
+        "odds": odds,
+        "is_over": is_over,
+        "implied_prob": round(implied, 6),
+        "model_prob": round(win_p, 6),
+        "edge": round(edge, 6),
+        "positive_edge": clears_threshold(edge, threshold),
+        "sigma": None,
+        "market": prop.get("market"),
+        "edge_threshold": threshold,
+        "eval_mode": "binary_ml",
+        "canonical_market": sigma_info["canonical_market"],
+        "sigma_source": "not_used",
+        "sigma_calibrated": False,
+        "distribution": "supplied_win_probability",
+        "distribution_calibrated": False,
+        "line_kind": None,
+        "push_handling": "binary_no_push",
+        "push_reason": "binary mode uses the supplied win probability and assumes no push",
+        "model_probability": round(win_p, 6),
+        "model_probability_ignores_push": False,
+        "win_probability": round(win_p, 6),
+        "loss_probability": round(1.0 - win_p, 6),
+        "push_probability": 0.0,
+        "raw_implied_probability": round(implied, 6),
+        "edge_vs_raw_implied": round(edge, 6),
+        "settlement_edge_vs_raw_implied": round(edge, 6),
+        "fair_market_probability": None if fair is None else round(fair, 6),
+        "edge_vs_fair_market": None if fair_edge is None else round(fair_edge, 6),
+        "fair_market_reason": fair_reason,
+        "overround": fair_extra.get("overround"),
+        "opposite_odds": fair_extra.get("opposite_odds"),
+        "price_skew_seconds": fair_extra.get("price_skew_seconds"),
+        "expected_value_per_unit": round(ev, 6),
+        "ev_reason": None,
+        "threshold_edge": round(threshold_edge, 6),
+        "threshold_edge_metric": threshold_metric,
+        "threshold_cleared": clears_threshold(threshold_edge, threshold),
+        "positive_edge_basis": "legacy model_prob minus vig-inclusive implied probability",
+    }
 
 
 def _base_result(prop: dict[str, Any], edge: dict[str, Any] | None, **extra: Any) -> dict[str, Any]:
@@ -63,8 +154,15 @@ def _base_result(prop: dict[str, Any], edge: dict[str, Any] | None, **extra: Any
     return out
 
 
+def _rejected(prop: dict[str, Any], errors: list[str]) -> dict[str, Any]:
+    return _base_result(prop, None, skip_reason="; ".join(errors))
+
+
 def evaluate_nba_prop(prop: dict[str, Any], *, n: int = 10) -> dict[str, Any]:
     """Evaluate one NBA prop; auto-fill projected from recent avg if missing."""
+    errors = price_errors(prop)
+    if errors:
+        return _rejected(prop, errors)
     projected = prop.get("projected")
     proj_source = "manual" if projected is not None else None
     avg_info = None
@@ -102,6 +200,9 @@ def evaluate_nba_prop(prop: dict[str, Any], *, n: int = 10) -> dict[str, Any]:
 
 def evaluate_wnba_prop(prop: dict[str, Any]) -> dict[str, Any]:
     """WNBA: no auto-proj API yet. Needs manual projected or skip."""
+    errors = price_errors(prop)
+    if errors:
+        return _rejected(prop, errors)
     projected = prop.get("projected")
     if projected is None:
         return _base_result(
@@ -115,6 +216,9 @@ def evaluate_wnba_prop(prop: dict[str, Any]) -> dict[str, Any]:
 
 def evaluate_nfl_prop(prop: dict[str, Any]) -> dict[str, Any]:
     """NFL: projected optional; without it skip (Muse owns final NFL ticket)."""
+    errors = price_errors(prop)
+    if errors:
+        return _rejected(prop, errors)
     projected = prop.get("projected")
     if projected is None:
         return _base_result(
@@ -128,6 +232,9 @@ def evaluate_nfl_prop(prop: dict[str, Any]) -> dict[str, Any]:
 
 def evaluate_mlb_prop(prop: dict[str, Any]) -> dict[str, Any]:
     """MLB skeleton: needs manual projected."""
+    errors = price_errors(prop)
+    if errors:
+        return _rejected(prop, errors)
     projected = prop.get("projected")
     if projected is None:
         return _base_result(
@@ -140,30 +247,61 @@ def evaluate_mlb_prop(prop: dict[str, Any]) -> dict[str, Any]:
 
 
 def evaluate_prop(prop: dict[str, Any], *, n: int = 10) -> dict[str, Any]:
-    """Dispatch; if prop has `books` {book: {line, odds, source} | null}, price every book."""
-    if prop.get("books"):
-        return evaluate_multibook_prop(prop, n=n)
-    return _evaluate_single(prop, n=n)
+    """Dispatch; if prop has `books` {book: {line, odds, source} | null}, price every book.
+
+    One bad prop returns a skipped row. It does not raise.
+    """
+    if not isinstance(prop, dict):
+        return {
+            "player": None,
+            "evaluated": False,
+            "skipped": True,
+            "skip_reason": "prop must be a JSON object",
+        }
+    try:
+        if prop.get("books"):
+            return evaluate_multibook_prop(prop, n=n)
+        return _evaluate_single(prop, n=n)
+    except Exception as exc:  # noqa: BLE001 — one bad prop must not kill the batch
+        return _base_result(
+            prop,
+            None,
+            skip_reason=f"could not evaluate this prop: {exc}",
+        )
 
 
 def evaluate_multibook_prop(prop: dict[str, Any], *, n: int = 10) -> dict[str, Any]:
-    """Evaluate each supported book's price; headline = best edge. Missing books stay missing."""
+    """Evaluate each supported book's price; headline = best legacy edge.
+
+    Missing books stay missing. A bad price on one book does not drop the others.
+    """
     per_book: dict[str, Any] = {}
     raw = {normalize_book(k) or k: v for k, v in (prop.get("books") or {}).items()}
     best = None
     for key in BOOK_KEYS:
-        q = raw.get(key)
-        if not q or q.get("line") is None or q.get("odds") is None:
-            per_book[key] = {"book": BOOK_LABELS[key], "missing": True,
-                             "reason": (q or {}).get("reason", "no line found")}
+        quote = raw.get(key)
+        if not quote or quote.get("line") is None or quote.get("odds") is None:
+            per_book[key] = {
+                "book": BOOK_LABELS[key],
+                "missing": True,
+                "reason": (quote or {}).get("reason", "no line found"),
+            }
             continue
-        sub = {**prop, "line": q["line"], "odds": q["odds"], "source": q.get("source")}
+        sub = {**prop, "line": quote["line"], "odds": quote["odds"], "source": quote.get("source")}
         sub.pop("books", None)
-        r = _evaluate_single(sub, n=n)
-        r["book"] = BOOK_LABELS[key]
-        per_book[key] = r
-        if r.get("evaluated") and (best is None or r["edge"] > best["edge"]):
-            best = r
+        sub.pop("opposite", None)
+        if quote.get("opposite"):
+            sub["opposite"] = quote["opposite"]
+        if quote.get("retrieved_at"):
+            sub["retrieved_at"] = quote["retrieved_at"]
+        try:
+            row = _evaluate_single(sub, n=n)
+        except Exception as exc:  # noqa: BLE001 — one bad book must not drop the others
+            row = _base_result(sub, None, skip_reason=f"could not evaluate this prop: {exc}")
+        row["book"] = BOOK_LABELS[key]
+        per_book[key] = row
+        if row.get("evaluated") and (best is None or row["edge"] > best["edge"]):
+            best = row
     unknown = [k for k in raw if k not in BOOK_KEYS]
     if best is None:
         out = _base_result(prop, None, skip_reason="no priced book")
@@ -187,7 +325,9 @@ def _evaluate_single(prop: dict[str, Any], *, n: int = 10) -> dict[str, Any]:
         return evaluate_nfl_prop(prop)
     if sport in ("mlb", "baseball_mlb"):
         return evaluate_mlb_prop(prop)
-    # fallback: if projected present, still calc edge
+    errors = price_errors(prop)
+    if errors:
+        return _rejected(prop, errors)
     if prop.get("projected") is not None:
         edge = _edge_from_prop(prop, float(prop["projected"]))
         return _base_result(prop, edge, proj_source="manual", sport_note="unknown sport")
