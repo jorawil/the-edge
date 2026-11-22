@@ -37,6 +37,19 @@ def parse_box(summ):
              for t in summ.get("boxscore", {}).get("teams", [])]
     return players, teams
 
+def _season_metadata(event):
+    """Return ESPN season type ID/name/year; None ID means unclassified."""
+    season = event.get("season") or {}
+    season_type = season.get("type") or {}
+    raw_id = season_type.get("id")
+    try:
+        type_id = int(raw_id) if raw_id is not None else None
+    except (TypeError, ValueError):
+        type_id = None
+    return {"season_year": season.get("year"), "season_type_id": type_id,
+            "season_type_name": season_type.get("name") or season_type.get("abbreviation")}
+
+
 def record_is_complete(record) -> bool:
     """True only when a stored game has the pieces a rerun should not replace.
 
@@ -67,11 +80,13 @@ def record_is_complete(record) -> bool:
     return True
 
 
-def run(sport, start, end, fetcher=None):
+def run(sport, start, end, fetcher=None, season_types=(2,)):
+    """Backfill selected ESPN season types; default 2 is regular season."""
+    allowed_season_types = {int(value) for value in season_types}
     fetch = fetcher or get
     path = DATA / sport / "games.json"; path.parent.mkdir(parents=True, exist_ok=True)
     store = json.loads(path.read_text()) if path.exists() else {"games": {}}
-    pre = set(store["games"]); added, repaired, missing, events = [], [], [], []
+    pre = set(store["games"]); added, repaired, missing, events, skipped_season = [], [], [], [], []
     d = start
     while d <= end:
         url = BASE + SPORTS[sport] + f"/scoreboard?dates={d:%Y%m%d}&limit=500" + ("&groups=80" if sport == "cfb" else "")
@@ -81,6 +96,13 @@ def run(sport, start, end, fetcher=None):
     seen = {}
     for e in events: seen[e["id"]] = e
     for gid, e in seen.items():
+        season_meta = _season_metadata(e)
+        season_type_id = season_meta["season_type_id"]
+        if season_type_id not in allowed_season_types:
+            skipped_season.append({"id": gid, "name": e.get("name"),
+                "season_type_id": season_type_id, "season_type_name": season_meta["season_type_name"],
+                "reason": "missing season type metadata" if season_type_id is None else "season type not selected"})
+            continue
         st = e["status"]["type"]
         comp = e["competitions"][0]
         if not st.get("completed"):
@@ -94,7 +116,8 @@ def run(sport, start, end, fetcher=None):
         except Exception as ex:
             players, teams = [], []; missing.append({"id": gid, "name": e["name"], "reason": f"box fetch failed {ex}"})
         if not players: missing.append({"id": gid, "name": e["name"], "reason": "no player box in source"})
-        record = {"id": gid, "date_utc": e.get("date"), "name": e.get("name"), "status": st.get("description"),
+        record = {"id": gid, "date_utc": e.get("date"), "name": e.get("name"), "status": st.get("description"), "season_year": season_meta["season_year"],
+            "season_type_id": season_meta["season_type_id"], "season_type_name": season_meta["season_type_name"],
             "scores": {c["team"]["abbreviation"]: _score(c.get("score")) for c in comp["competitors"]},
             "home": next(c["team"]["abbreviation"] for c in comp["competitors"] if c["homeAway"] == "home"),
             "week": e.get("week", {}).get("number"), "players": players, "team_stats": teams,
@@ -111,7 +134,8 @@ def run(sport, start, end, fetcher=None):
             added.append(gid)
     store["updated"] = dt.datetime.now(dt.timezone.utc).isoformat()
     path.write_text(json.dumps(store, indent=1))
-    rep = {"sport": sport, "events_in_window": len(seen), "final": len(seen) - sum(1 for m in missing if m["reason"].startswith("not final")),
+    rep = {"sport": sport, "events_in_window": len(seen), "selected_season_types": sorted(allowed_season_types), "skipped_season_type": skipped_season,
+           "final": len(seen) - len(skipped_season) - sum(1 for m in missing if m["reason"].startswith("not final")),
            "already_covered": len([g for g in seen if g in pre and record_is_complete(store["games"].get(g, {}))]),
            "added": len(added), "repaired": len(repaired), "missing": missing}
     print(json.dumps({k: v for k, v in rep.items() if k != "missing"}), len(missing))
@@ -129,14 +153,23 @@ def main(argv=None):
     parser.add_argument("sports", nargs="*", help="nba, nhl, nfl, and/or cfb. Default: all four.")
     parser.add_argument("--start", default="2026-10-24", help="First date, YYYY-MM-DD. Default is the original window.")
     parser.add_argument("--end", default="2026-10-31", help="Last date, YYYY-MM-DD.")
+    parser.add_argument("--season-types", default="2", help="Comma-separated ESPN season type IDs (1=preseason, 2=regular, 3=postseason). Default: 2.")
     args = parser.parse_args(argv)
     start = dt.date.fromisoformat(args.start)
     end = dt.date.fromisoformat(args.end)
+    if end < start:
+        parser.error("--end must be on or after --start")
+    try:
+        season_types = tuple({int(value.strip()) for value in args.season_types.split(",") if value.strip()})
+        if not season_types:
+            raise ValueError("at least one season type is required")
+    except ValueError as exc:
+        parser.error(f"invalid --season-types: {exc}")
     chosen = args.sports or list(SPORTS)
     unknown = [sport for sport in chosen if sport not in SPORTS]
     if unknown:
         raise SystemExit(f"unsupported sport: {', '.join(unknown)}")
-    reps = [run(sport, start, end) for sport in chosen]
+    reps = [run(sport, start, end, season_types=season_types) for sport in chosen]
     dated = DATA / f"backfill_report_{start.isoformat()}_{end.isoformat()}.json"
     dated.parent.mkdir(parents=True, exist_ok=True)
     dated.write_text(json.dumps(reps, indent=1))
