@@ -1,1834 +1,5108 @@
 [
  {
-  "sport": "nfl",
-  "events_in_window": 1501,
+  "sport": "nba",
+  "events_in_window": 5906,
   "selected_season_types": [
    2
   ],
   "skipped_season_type": [
    {
-    "id": "401438000",
-    "name": "Seattle Seahawks at San Francisco 49ers",
+    "id": "401474841",
+    "name": "Golden State Warriors at Washington Wizards",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474842",
+    "name": "RA'ANANA Ra'Anana at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474843",
+    "name": "Memphis Grizzlies at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474844",
+    "name": "Washington Wizards at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474845",
+    "name": "Charlotte Hornets at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474846",
+    "name": "Utah Jazz at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474847",
+    "name": "San Antonio Spurs at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474848",
+    "name": "ADELAIDE 36ers at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474849",
+    "name": "Philadelphia 76ers at Brooklyn Nets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474850",
+    "name": "Orlando Magic at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474851",
+    "name": "Oklahoma City Thunder at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474852",
+    "name": "Sacramento Kings at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474853",
+    "name": "Portland Trail Blazers at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474854",
+    "name": "Detroit Pistons at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474855",
+    "name": "Minnesota Timberwolves at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474856",
+    "name": "New Orleans Pelicans at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474857",
+    "name": "Utah Jazz at Portland Trail Blazers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474858",
+    "name": "Indiana Pacers at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474859",
+    "name": "Cleveland Cavaliers at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474860",
+    "name": "Toronto Raptors at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474861",
+    "name": "Dallas Mavericks at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474862",
+    "name": "Phoenix Suns at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474863",
+    "name": "Milwaukee Bucks at Atlanta Hawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474864",
+    "name": "Miami Heat at Brooklyn Nets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474865",
+    "name": "ADELAIDE 36ers at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474866",
+    "name": "Orlando Magic at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474867",
+    "name": "RA'ANANA Ra'Anana at Portland Trail Blazers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474868",
+    "name": "Minnesota Timberwolves at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474869",
+    "name": "Boston Celtics at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474870",
+    "name": "Indiana Pacers at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474871",
+    "name": "Denver Nuggets at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474872",
+    "name": "Toronto Raptors at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474873",
+    "name": "Miami Heat at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474874",
+    "name": "Detroit Pistons at New Orleans Pelicans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474875",
+    "name": "Orlando Magic at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474876",
+    "name": "Atlanta Hawks at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474877",
+    "name": "Chicago Bulls at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474878",
+    "name": "RA'ANANA Ra'Anana at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474879",
+    "name": "New Orleans Pelicans at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474880",
+    "name": "Los Angeles Lakers at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474881",
+    "name": "Portland Trail Blazers at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474882",
+    "name": "Minnesota Timberwolves at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474883",
+    "name": "Washington Wizards at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474884",
+    "name": "Philadelphia 76ers at Cleveland Cavaliers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474885",
+    "name": "Houston Rockets at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474886",
+    "name": "Phoenix Suns at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474887",
+    "name": "Oklahoma City Thunder at Detroit Pistons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474888",
+    "name": "Memphis Grizzlies at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474889",
+    "name": "Milwaukee Bucks at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474890",
+    "name": "San Antonio Spurs at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474891",
+    "name": "Portland Trail Blazers at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474892",
+    "name": "Atlanta Hawks at Cleveland Cavaliers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474893",
+    "name": "New York Knicks at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474894",
+    "name": "Charlotte Hornets at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474895",
+    "name": "New Orleans Pelicans at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474896",
+    "name": "Brooklyn Nets at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474897",
+    "name": "Minnesota Timberwolves at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474898",
+    "name": "Sacramento Kings at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474899",
+    "name": "Denver Nuggets at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474900",
+    "name": "Memphis Grizzlies at Detroit Pistons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474901",
+    "name": "Oklahoma City Thunder at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474902",
+    "name": "Houston Rockets at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474903",
+    "name": "Cleveland Cavaliers at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474904",
+    "name": "Boston Celtics at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474905",
+    "name": "Washington Wizards at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474906",
+    "name": "Brooklyn Nets at Minnesota Timberwolves",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474907",
+    "name": "Atlanta Hawks at New Orleans Pelicans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474908",
+    "name": "Dallas Mavericks at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474909",
+    "name": "Denver Nuggets at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401474910",
+    "name": "Los Angeles Lakers at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401539671",
+    "name": "Atlanta Hawks at Miami Heat",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401539672",
+    "name": "Minnesota Timberwolves at Los Angeles Lakers",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401539673",
+    "name": "Chicago Bulls at Toronto Raptors",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401539674",
+    "name": "Oklahoma City Thunder at New Orleans Pelicans",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401539675",
+    "name": "Chicago Bulls at Miami Heat",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401539676",
+    "name": "Oklahoma City Thunder at Minnesota Timberwolves",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401540750",
+    "name": "Brooklyn Nets at Philadelphia 76ers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401437998",
-    "name": "Los Angeles Chargers at Jacksonville Jaguars",
+    "id": "401540751",
+    "name": "Atlanta Hawks at Boston Celtics",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438002",
-    "name": "Miami Dolphins at Buffalo Bills",
+    "id": "401540752",
+    "name": "New York Knicks at Cleveland Cavaliers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438001",
-    "name": "New York Giants at Minnesota Vikings",
+    "id": "401540753",
+    "name": "Golden State Warriors at Sacramento Kings",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401437999",
-    "name": "Baltimore Ravens at Cincinnati Bengals",
+    "id": "401540756",
+    "name": "Los Angeles Lakers at Memphis Grizzlies",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438003",
-    "name": "Dallas Cowboys at Tampa Bay Buccaneers",
+    "id": "401540754",
+    "name": "Miami Heat at Milwaukee Bucks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438005",
-    "name": "Jacksonville Jaguars at Kansas City Chiefs",
+    "id": "401540757",
+    "name": "LA Clippers at Phoenix Suns",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438004",
-    "name": "New York Giants at Philadelphia Eagles",
+    "id": "401540755",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438007",
-    "name": "Cincinnati Bengals at Buffalo Bills",
+    "id": "401541173",
+    "name": "Brooklyn Nets at Philadelphia 76ers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438006",
-    "name": "Dallas Cowboys at San Francisco 49ers",
+    "id": "401541169",
+    "name": "Golden State Warriors at Sacramento Kings",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438009",
-    "name": "San Francisco 49ers at Philadelphia Eagles",
+    "id": "401541172",
+    "name": "Atlanta Hawks at Boston Celtics",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438008",
-    "name": "Cincinnati Bengals at Kansas City Chiefs",
+    "id": "401541174",
+    "name": "New York Knicks at Cleveland Cavaliers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401492629",
-    "name": "AFC  at NFC ",
+    "id": "401541170",
+    "name": "LA Clippers at Phoenix Suns",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401438030",
-    "name": "Kansas City Chiefs at Philadelphia Eagles",
+    "id": "401541168",
+    "name": "Los Angeles Lakers at Memphis Grizzlies",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547654",
-    "name": "New York Jets at Cleveland Browns",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548631",
-    "name": "Houston Texans at New England Patriots",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550740",
-    "name": "Minnesota Vikings at Seattle Seahawks",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548624",
-    "name": "Green Bay Packers at Cincinnati Bengals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550739",
-    "name": "New York Giants at Detroit Lions",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548626",
-    "name": "Atlanta Falcons at Miami Dolphins",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550178",
-    "name": "Pittsburgh Steelers at Tampa Bay Buccaneers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401549309",
-    "name": "Washington Commanders at Cleveland Browns",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548496",
-    "name": "Denver Broncos at Arizona Cardinals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547663",
-    "name": "Indianapolis Colts at Buffalo Bills",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548411",
-    "name": "Tennessee Titans at Chicago Bears",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550833",
-    "name": "New York Jets at Carolina Panthers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548620",
-    "name": "Jacksonville Jaguars at Dallas Cowboys",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547659",
-    "name": "Philadelphia Eagles at Baltimore Ravens",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547666",
-    "name": "Los Angeles Chargers at Los Angeles Rams",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548628",
-    "name": "Kansas City Chiefs at New Orleans Saints",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550918",
-    "name": "San Francisco 49ers at Las Vegas Raiders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547661",
-    "name": "Cleveland Browns at Philadelphia Eagles",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550834",
-    "name": "Carolina Panthers at New York Giants",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548625",
-    "name": "Cincinnati Bengals at Atlanta Falcons",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548621",
-    "name": "Jacksonville Jaguars at Detroit Lions",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547665",
-    "name": "Miami Dolphins at Houston Texans",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547662",
-    "name": "Buffalo Bills at Pittsburgh Steelers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547664",
-    "name": "Chicago Bears at Indianapolis Colts",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550836",
-    "name": "Tampa Bay Buccaneers at New York Jets",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401549211",
-    "name": "New England Patriots at Green Bay Packers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548507",
-    "name": "Tennessee Titans at Minnesota Vikings",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548497",
-    "name": "Kansas City Chiefs at Arizona Cardinals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548509",
-    "name": "Denver Broncos at San Francisco 49ers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547668",
-    "name": "Las Vegas Raiders at Los Angeles Rams",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550161",
-    "name": "Dallas Cowboys at Seattle Seahawks",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547667",
-    "name": "New Orleans Saints at Los Angeles Chargers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547655",
-    "name": "Baltimore Ravens at Washington Commanders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548627",
-    "name": "Pittsburgh Steelers at Atlanta Falcons",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547656",
-    "name": "Indianapolis Colts at Philadelphia Eagles",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547657",
-    "name": "Detroit Lions at Carolina Panthers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548508",
-    "name": "New England Patriots at Tennessee Titans",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548510",
-    "name": "Los Angeles Chargers at San Francisco 49ers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548412",
-    "name": "Buffalo Bills at Chicago Bears",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401549212",
-    "name": "Seattle Seahawks at Green Bay Packers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548629",
-    "name": "Cleveland Browns at Kansas City Chiefs",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548498",
-    "name": "Arizona Cardinals at Minnesota Vikings",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550835",
-    "name": "New York Jets at New York Giants",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548623",
-    "name": "Cincinnati Bengals at Washington Commanders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547660",
-    "name": "Baltimore Ravens at Tampa Bay Buccaneers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401548622",
-    "name": "Miami Dolphins at Jacksonville Jaguars",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401550167",
-    "name": "Las Vegas Raiders at Dallas Cowboys",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547669",
-    "name": "Los Angeles Rams at Denver Broncos",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547658",
-    "name": "Houston Texans at New Orleans Saints",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401547749",
-    "name": "Cleveland Browns at Houston Texans",
+    "id": "401541171",
+    "name": "Miami Heat at Milwaukee Bucks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547750",
-    "name": "Miami Dolphins at Kansas City Chiefs",
+    "id": "401541167",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547752",
-    "name": "Green Bay Packers at Dallas Cowboys",
+    "id": "401541181",
+    "name": "Philadelphia 76ers at Brooklyn Nets",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547753",
-    "name": "Los Angeles Rams at Detroit Lions",
+    "id": "401541177",
+    "name": "Sacramento Kings at Golden State Warriors",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547751",
-    "name": "Pittsburgh Steelers at Buffalo Bills",
+    "id": "401541178",
+    "name": "Phoenix Suns at LA Clippers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547754",
-    "name": "Philadelphia Eagles at Tampa Bay Buccaneers",
+    "id": "401541180",
+    "name": "Boston Celtics at Atlanta Hawks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547755",
-    "name": "Houston Texans at Baltimore Ravens",
+    "id": "401541182",
+    "name": "Cleveland Cavaliers at New York Knicks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547756",
-    "name": "Green Bay Packers at San Francisco 49ers",
+    "id": "401541175",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547757",
-    "name": "Tampa Bay Buccaneers at Detroit Lions",
+    "id": "401541189",
+    "name": "Philadelphia 76ers at Brooklyn Nets",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547758",
-    "name": "Kansas City Chiefs at Buffalo Bills",
+    "id": "401541186",
+    "name": "Phoenix Suns at LA Clippers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547379",
-    "name": "Kansas City Chiefs at Baltimore Ravens",
+    "id": "401541179",
+    "name": "Milwaukee Bucks at Miami Heat",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547380",
-    "name": "Detroit Lions at San Francisco 49ers",
+    "id": "401541176",
+    "name": "Memphis Grizzlies at Los Angeles Lakers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401616889",
-    "name": "NFC  at AFC ",
+    "id": "401541190",
+    "name": "Cleveland Cavaliers at New York Knicks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401547378",
-    "name": "San Francisco 49ers at Kansas City Chiefs",
+    "id": "401541185",
+    "name": "Sacramento Kings at Golden State Warriors",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671610",
-    "name": "Houston Texans at Chicago Bears",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671918",
-    "name": "Carolina Panthers at New England Patriots",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401673457",
-    "name": "Detroit Lions at New York Giants",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671915",
-    "name": "Atlanta Falcons at Miami Dolphins",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671905",
-    "name": "Houston Texans at Pittsburgh Steelers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671897",
-    "name": "Philadelphia Eagles at Baltimore Ravens",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401673171",
-    "name": "Washington Commanders at New York Jets",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671615",
-    "name": "Chicago Bears at Buffalo Bills",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401672005",
-    "name": "Las Vegas Raiders at Minnesota Vikings",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671902",
-    "name": "Green Bay Packers at Cleveland Browns",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671900",
-    "name": "Tampa Bay Buccaneers at Cincinnati Bengals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401673472",
-    "name": "San Francisco 49ers at Tennessee Titans",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671910",
-    "name": "Kansas City Chiefs at Jacksonville Jaguars",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671907",
-    "name": "Seattle Seahawks at Los Angeles Chargers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401673456",
-    "name": "New Orleans Saints at Arizona Cardinals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671920",
-    "name": "Denver Broncos at Indianapolis Colts",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671913",
-    "name": "Dallas Cowboys at Los Angeles Rams",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671919",
-    "name": "Philadelphia Eagles at New England Patriots",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671898",
-    "name": "Atlanta Falcons at Baltimore Ravens",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671901",
-    "name": "Cincinnati Bengals at Chicago Bears",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671924",
-    "name": "New York Giants at Houston Texans",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671911",
-    "name": "Detroit Lions at Kansas City Chiefs",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671903",
-    "name": "Minnesota Vikings at Cleveland Browns",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401673562",
-    "name": "Seattle Seahawks at Tennessee Titans",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671936",
-    "name": "Arizona Cardinals at Indianapolis Colts",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671916",
-    "name": "Washington Commanders at Miami Dolphins",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671906",
-    "name": "Buffalo Bills at Pittsburgh Steelers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401676591",
-    "name": "New York Jets at Carolina Panthers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671908",
-    "name": "Los Angeles Rams at Los Angeles Chargers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671925",
-    "name": "Tampa Bay Buccaneers at Jacksonville Jaguars",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401672897",
-    "name": "Dallas Cowboys at Las Vegas Raiders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671921",
-    "name": "Green Bay Packers at Denver Broncos",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671611",
-    "name": "New Orleans Saints at San Francisco 49ers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671612",
-    "name": "Indianapolis Colts at Cincinnati Bengals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671912",
-    "name": "Chicago Bears at Kansas City Chiefs",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671922",
-    "name": "Jacksonville Jaguars at Atlanta Falcons",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671917",
-    "name": "Miami Dolphins at Tampa Bay Buccaneers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401672898",
-    "name": "San Francisco 49ers at Las Vegas Raiders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671896",
-    "name": "Carolina Panthers at Buffalo Bills",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401673458",
-    "name": "Pittsburgh Steelers at Detroit Lions",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671899",
-    "name": "Baltimore Ravens at Green Bay Packers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401672006",
-    "name": "Minnesota Vikings at Philadelphia Eagles",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671914",
-    "name": "Los Angeles Rams at Houston Texans",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671909",
-    "name": "Los Angeles Chargers at Dallas Cowboys",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401673172",
-    "name": "New York Giants at New York Jets",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671904",
-    "name": "Cleveland Browns at Seattle Seahawks",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401673561",
-    "name": "Tennessee Titans at New Orleans Saints",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671613",
-    "name": "Arizona Cardinals at Denver Broncos",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671614",
-    "name": "New England Patriots at Washington Commanders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401671878",
-    "name": "Los Angeles Chargers at Houston Texans",
+    "id": "401541188",
+    "name": "Boston Celtics at Atlanta Hawks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671879",
-    "name": "Pittsburgh Steelers at Baltimore Ravens",
+    "id": "401541183",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671881",
-    "name": "Denver Broncos at Buffalo Bills",
+    "id": "401541187",
+    "name": "Milwaukee Bucks at Miami Heat",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671880",
-    "name": "Green Bay Packers at Philadelphia Eagles",
+    "id": "401541184",
+    "name": "Memphis Grizzlies at Los Angeles Lakers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671883",
-    "name": "Washington Commanders at Tampa Bay Buccaneers",
+    "id": "401541243",
+    "name": "Atlanta Hawks at Boston Celtics",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671882",
-    "name": "Minnesota Vikings at Los Angeles Rams",
+    "id": "401541196",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671884",
-    "name": "Houston Texans at Kansas City Chiefs",
+    "id": "401541237",
+    "name": "LA Clippers at Phoenix Suns",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671885",
-    "name": "Washington Commanders at Detroit Lions",
+    "id": "401541249",
+    "name": "New York Knicks at Cleveland Cavaliers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671937",
-    "name": "Los Angeles Rams at Philadelphia Eagles",
+    "id": "401541231",
+    "name": "Los Angeles Lakers at Memphis Grizzlies",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671886",
-    "name": "Baltimore Ravens at Buffalo Bills",
+    "id": "401541240",
+    "name": "Miami Heat at Milwaukee Bucks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671888",
-    "name": "Washington Commanders at Philadelphia Eagles",
+    "id": "401541234",
+    "name": "Golden State Warriors at Sacramento Kings",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671887",
-    "name": "Buffalo Bills at Kansas City Chiefs",
+    "id": "401541244",
+    "name": "Boston Celtics at Atlanta Hawks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401701113",
-    "name": "AFC  at NFC ",
+    "id": "401541235",
+    "name": "Sacramento Kings at Golden State Warriors",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401671889",
-    "name": "Kansas City Chiefs at Philadelphia Eagles",
+    "id": "401541232",
+    "name": "Memphis Grizzlies at Los Angeles Lakers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772971",
-    "name": "Los Angeles Chargers at Detroit Lions",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773001",
-    "name": "Indianapolis Colts at Baltimore Ravens",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773005",
-    "name": "Cincinnati Bengals at Philadelphia Eagles",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401774568",
-    "name": "Las Vegas Raiders at Seattle Seahawks",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773016",
-    "name": "Detroit Lions at Atlanta Falcons",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773018",
-    "name": "Cleveland Browns at Carolina Panthers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772996",
-    "name": "Washington Commanders at New England Patriots",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401776263",
-    "name": "New York Giants at Buffalo Bills",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773012",
-    "name": "Houston Texans at Minnesota Vikings",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773020",
-    "name": "Dallas Cowboys at Los Angeles Rams",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773002",
-    "name": "Pittsburgh Steelers at Jacksonville Jaguars",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401774029",
-    "name": "Tennessee Titans at Tampa Bay Buccaneers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773010",
-    "name": "New York Jets at Green Bay Packers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401774636",
-    "name": "Kansas City Chiefs at Arizona Cardinals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401776566",
-    "name": "Denver Broncos at San Francisco 49ers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401776564",
-    "name": "Miami Dolphins at Chicago Bears",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773026",
-    "name": "New Orleans Saints at Los Angeles Chargers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773017",
-    "name": "Tennessee Titans at Atlanta Falcons",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401774591",
-    "name": "Kansas City Chiefs at Seattle Seahawks",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401776264",
-    "name": "Miami Dolphins at Detroit Lions",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773003",
-    "name": "Green Bay Packers at Indianapolis Colts",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773013",
-    "name": "New England Patriots at Minnesota Vikings",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773006",
-    "name": "Cleveland Browns at Philadelphia Eagles",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773027",
-    "name": "Carolina Panthers at Houston Texans",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401774569",
-    "name": "San Francisco 49ers at Las Vegas Raiders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773007",
-    "name": "Baltimore Ravens at Dallas Cowboys",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773021",
-    "name": "Los Angeles Chargers at Los Angeles Rams",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773009",
-    "name": "New York Jets at New York Giants",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773000",
-    "name": "Tampa Bay Buccaneers at Pittsburgh Steelers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401774637",
-    "name": "Arizona Cardinals at Denver Broncos",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773014",
-    "name": "Jacksonville Jaguars at New Orleans Saints",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772972",
-    "name": "Buffalo Bills at Chicago Bears",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772973",
-    "name": "Cincinnati Bengals at Washington Commanders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773019",
-    "name": "Pittsburgh Steelers at Carolina Panthers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772974",
-    "name": "New England Patriots at New York Giants",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772997",
-    "name": "Philadelphia Eagles at New York Jets",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773008",
-    "name": "Atlanta Falcons at Dallas Cowboys",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772975",
-    "name": "Minnesota Vikings at Tennessee Titans",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773004",
-    "name": "Chicago Bears at Kansas City Chiefs",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401777124",
-    "name": "Baltimore Ravens at Washington Commanders",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772998",
-    "name": "Indianapolis Colts at Cincinnati Bengals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772999",
-    "name": "Los Angeles Rams at Cleveland Browns",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401776265",
-    "name": "Houston Texans at Detroit Lions",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773015",
-    "name": "Denver Broncos at New Orleans Saints",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401773011",
-    "name": "Seattle Seahawks at Green Bay Packers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401776565",
-    "name": "Jacksonville Jaguars at Miami Dolphins",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401774030",
-    "name": "Buffalo Bills at Tampa Bay Buccaneers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401776567",
-    "name": "Los Angeles Chargers at San Francisco 49ers",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401774590",
-    "name": "Las Vegas Raiders at Arizona Cardinals",
-    "season_type_id": 1,
-    "season_type_name": null,
-    "reason": "season type not selected"
-   },
-   {
-    "id": "401772979",
-    "name": "Los Angeles Rams at Carolina Panthers",
+    "id": "401544334",
+    "name": "Phoenix Suns at Denver Nuggets",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772981",
-    "name": "Green Bay Packers at Chicago Bears",
+    "id": "401544973",
+    "name": "Miami Heat at New York Knicks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772977",
-    "name": "Buffalo Bills at Jacksonville Jaguars",
+    "id": "401541236",
+    "name": "Golden State Warriors at Sacramento Kings",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772980",
-    "name": "San Francisco 49ers at Philadelphia Eagles",
+    "id": "401545111",
+    "name": "Philadelphia 76ers at Boston Celtics",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772978",
-    "name": "Los Angeles Chargers at New England Patriots",
+    "id": "401544335",
+    "name": "Phoenix Suns at Denver Nuggets",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772976",
-    "name": "Houston Texans at Pittsburgh Steelers",
+    "id": "401544974",
+    "name": "Miami Heat at New York Knicks",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772982",
-    "name": "Buffalo Bills at Denver Broncos",
+    "id": "401545231",
+    "name": "Los Angeles Lakers at Golden State Warriors",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772984",
-    "name": "San Francisco 49ers at Seattle Seahawks",
+    "id": "401545112",
+    "name": "Philadelphia 76ers at Boston Celtics",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772983",
-    "name": "Houston Texans at New England Patriots",
+    "id": "401545232",
+    "name": "Los Angeles Lakers at Golden State Warriors",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772985",
-    "name": "Los Angeles Rams at Chicago Bears",
+    "id": "401545113",
+    "name": "Boston Celtics at Philadelphia 76ers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772986",
-    "name": "New England Patriots at Denver Broncos",
+    "id": "401544336",
+    "name": "Denver Nuggets at Phoenix Suns",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772987",
-    "name": "Los Angeles Rams at Seattle Seahawks",
+    "id": "401544975",
+    "name": "New York Knicks at Miami Heat",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401831718",
-    "name": "NFC  at AFC ",
+    "id": "401545233",
+    "name": "Golden State Warriors at Los Angeles Lakers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401772988",
-    "name": "Seattle Seahawks at New England Patriots",
+    "id": "401545114",
+    "name": "Boston Celtics at Philadelphia 76ers",
     "season_type_id": 3,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873271",
-    "name": "Carolina Panthers at Arizona Cardinals",
+    "id": "401544337",
+    "name": "Denver Nuggets at Phoenix Suns",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544976",
+    "name": "New York Knicks at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401545234",
+    "name": "Golden State Warriors at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401545115",
+    "name": "Philadelphia 76ers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544338",
+    "name": "Phoenix Suns at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544977",
+    "name": "Miami Heat at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401545235",
+    "name": "Los Angeles Lakers at Golden State Warriors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401545116",
+    "name": "Boston Celtics at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544339",
+    "name": "Denver Nuggets at Phoenix Suns",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544978",
+    "name": "New York Knicks at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401545236",
+    "name": "Golden State Warriors at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401545117",
+    "name": "Philadelphia 76ers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547679",
+    "name": "Los Angeles Lakers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547671",
+    "name": "Miami Heat at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547682",
+    "name": "Los Angeles Lakers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547672",
+    "name": "Miami Heat at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547683",
+    "name": "Denver Nuggets at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547673",
+    "name": "Boston Celtics at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547684",
+    "name": "Denver Nuggets at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547674",
+    "name": "Boston Celtics at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547675",
+    "name": "Miami Heat at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547676",
+    "name": "Boston Celtics at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401547678",
+    "name": "Miami Heat at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544846",
+    "name": "Miami Heat at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544847",
+    "name": "Miami Heat at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544848",
+    "name": "Denver Nuggets at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544849",
+    "name": "Denver Nuggets at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401544850",
+    "name": "Miami Heat at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591869",
+    "name": "Dallas Mavericks at Minnesota Timberwolves",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873272",
-    "name": "Detroit Lions at Cincinnati Bengals",
+    "id": "401591870",
+    "name": "Minnesota Timberwolves at Dallas Mavericks",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873275",
-    "name": "Green Bay Packers at Pittsburgh Steelers",
+    "id": "401591871",
+    "name": "Los Angeles Lakers at Golden State Warriors",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873273",
-    "name": "Indianapolis Colts at New England Patriots",
+    "id": "401591872",
+    "name": "Chicago Bulls at Milwaukee Bucks",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873640",
-    "name": "Arizona Cardinals at Las Vegas Raiders",
+    "id": "401591873",
+    "name": "Phoenix Suns at Detroit Pistons",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873274",
-    "name": "Los Angeles Chargers at Houston Texans",
+    "id": "401591874",
+    "name": "Philadelphia 76ers at Boston Celtics",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401874392",
-    "name": "Tennessee Titans at San Francisco 49ers",
+    "id": "401591875",
+    "name": "Indiana Pacers at Memphis Grizzlies",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873278",
-    "name": "Denver Broncos at Atlanta Falcons",
+    "id": "401591876",
+    "name": "Sacramento Kings at Toronto Raptors",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873276",
-    "name": "Tampa Bay Buccaneers at New York Jets",
+    "id": "401591877",
+    "name": "Utah Jazz at LA Clippers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873277",
-    "name": "Miami Dolphins at Washington Commanders",
+    "id": "401591878",
+    "name": "Boston Celtics at New York Knicks",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873282",
-    "name": "Carolina Panthers at Buffalo Bills",
+    "id": "401591879",
+    "name": "San Antonio Spurs at Oklahoma City Thunder",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401874393",
-    "name": "Cleveland Browns at Chicago Bears",
+    "id": "401591880",
+    "name": "Brooklyn Nets at Los Angeles Lakers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873280",
-    "name": "Minnesota Vikings at New York Giants",
+    "id": "401608099",
+    "name": "Dallas Mavericks at null Real Madrid",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873283",
-    "name": "Los Angeles Rams at Kansas City Chiefs",
+    "id": "401591882",
+    "name": "Cairns Taipans at Washington Wizards",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873281",
-    "name": "Jacksonville Jaguars at New Orleans Saints",
+    "id": "401591883",
+    "name": "Cleveland Cavaliers at Atlanta Hawks",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873284",
-    "name": "Philadelphia Eagles at Baltimore Ravens",
+    "id": "401591884",
+    "name": "Charlotte Hornets at Miami Heat",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873279",
-    "name": "Dallas Cowboys at Seattle Seahawks",
+    "id": "401591885",
+    "name": "Indiana Pacers at Houston Rockets",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873286",
-    "name": "Las Vegas Raiders at Houston Texans",
+    "id": "401591886",
+    "name": "Milwaukee Bucks at Memphis Grizzlies",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873285",
-    "name": "San Francisco 49ers at Los Angeles Chargers",
+    "id": "401591887",
+    "name": "Orlando Magic at New Orleans Pelicans",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873288",
-    "name": "New York Jets at Pittsburgh Steelers",
+    "id": "401591888",
+    "name": "Utah Jazz at LA Clippers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873287",
-    "name": "Carolina Panthers at Jacksonville Jaguars",
+    "id": "401591889",
+    "name": "Denver Nuggets at Phoenix Suns",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873613",
-    "name": "Green Bay Packers at Denver Broncos",
+    "id": "401591890",
+    "name": "New Zealand Breakers at Portland Trail Blazers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873601",
-    "name": "Washington Commanders at Detroit Lions",
+    "id": "401591891",
+    "name": "Boston Celtics at Philadelphia 76ers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873294",
-    "name": "Buffalo Bills at Cleveland Browns",
+    "id": "401591892",
+    "name": "Sacramento Kings at Los Angeles Lakers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873295",
-    "name": "Atlanta Falcons at Indianapolis Colts",
+    "id": "401591893",
+    "name": "Orlando Magic at Cleveland Cavaliers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873291",
-    "name": "Baltimore Ravens at Minnesota Vikings",
+    "id": "401591894",
+    "name": "Detroit Pistons at Oklahoma City Thunder",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873290",
-    "name": "New Orleans Saints at Los Angeles Rams",
+    "id": "401591895",
+    "name": "Charlotte Hornets at Washington Wizards",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873292",
-    "name": "New York Giants at Miami Dolphins",
+    "id": "401591896",
+    "name": "Memphis Grizzlies at Atlanta Hawks",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873289",
-    "name": "Chicago Bears at Cincinnati Bengals",
+    "id": "401591897",
+    "name": "RA'ANANA Ra'Anana at Brooklyn Nets",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873293",
-    "name": "Philadelphia Eagles at New England Patriots",
+    "id": "401591898",
+    "name": "Denver Nuggets at Chicago Bulls",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873296",
-    "name": "Kansas City Chiefs at Tampa Bay Buccaneers",
+    "id": "401591899",
+    "name": "Houston Rockets at New Orleans Pelicans",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401874101",
-    "name": "Dallas Cowboys at Arizona Cardinals",
+    "id": "401591900",
+    "name": "Phoenix Suns at Portland Trail Blazers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873297",
-    "name": "Seattle Seahawks at Tennessee Titans",
+    "id": "401591901",
+    "name": "Miami Heat at San Antonio Spurs",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873298",
-    "name": "Pittsburgh Steelers at Buffalo Bills",
+    "id": "401591902",
+    "name": "Golden State Warriors at Los Angeles Lakers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873299",
-    "name": "New England Patriots at Cleveland Browns",
+    "id": "401591903",
+    "name": "New Orleans Pelicans at Atlanta Hawks",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873641",
-    "name": "San Francisco 49ers at Las Vegas Raiders",
+    "id": "401591904",
+    "name": "Minnesota Timberwolves at New York Knicks",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873300",
-    "name": "Los Angeles Rams at Los Angeles Chargers",
+    "id": "401591905",
+    "name": "Portland Trail Blazers at Utah Jazz",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873302",
-    "name": "Washington Commanders at Baltimore Ravens",
+    "id": "401591906",
+    "name": "Oklahoma City Thunder at Charlotte Hornets",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873304",
-    "name": "Atlanta Falcons at Miami Dolphins",
+    "id": "401591907",
+    "name": "Memphis Grizzlies at Miami Heat",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873307",
-    "name": "Houston Texans at Carolina Panthers",
+    "id": "401591908",
+    "name": "Cairns Taipans at Toronto Raptors",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873303",
-    "name": "New York Giants at New York Jets",
+    "id": "401591909",
+    "name": "Milwaukee Bucks at Los Angeles Lakers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873306",
-    "name": "Tampa Bay Buccaneers at Jacksonville Jaguars",
+    "id": "401591910",
+    "name": "Chicago Bulls at Denver Nuggets",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401874048",
-    "name": "New Orleans Saints at Dallas Cowboys",
+    "id": "401591911",
+    "name": "Golden State Warriors at Sacramento Kings",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401874102",
-    "name": "Arizona Cardinals at Green Bay Packers",
+    "id": "401591912",
+    "name": "RA'ANANA Ra'Anana at Cleveland Cavaliers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873305",
-    "name": "Seattle Seahawks at Kansas City Chiefs",
+    "id": "401591913",
+    "name": "Atlanta Hawks at Indiana Pacers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873301",
-    "name": "Cincinnati Bengals at Philadelphia Eagles",
+    "id": "401591914",
+    "name": "Philadelphia 76ers at Brooklyn Nets",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873614",
-    "name": "Minnesota Vikings at Denver Broncos",
+    "id": "401591915",
+    "name": "Houston Rockets at San Antonio Spurs",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401873308",
-    "name": "Detroit Lions at Indianapolis Colts",
+    "id": "401591916",
+    "name": "New Zealand Breakers at Utah Jazz",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    },
    {
-    "id": "401874394",
-    "name": "Chicago Bears at Tennessee Titans",
+    "id": "401591917",
+    "name": "Portland Trail Blazers at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591918",
+    "name": "New Orleans Pelicans at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591919",
+    "name": "New York Knicks at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591920",
+    "name": "Toronto Raptors at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591921",
+    "name": "RA'ANANA Ra'Anana at Minnesota Timberwolves",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591922",
+    "name": "Milwaukee Bucks at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591923",
+    "name": "Denver Nuggets at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591924",
+    "name": "Brooklyn Nets at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591925",
+    "name": "Washington Wizards at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591926",
+    "name": "Houston Rockets at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591927",
+    "name": "Sacramento Kings at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591928",
+    "name": "Boston Celtics at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591929",
+    "name": "Minnesota Timberwolves at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591930",
+    "name": "Detroit Pistons at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591931",
+    "name": "Phoenix Suns at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591932",
+    "name": "Denver Nuggets at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591933",
+    "name": "Utah Jazz at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591934",
+    "name": "Cleveland Cavaliers at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591935",
+    "name": "Flamengo Flamengo at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591936",
+    "name": "Atlanta Hawks at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591937",
+    "name": "Washington Wizards at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591938",
+    "name": "Detroit Pistons at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591939",
+    "name": "Miami Heat at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591940",
+    "name": "Memphis Grizzlies at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401591941",
+    "name": "San Antonio Spurs at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654655",
+    "name": "Los Angeles Lakers at New Orleans Pelicans",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654656",
+    "name": "Golden State Warriors at Sacramento Kings",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654659",
+    "name": "Miami Heat at Philadelphia 76ers",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654658",
+    "name": "Atlanta Hawks at Chicago Bulls",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654660",
+    "name": "Chicago Bulls at Miami Heat",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654661",
+    "name": "Sacramento Kings at New Orleans Pelicans",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654757",
+    "name": "Orlando Magic at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654759",
+    "name": "Phoenix Suns at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654756",
+    "name": "Philadelphia 76ers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654758",
+    "name": "Los Angeles Lakers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654760",
+    "name": "Miami Heat at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654763",
+    "name": "Dallas Mavericks at LA Clippers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654761",
+    "name": "Indiana Pacers at Milwaukee Bucks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401654762",
+    "name": "New Orleans Pelicans at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655118",
+    "name": "Orlando Magic at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655106",
+    "name": "Philadelphia 76ers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655082",
+    "name": "Los Angeles Lakers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655088",
+    "name": "Phoenix Suns at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655112",
+    "name": "Indiana Pacers at Milwaukee Bucks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655094",
+    "name": "Dallas Mavericks at LA Clippers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655100",
+    "name": "Miami Heat at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655076",
+    "name": "New Orleans Pelicans at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655119",
+    "name": "Cleveland Cavaliers at Orlando Magic",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655107",
+    "name": "New York Knicks at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655083",
+    "name": "Denver Nuggets at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655113",
+    "name": "Milwaukee Bucks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655095",
+    "name": "LA Clippers at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655089",
+    "name": "Minnesota Timberwolves at Phoenix Suns",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655120",
+    "name": "Cleveland Cavaliers at Orlando Magic",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655077",
+    "name": "Oklahoma City Thunder at New Orleans Pelicans",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655101",
+    "name": "Boston Celtics at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655084",
+    "name": "Denver Nuggets at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655108",
+    "name": "New York Knicks at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655096",
+    "name": "LA Clippers at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655114",
+    "name": "Milwaukee Bucks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655090",
+    "name": "Minnesota Timberwolves at Phoenix Suns",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655102",
+    "name": "Boston Celtics at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655078",
+    "name": "Oklahoma City Thunder at New Orleans Pelicans",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655085",
+    "name": "Los Angeles Lakers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655109",
+    "name": "Philadelphia 76ers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655121",
+    "name": "Orlando Magic at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655115",
+    "name": "Indiana Pacers at Milwaukee Bucks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655103",
+    "name": "Miami Heat at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655097",
+    "name": "Dallas Mavericks at LA Clippers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655116",
+    "name": "Milwaukee Bucks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655110",
+    "name": "New York Knicks at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655122",
+    "name": "Cleveland Cavaliers at Orlando Magic",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655098",
+    "name": "LA Clippers at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657182",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401655123",
+    "name": "Orlando Magic at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657420",
+    "name": "Indiana Pacers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657183",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658224",
+    "name": "Cleveland Cavaliers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657231",
+    "name": "Dallas Mavericks at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657421",
+    "name": "Indiana Pacers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658225",
+    "name": "Cleveland Cavaliers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658188",
+    "name": "Dallas Mavericks at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657422",
+    "name": "New York Knicks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657184",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658190",
+    "name": "Oklahoma City Thunder at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658226",
+    "name": "Boston Celtics at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657423",
+    "name": "New York Knicks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657185",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658227",
+    "name": "Boston Celtics at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658191",
+    "name": "Oklahoma City Thunder at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658196",
+    "name": "Indiana Pacers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657186",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658228",
+    "name": "Cleveland Cavaliers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658192",
+    "name": "Dallas Mavericks at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657187",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658197",
+    "name": "New York Knicks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658194",
+    "name": "Oklahoma City Thunder at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401658198",
+    "name": "Indiana Pacers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401657188",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671998",
+    "name": "Indiana Pacers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672976",
+    "name": "Dallas Mavericks at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401671999",
+    "name": "Indiana Pacers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672977",
+    "name": "Dallas Mavericks at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672000",
+    "name": "Boston Celtics at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672978",
+    "name": "Minnesota Timberwolves at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672001",
+    "name": "Boston Celtics at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672979",
+    "name": "Minnesota Timberwolves at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401672980",
+    "name": "Dallas Mavericks at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401656359",
+    "name": "Dallas Mavericks at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401656360",
+    "name": "Dallas Mavericks at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401656361",
+    "name": "Boston Celtics at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401656362",
+    "name": "Boston Celtics at Dallas Mavericks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401656363",
+    "name": "Dallas Mavericks at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716947",
+    "name": "Boston Celtics at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716948",
+    "name": "New Zealand Breakers at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716949",
+    "name": "Minnesota Timberwolves at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716950",
+    "name": "Golden State Warriors at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716951",
+    "name": "Denver Nuggets at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716952",
+    "name": "New York Knicks at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716953",
+    "name": "Washington Wizards at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716954",
+    "name": "Milwaukee Bucks at Detroit Pistons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716955",
+    "name": "Phoenix Suns at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716956",
+    "name": "Orlando Magic at New Orleans Pelicans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717054",
+    "name": "New Zealand Breakers at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716957",
+    "name": "Memphis Grizzlies at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716958",
+    "name": "Oklahoma City Thunder at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716959",
+    "name": "Houston Rockets at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716960",
+    "name": "Miami Heat at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716962",
+    "name": "Chicago Bulls at Cleveland Cavaliers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716964",
+    "name": "Phoenix Suns at Detroit Pistons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716965",
+    "name": "Indiana Pacers at Atlanta Hawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716967",
+    "name": "Brooklyn Nets at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716969",
+    "name": "Washington Wizards at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716971",
+    "name": "Houston Rockets at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716973",
+    "name": "Orlando Magic at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716975",
+    "name": "Golden State Warriors at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716976",
+    "name": "Indiana Pacers at Cleveland Cavaliers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716978",
+    "name": "Utah Jazz at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716979",
+    "name": "Charlotte Hornets at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716980",
+    "name": "Los Angeles Lakers at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716981",
+    "name": "New Zealand Breakers at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716982",
+    "name": "New Orleans Pelicans at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716983",
+    "name": "Toronto Raptors at Washington Wizards",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716984",
+    "name": "Philadelphia 76ers at Minnesota Timberwolves",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716985",
+    "name": "Sacramento Kings at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716986",
+    "name": "Detroit Pistons at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716987",
+    "name": "Portland Trail Blazers at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716988",
+    "name": "Philadelphia 76ers at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716989",
+    "name": "Memphis Grizzlies at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716990",
+    "name": "Utah Jazz at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716991",
+    "name": "New Orleans Pelicans at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716992",
+    "name": "Minnesota Timberwolves at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716993",
+    "name": "Portland Trail Blazers at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716994",
+    "name": "Toronto Raptors at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716995",
+    "name": "Phoenix Suns at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716996",
+    "name": "Detroit Pistons at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716997",
+    "name": "Memphis Grizzlies at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716998",
+    "name": "Philadelphia 76ers at Atlanta Hawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716999",
+    "name": "Washington Wizards at Brooklyn Nets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717000",
+    "name": "Chicago Bulls at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717001",
+    "name": "Dallas Mavericks at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717002",
+    "name": "Boston Celtics at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717003",
+    "name": "San Antonio Spurs at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717004",
+    "name": "Charlotte Hornets at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717005",
+    "name": "New Orleans Pelicans at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717006",
+    "name": "Oklahoma City Thunder at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717007",
+    "name": "Sacramento Kings at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717008",
+    "name": "Golden State Warriors at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717009",
+    "name": "Cleveland Cavaliers at Detroit Pistons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717010",
+    "name": "Brooklyn Nets at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401716977",
+    "name": "Atlanta Hawks at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717011",
+    "name": "Minnesota Timberwolves at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717012",
+    "name": "Ulm Ulm at Portland Trail Blazers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717013",
+    "name": "Charlotte Hornets at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717014",
+    "name": "Milwaukee Bucks at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717015",
+    "name": "San Antonio Spurs at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717016",
+    "name": "Atlanta Hawks at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717024",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717017",
+    "name": "Los Angeles Lakers at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717018",
+    "name": "Sacramento Kings at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717019",
+    "name": "Philadelphia 76ers at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717020",
+    "name": "New York Knicks at Washington Wizards",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717021",
+    "name": "Toronto Raptors at Brooklyn Nets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717022",
+    "name": "Cleveland Cavaliers at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717023",
+    "name": "Miami Heat at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717025",
+    "name": "Utah Jazz at Portland Trail Blazers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401717026",
+    "name": "Los Angeles Lakers at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766458",
+    "name": "Atlanta Hawks at Orlando Magic",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766459",
+    "name": "Memphis Grizzlies at Golden State Warriors",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766460",
+    "name": "Miami Heat at Chicago Bulls",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766461",
+    "name": "Dallas Mavericks at Sacramento Kings",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766462",
+    "name": "Miami Heat at Atlanta Hawks",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766463",
+    "name": "Dallas Mavericks at Memphis Grizzlies",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767817",
+    "name": "Milwaukee Bucks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767819",
+    "name": "LA Clippers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767820",
+    "name": "Detroit Pistons at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767821",
+    "name": "Minnesota Timberwolves at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767818",
+    "name": "Memphis Grizzlies at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767822",
+    "name": "Orlando Magic at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767816",
+    "name": "Miami Heat at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767823",
+    "name": "Golden State Warriors at Houston Rockets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768041",
+    "name": "Detroit Pistons at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768061",
+    "name": "LA Clippers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768047",
+    "name": "Milwaukee Bucks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767903",
+    "name": "Memphis Grizzlies at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767915",
+    "name": "Minnesota Timberwolves at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768029",
+    "name": "Orlando Magic at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768035",
+    "name": "Miami Heat at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767909",
+    "name": "Golden State Warriors at Houston Rockets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768042",
+    "name": "New York Knicks at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767904",
+    "name": "Oklahoma City Thunder at Memphis Grizzlies",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768062",
+    "name": "Denver Nuggets at LA Clippers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768030",
+    "name": "Boston Celtics at Orlando Magic",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768048",
+    "name": "Indiana Pacers at Milwaukee Bucks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768056",
+    "name": "Los Angeles Lakers at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768036",
+    "name": "Cleveland Cavaliers at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767905",
+    "name": "Oklahoma City Thunder at Memphis Grizzlies",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768063",
+    "name": "Denver Nuggets at LA Clippers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767910",
+    "name": "Houston Rockets at Golden State Warriors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768043",
+    "name": "New York Knicks at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768057",
+    "name": "Los Angeles Lakers at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768031",
+    "name": "Boston Celtics at Orlando Magic",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768049",
+    "name": "Indiana Pacers at Milwaukee Bucks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768037",
+    "name": "Cleveland Cavaliers at Miami Heat",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767911",
+    "name": "Houston Rockets at Golden State Warriors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768050",
+    "name": "Milwaukee Bucks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768044",
+    "name": "Detroit Pistons at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768032",
+    "name": "Orlando Magic at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768064",
+    "name": "LA Clippers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767912",
+    "name": "Golden State Warriors at Houston Rockets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768058",
+    "name": "Minnesota Timberwolves at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768045",
+    "name": "New York Knicks at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768065",
+    "name": "Denver Nuggets at LA Clippers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767913",
+    "name": "Houston Rockets at Golden State Warriors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401768066",
+    "name": "LA Clippers at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769689",
+    "name": "Indiana Pacers at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401767914",
+    "name": "Golden State Warriors at Houston Rockets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769746",
+    "name": "New York Knicks at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769820",
+    "name": "Denver Nuggets at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769740",
+    "name": "Indiana Pacers at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769837",
+    "name": "Golden State Warriors at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769747",
+    "name": "New York Knicks at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769821",
+    "name": "Denver Nuggets at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769838",
+    "name": "Golden State Warriors at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769741",
+    "name": "Cleveland Cavaliers at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769822",
+    "name": "Oklahoma City Thunder at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769748",
+    "name": "Boston Celtics at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769839",
+    "name": "Minnesota Timberwolves at Golden State Warriors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769823",
+    "name": "Oklahoma City Thunder at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769742",
+    "name": "Cleveland Cavaliers at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769749",
+    "name": "Boston Celtics at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769840",
+    "name": "Minnesota Timberwolves at Golden State Warriors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769743",
+    "name": "Indiana Pacers at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769990",
+    "name": "Denver Nuggets at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769750",
+    "name": "New York Knicks at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769987",
+    "name": "Golden State Warriors at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769991",
+    "name": "Oklahoma City Thunder at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769751",
+    "name": "Boston Celtics at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401769992",
+    "name": "Denver Nuggets at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773148",
+    "name": "Minnesota Timberwolves at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772989",
+    "name": "Indiana Pacers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773149",
+    "name": "Minnesota Timberwolves at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772990",
+    "name": "Indiana Pacers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773150",
+    "name": "Oklahoma City Thunder at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772991",
+    "name": "New York Knicks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773151",
+    "name": "Oklahoma City Thunder at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772992",
+    "name": "New York Knicks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401773152",
+    "name": "Minnesota Timberwolves at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772993",
+    "name": "Indiana Pacers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401772994",
+    "name": "New York Knicks at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766122",
+    "name": "Indiana Pacers at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766123",
+    "name": "Indiana Pacers at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766124",
+    "name": "Oklahoma City Thunder at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766125",
+    "name": "Oklahoma City Thunder at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766126",
+    "name": "Indiana Pacers at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766127",
+    "name": "Oklahoma City Thunder at Indiana Pacers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401766128",
+    "name": "Indiana Pacers at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812480",
+    "name": "Philadelphia 76ers at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812481",
+    "name": "Melbourne Melbourne United at New Orleans Pelicans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812482",
+    "name": "Phoenix Suns at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812483",
+    "name": "New York Knicks at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812484",
+    "name": "null Hapoel Jerusalem at Brooklyn Nets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812485",
+    "name": "Orlando Magic at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812486",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812487",
+    "name": "Melbourne Pnx at New Orleans Pelicans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812676",
+    "name": "Oklahoma City Thunder at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812677",
+    "name": "Los Angeles Lakers at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812678",
+    "name": "Milwaukee Bucks at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812679",
+    "name": "Atlanta Hawks at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812680",
+    "name": "Detroit Pistons at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812681",
+    "name": "Guangzhou Loong-Lions at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812682",
+    "name": "Oklahoma City Thunder at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812683",
+    "name": "Denver Nuggets at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812684",
+    "name": "Chicago Bulls at Cleveland Cavaliers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812685",
+    "name": "Indiana Pacers at Minnesota Timberwolves",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812686",
+    "name": "San Antonio Spurs at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812687",
+    "name": "Utah Jazz at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812688",
+    "name": "Boston Celtics at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812689",
+    "name": "Portland Trail Blazers at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812690",
+    "name": "Toronto Raptors at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812691",
+    "name": "Minnesota Timberwolves at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812692",
+    "name": "Cleveland Cavaliers at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812693",
+    "name": "Detroit Pistons at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812694",
+    "name": "Charlotte Hornets at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812695",
+    "name": "Guangzhou Loong-Lions at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812696",
+    "name": "Phoenix Suns at Brooklyn Nets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812697",
+    "name": "Boston Celtics at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812698",
+    "name": "Orlando Magic at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812699",
+    "name": "Utah Jazz at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812700",
+    "name": "Sacramento Kings at Portland Trail Blazers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812701",
+    "name": "Oklahoma City Thunder at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812702",
+    "name": "Atlanta Hawks at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812703",
+    "name": "Charlotte Hornets at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812704",
+    "name": "Brooklyn Nets at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812705",
+    "name": "Toronto Raptors at Washington Wizards",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812706",
+    "name": "Miami Heat at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812707",
+    "name": "Cleveland Cavaliers at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812708",
+    "name": "Milwaukee Bucks at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812709",
+    "name": "Denver Nuggets at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812710",
+    "name": "Golden State Warriors at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812711",
+    "name": "Miami Heat at Atlanta Hawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812712",
+    "name": "San Antonio Spurs at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812713",
+    "name": "Washington Wizards at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812714",
+    "name": "Guangzhou Loong-Lions at Minnesota Timberwolves",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812715",
+    "name": "Dallas Mavericks at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812716",
+    "name": "Detroit Pistons at Cleveland Cavaliers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812717",
+    "name": "Houston Rockets at New Orleans Pelicans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812718",
+    "name": "Oklahoma City Thunder at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812719",
+    "name": "Chicago Bulls at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812720",
+    "name": "Golden State Warriors at Portland Trail Blazers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812721",
+    "name": "Los Angeles Lakers at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812722",
+    "name": "Memphis Grizzlies at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812723",
+    "name": "Toronto Raptors at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812725",
+    "name": "LA Clippers at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812724",
+    "name": "Dallas Mavericks at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812726",
+    "name": "New Orleans Pelicans at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812727",
+    "name": "Washington Wizards at Detroit Pistons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812728",
+    "name": "Houston Rockets at Atlanta Hawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812729",
+    "name": "Minnesota Timberwolves at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812730",
+    "name": "Portland Trail Blazers at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812731",
+    "name": "Brooklyn Nets at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812732",
+    "name": "Minnesota Timberwolves at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812733",
+    "name": "Charlotte Hornets at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812734",
+    "name": "Memphis Grizzlies at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812735",
+    "name": "Denver Nuggets at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812736",
+    "name": "Indiana Pacers at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812737",
+    "name": "LA Clippers at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401812738",
+    "name": "Sacramento Kings at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401866755",
+    "name": "Miami Heat at Charlotte Hornets",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401866754",
+    "name": "Portland Trail Blazers at Phoenix Suns",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401866757",
+    "name": "Orlando Magic at Philadelphia 76ers",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401866756",
+    "name": "Golden State Warriors at LA Clippers",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401866758",
+    "name": "Charlotte Hornets at Orlando Magic",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401866759",
+    "name": "Golden State Warriors at Phoenix Suns",
+    "season_type_id": 5,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869187",
+    "name": "Toronto Raptors at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869188",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869189",
+    "name": "Atlanta Hawks at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869190",
+    "name": "Houston Rockets at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869191",
+    "name": "Philadelphia 76ers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869192",
+    "name": "Phoenix Suns at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869193",
+    "name": "Orlando Magic at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869194",
+    "name": "Portland Trail Blazers at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869369",
+    "name": "Toronto Raptors at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869387",
+    "name": "Atlanta Hawks at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869395",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869396",
+    "name": "Philadelphia 76ers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869378",
+    "name": "Portland Trail Blazers at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869397",
+    "name": "Houston Rockets at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869411",
+    "name": "Orlando Magic at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869368",
+    "name": "Phoenix Suns at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869389",
+    "name": "New York Knicks at Atlanta Hawks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869375",
+    "name": "Cleveland Cavaliers at Toronto Raptors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869398",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869404",
+    "name": "Boston Celtics at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869400",
+    "name": "Los Angeles Lakers at Houston Rockets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869382",
+    "name": "San Antonio Spurs at Portland Trail Blazers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869414",
+    "name": "Detroit Pistons at Orlando Magic",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869370",
+    "name": "Oklahoma City Thunder at Phoenix Suns",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869391",
+    "name": "New York Knicks at Atlanta Hawks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869399",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869377",
+    "name": "Cleveland Cavaliers at Toronto Raptors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869385",
+    "name": "San Antonio Spurs at Portland Trail Blazers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869406",
+    "name": "Boston Celtics at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869405",
+    "name": "Los Angeles Lakers at Houston Rockets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869415",
+    "name": "Detroit Pistons at Orlando Magic",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869373",
+    "name": "Oklahoma City Thunder at Phoenix Suns",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869401",
+    "name": "Minnesota Timberwolves at Denver Nuggets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869408",
+    "name": "Philadelphia 76ers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869392",
+    "name": "Atlanta Hawks at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869386",
+    "name": "Portland Trail Blazers at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869416",
+    "name": "Orlando Magic at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869380",
+    "name": "Toronto Raptors at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869407",
+    "name": "Houston Rockets at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869393",
+    "name": "New York Knicks at Atlanta Hawks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869410",
+    "name": "Boston Celtics at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869402",
+    "name": "Denver Nuggets at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869417",
+    "name": "Detroit Pistons at Orlando Magic",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869381",
+    "name": "Cleveland Cavaliers at Toronto Raptors",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869409",
+    "name": "Los Angeles Lakers at Houston Rockets",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869412",
+    "name": "Philadelphia 76ers at Boston Celtics",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869418",
+    "name": "Orlando Magic at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401869384",
+    "name": "Toronto Raptors at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871159",
+    "name": "Philadelphia 76ers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871152",
+    "name": "Minnesota Timberwolves at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871333",
+    "name": "Cleveland Cavaliers at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871326",
+    "name": "Los Angeles Lakers at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871160",
+    "name": "Philadelphia 76ers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871153",
+    "name": "Minnesota Timberwolves at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871334",
+    "name": "Cleveland Cavaliers at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871327",
+    "name": "Los Angeles Lakers at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871161",
+    "name": "New York Knicks at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871154",
+    "name": "San Antonio Spurs at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871335",
+    "name": "Detroit Pistons at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871328",
+    "name": "Oklahoma City Thunder at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871162",
+    "name": "New York Knicks at Philadelphia 76ers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871155",
+    "name": "San Antonio Spurs at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871336",
+    "name": "Detroit Pistons at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871329",
+    "name": "Oklahoma City Thunder at Los Angeles Lakers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871156",
+    "name": "Minnesota Timberwolves at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871337",
+    "name": "Cleveland Cavaliers at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871338",
+    "name": "Detroit Pistons at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871157",
+    "name": "San Antonio Spurs at Minnesota Timberwolves",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401871339",
+    "name": "Cleveland Cavaliers at Detroit Pistons",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873197",
+    "name": "San Antonio Spurs at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873341",
+    "name": "Cleveland Cavaliers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873198",
+    "name": "San Antonio Spurs at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873342",
+    "name": "Cleveland Cavaliers at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873199",
+    "name": "Oklahoma City Thunder at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873343",
+    "name": "New York Knicks at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873200",
+    "name": "Oklahoma City Thunder at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873344",
+    "name": "New York Knicks at Cleveland Cavaliers",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873201",
+    "name": "San Antonio Spurs at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873202",
+    "name": "Oklahoma City Thunder at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401873203",
+    "name": "San Antonio Spurs at Oklahoma City Thunder",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401859963",
+    "name": "New York Knicks at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401859964",
+    "name": "New York Knicks at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401859965",
+    "name": "San Antonio Spurs at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401859966",
+    "name": "San Antonio Spurs at New York Knicks",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401859967",
+    "name": "New York Knicks at San Antonio Spurs",
+    "season_type_id": 3,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401902644",
+    "name": "Miami Heat at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914127",
+    "name": "Utah Jazz at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401918010",
+    "name": "Golden State Warriors at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898388",
+    "name": "Memphis Grizzlies at Atlanta Hawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908947",
+    "name": "Phoenix Suns at Detroit Pistons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914101",
+    "name": "New York Knicks at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914102",
+    "name": "Minnesota Timberwolves at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898716",
+    "name": "Los Angeles Lakers at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401901820",
+    "name": "Brooklyn Nets at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898389",
+    "name": "New Orleans Pelicans at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914128",
+    "name": "Denver Nuggets at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898390",
+    "name": "Los Angeles Lakers at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914123",
+    "name": "Minnesota Timberwolves at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898391",
+    "name": "Orlando Magic at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908620",
+    "name": "Milwaukee Bucks at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908939",
+    "name": "Phoenix Suns at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914129",
+    "name": "Golden State Warriors at Portland Trail Blazers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898392",
+    "name": "Boston Celtics at Cleveland Cavaliers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898393",
+    "name": "New Orleans Pelicans at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401901823",
+    "name": "Philadelphia 76ers at Brooklyn Nets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401906508",
+    "name": "Washington Wizards at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898394",
+    "name": "Atlanta Hawks at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898717",
+    "name": "Sacramento Kings at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898395",
+    "name": "Houston Rockets at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908940",
+    "name": "Memphis Grizzlies at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401902645",
+    "name": "LA Clippers at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898396",
+    "name": "Atlanta Hawks at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401906510",
+    "name": "Detroit Pistons at Washington Wizards",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898397",
+    "name": "Minnesota Timberwolves at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898398",
+    "name": "Philadelphia 76ers at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898399",
+    "name": "Sacramento Kings at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898720",
+    "name": "San Antonio Spurs at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898400",
+    "name": "Dallas Mavericks at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898401",
+    "name": "Orlando Magic at Cleveland Cavaliers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401901821",
+    "name": "Milwaukee Bucks at Charlotte Hornets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908941",
+    "name": "Chicago Bulls at Denver Nuggets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914130",
+    "name": "London Lions at Portland Trail Blazers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898402",
+    "name": "Oklahoma City Thunder at Atlanta Hawks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401901824",
+    "name": "Brooklyn Nets at Washington Wizards",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914124",
+    "name": "Minnesota Timberwolves at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898721",
+    "name": "San Antonio Spurs at Utah Jazz",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898403",
+    "name": "Cleveland Cavaliers at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908944",
+    "name": "New York Knicks at Toronto Raptors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908621",
+    "name": "Indiana Pacers at Oklahoma City Thunder",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898718",
+    "name": "Golden State Warriors at Los Angeles Lakers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401901826",
+    "name": "Portland Trail Blazers at Sacramento Kings",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898404",
+    "name": "Brooklyn Nets at Miami Heat",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898405",
+    "name": "Charlotte Hornets at Boston Celtics",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898722",
+    "name": "Phoenix Suns at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401901825",
+    "name": "New Orleans Pelicans at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908942",
+    "name": "Chicago Bulls at Milwaukee Bucks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914125",
+    "name": "Detroit Pistons at Minnesota Timberwolves",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401918011",
+    "name": "Denver Nuggets at LA Clippers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908945",
+    "name": "Toronto Raptors at New York Knicks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908622",
+    "name": "Oklahoma City Thunder at Houston Rockets",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898406",
+    "name": "Miami Heat at Orlando Magic",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898407",
+    "name": "Boston Celtics at Philadelphia 76ers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908946",
+    "name": "Toronto Raptors at Detroit Pistons",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401914126",
+    "name": "Milwaukee Bucks at Indiana Pacers",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898408",
+    "name": "Atlanta Hawks at Dallas Mavericks",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898843",
+    "name": "Sacramento Kings at San Antonio Spurs",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401901822",
+    "name": "Charlotte Hornets at Memphis Grizzlies",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401906509",
+    "name": "Washington Wizards at New Orleans Pelicans",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908943",
+    "name": "Minnesota Timberwolves at Chicago Bulls",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898409",
+    "name": "Portland Trail Blazers at Golden State Warriors",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401908948",
+    "name": "Utah Jazz at Phoenix Suns",
+    "season_type_id": 1,
+    "season_type_name": null,
+    "reason": "season type not selected"
+   },
+   {
+    "id": "401898719",
+    "name": "Denver Nuggets at Los Angeles Lakers",
     "season_type_id": 1,
     "season_type_name": null,
     "reason": "season type not selected"
    }
   ],
-  "final": 1238,
-  "already_covered": 151,
-  "added": 1087,
+  "final": 5173,
+  "already_covered": 241,
+  "added": 4932,
   "repaired": 0,
   "missing": [
    {
-    "id": "401873070",
-    "name": "Miami Dolphins at Buffalo Bills",
-    "reason": "not final (In Progress)"
+    "id": "401468924",
+    "name": "Washington Wizards at Detroit Pistons",
+    "reason": "not final (Postponed)"
    },
    {
-    "id": "401873071",
-    "name": "New Orleans Saints at Chicago Bears",
-    "reason": "not final (In Progress)"
+    "id": "401585204",
+    "name": "Golden State Warriors at Utah Jazz",
+    "reason": "not final (Postponed)"
    },
    {
-    "id": "401873073",
-    "name": "Tennessee Titans at Dallas Cowboys",
-    "reason": "not final (In Progress)"
+    "id": "401585217",
+    "name": "Dallas Mavericks at Golden State Warriors",
+    "reason": "not final (Postponed)"
    },
    {
-    "id": "401873072",
-    "name": "Tampa Bay Buccaneers at Detroit Lions",
-    "reason": "not final (In Progress)"
+    "id": "401705090",
+    "name": "Charlotte Hornets at Los Angeles Lakers",
+    "reason": "not final (Postponed)"
    },
    {
-    "id": "401873067",
-    "name": "Arizona Cardinals at Kansas City Chiefs",
-    "reason": "not final (In Progress)"
+    "id": "401705098",
+    "name": "Houston Rockets at Atlanta Hawks",
+    "reason": "not final (Postponed)"
    },
    {
-    "id": "401873076",
-    "name": "Pittsburgh Steelers at Philadelphia Eagles",
-    "reason": "not final (In Progress)"
+    "id": "401705103",
+    "name": "San Antonio Spurs at Los Angeles Lakers",
+    "reason": "not final (Postponed)"
    },
    {
-    "id": "401873068",
-    "name": "Baltimore Ravens at Carolina Panthers",
-    "reason": "not final (In Progress)"
+    "id": "401705104",
+    "name": "Charlotte Hornets at LA Clippers",
+    "reason": "not final (Postponed)"
    },
    {
-    "id": "401873074",
-    "name": "New York Jets at Los Angeles Chargers",
+    "id": "401705183",
+    "name": "Milwaukee Bucks at New Orleans Pelicans",
+    "reason": "not final (Postponed)"
+   },
+   {
+    "id": "401810384",
+    "name": "Miami Heat at Chicago Bulls",
+    "reason": "not final (Postponed)"
+   },
+   {
+    "id": "401810499",
+    "name": "Golden State Warriors at Minnesota Timberwolves",
+    "reason": "not final (Postponed)"
+   },
+   {
+    "id": "401810506",
+    "name": "Denver Nuggets at Memphis Grizzlies",
+    "reason": "not final (Postponed)"
+   },
+   {
+    "id": "401810507",
+    "name": "Dallas Mavericks at Milwaukee Bucks",
+    "reason": "not final (Postponed)"
+   },
+   {
+    "id": "401910029",
+    "name": "Detroit Pistons at Atlanta Hawks",
     "reason": "not final (Scheduled)"
    },
    {
-    "id": "401873075",
-    "name": "Las Vegas Raiders at Denver Broncos",
+    "id": "401910030",
+    "name": "Oklahoma City Thunder at Miami Heat",
     "reason": "not final (Scheduled)"
    },
    {
-    "id": "401873069",
-    "name": "Jacksonville Jaguars at New York Giants",
+    "id": "401910031",
+    "name": "Orlando Magic at Washington Wizards",
     "reason": "not final (Scheduled)"
    },
    {
-    "id": "401873077",
-    "name": "Minnesota Vikings at San Francisco 49ers",
+    "id": "401910032",
+    "name": "Denver Nuggets at Chicago Bulls",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401910033",
+    "name": "Dallas Mavericks at Utah Jazz",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401910034",
+    "name": "Indiana Pacers at New York Knicks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401910035",
+    "name": "Boston Celtics at Golden State Warriors",
     "reason": "not final (Scheduled)"
    }
   ]
