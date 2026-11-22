@@ -29,6 +29,13 @@ from .archive import (
     load_props_file,
 )
 from .archive_analysis import analyze_archive, render_markdown
+from .collection import collect_event_odds, collect_joined, collect_pregame, default_paths
+from .grading import grade_archive, grade_with_fixture
+from .journal import default_journal_path
+from .odds import normalize_player_props
+from .quality import quality_report, render_markdown as render_quality
+from .result_sources import EspnResultSource
+from .schedule import load_schedule, run_once
 from .books import BOOKS
 from .pairing import attach_opposites
 from .parlays import evaluate_parlay
@@ -317,10 +324,126 @@ def _add_archive_parser(sub: argparse._SubParsersAction) -> None:
         choices=("markdown", "json"),
         help="What to print. markdown is the default. json prints the full report.",
     )
+    collect = commands.add_parser(
+        "collect",
+        help="Archive real pregame props. Does not invent a price or a projection.",
+    )
+    collect.add_argument("--db", type=Path, default=None)
+    collect.add_argument("--journal", type=Path, default=None)
+    collect.add_argument("--props", type=Path, default=None, help="Props that already include prices")
+    collect.add_argument("--projections", type=Path, default=None, help="Projections to join to prices")
+    collect.add_argument("--odds-fixture", type=Path, default=None, help="Local odds payload. Not a live call.")
+    collect.add_argument("--odds-live", action="store_true", help="Call The Odds API for one current event")
+    collect.add_argument("--sport-key", default=None, help="Odds API sport key, such as basketball_nba")
+    collect.add_argument("--event", default=None, help="Odds API event id")
+    collect.add_argument("--markets", default=None, help="Comma-separated player prop markets")
+    collect.add_argument("--bookmakers", default=None, help="Documented bookmaker keys. bet365 is not sent.")
+    grade = commands.add_parser(
+        "grade",
+        help="Attach verified finals. Does not grade a missing stat as zero or a loss.",
+    )
+    grade.add_argument("--db", type=Path, default=None)
+    grade.add_argument("--journal", type=Path, default=None)
+    grade.add_argument("--results-fixture", type=Path, default=None, help="Local result file with kind result_fixture")
+    grade.add_argument("--delay", type=float, default=0.25, help="Seconds between ESPN calls")
+    quality = commands.add_parser(
+        "quality",
+        help="Collection and grading counts. Not a calibration or profit report.",
+    )
+    quality.add_argument("--db", type=Path, default=None)
+    quality.add_argument("--journal", type=Path, default=None)
+    quality.add_argument("--format", default="markdown", choices=("markdown", "json"))
+    scheduled = commands.add_parser(
+        "run-once",
+        help="Run the optional schedule once. Does not start a daemon and does not bet.",
+    )
+    scheduled.add_argument("--config", required=True, type=Path)
+    scheduled.add_argument("--db", type=Path, default=None)
+    scheduled.add_argument("--journal", type=Path, default=None)
 
 
 def _db_path(args: argparse.Namespace) -> Path:
     return args.db if args.db is not None else default_db_path()
+
+
+def _journal_path(args: argparse.Namespace) -> Path:
+    return args.journal if args.journal is not None else default_journal_path()
+
+
+def _load_odds_fixture(path: Path) -> list[dict[str, Any]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(payload, dict) and isinstance(payload.get("bookmakers"), list):
+        as_of = payload.get("as_of")
+        if not isinstance(as_of, str) or not as_of.strip():
+            as_of = datetime.now(ET).isoformat()
+        normalized = normalize_player_props(payload, retrieved_at=as_of)
+        return list(normalized.get("records") or [])
+    if isinstance(payload, dict) and isinstance(payload.get("records"), list):
+        if payload.get("fixture") is not True:
+            raise ValueError("a records file must set fixture to true so it is not treated as a live price feed")
+        return list(payload["records"])
+    raise ValueError("odds fixture must be an event payload or a records list marked as a fixture")
+
+
+def _collect_command(args: argparse.Namespace) -> int:
+    database, journal = default_paths(_db_path(args), _journal_path(args))
+    if sum(1 for enabled in (args.props is not None, args.projections is not None) if enabled) != 1:
+        print("Use either --props or --projections.", file=sys.stderr)
+        return 2
+    try:
+        if args.props is not None:
+            if args.odds_live or args.odds_fixture is not None:
+                print("--props already includes prices. Do not also pass an odds source.", file=sys.stderr)
+                return 2
+            result = collect_pregame(database, load_props_file(args.props), journal_path=journal)
+        elif args.odds_live:
+            if not args.sport_key or not args.event or not args.markets:
+                print("--odds-live requires --sport-key, --event, and --markets.", file=sys.stderr)
+                return 2
+            result = collect_event_odds(
+                database,
+                load_props_file(args.projections),
+                sport_key=args.sport_key,
+                event_id=args.event,
+                markets=args.markets,
+                journal_path=journal,
+                bookmakers=args.bookmakers,
+            )
+        elif args.odds_fixture is not None:
+            result = collect_joined(
+                database,
+                load_props_file(args.projections),
+                _load_odds_fixture(args.odds_fixture),
+                journal_path=journal,
+            )
+        else:
+            print("--projections needs --odds-fixture or --odds-live.", file=sys.stderr)
+            return 2
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"Could not collect: {exc}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2))
+    return 0
+
+
+def _grade_command(args: argparse.Namespace) -> int:
+    database = _db_path(args)
+    journal = _journal_path(args)
+    try:
+        if args.results_fixture is not None:
+            document = json.loads(args.results_fixture.read_text(encoding="utf-8"))
+            result = grade_with_fixture(database, document, journal_path=journal)
+        else:
+            result = grade_archive(
+                database,
+                EspnResultSource(delay=args.delay),
+                journal_path=journal,
+            )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"Could not grade: {exc}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, indent=2))
+    return 0
 
 
 def _archive_command(args: argparse.Namespace) -> int:
@@ -399,6 +522,26 @@ def _archive_command(args: argparse.Namespace) -> int:
     if args.archive_cmd == "stats":
         print(json.dumps(archive_stats(database), indent=2))
         return 0
+    if args.archive_cmd == "collect":
+        return _collect_command(args)
+    if args.archive_cmd == "grade":
+        return _grade_command(args)
+    if args.archive_cmd == "quality":
+        report = quality_report(_db_path(args), _journal_path(args))
+        if args.format == "json":
+            print(json.dumps(report, indent=2))
+        else:
+            print(render_quality(report))
+        return 0
+    if args.archive_cmd == "run-once":
+        try:
+            config = load_schedule(args.config)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"Could not read the schedule: {exc}", file=sys.stderr)
+            return 2
+        result = run_once(config, database=_db_path(args), journal_path=_journal_path(args))
+        print(json.dumps(result, indent=2, default=str))
+        return 0 if result.get("ok", True) else 2
     if args.archive_cmd == "analyze":
         report = analyze_archive(database)
         if not report.get("ok"):
