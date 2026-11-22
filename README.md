@@ -139,9 +139,7 @@ python scripts/backfill_espn.py nba --start 2026-10-24 --end 2026-10-31
 
 With no dates, the script uses October 24–31, 2026, which is the original window. It is safe to rerun: a complete game is skipped, and an incomplete box is fetched again. A missing stat is not stored as zero.
 
-Calibration does **not** run off those box scores alone. It needs a projection that was saved before the game. Nothing in the current files is that archive, so there is no calibrated sigma and no claim that the model wins money.
-
-The functions are `betting_model.calibration` and `betting_model.backtest`. They refuse a projection timestamp that is not before the game, they do not edit an old snapshot, and they do not change `SIGMA_DEFAULTS`.
+Calibration does **not** run off those box scores alone. It needs a projection that was saved before the game. `betting_model.calibration` and `betting_model.backtest` score an older JSON snapshot file. `archive analyze` scores the SQLite archive. The archive writers refuse a projection that was not saved before the event, and the report leaves those rows out if one is ever stored. None of these tools edit an old snapshot, replace `SIGMA_DEFAULTS`, or mark a row Qualified. This repository does not ship a filled archive, so there is no calibrated sigma and no claim that the model wins money.
 
 ## Pregame archive
 
@@ -165,7 +163,12 @@ python -m betting_model.cli archive attach-result --id <archive-id> \
 python -m betting_model.cli archive incomplete
 python -m betting_model.cli archive export --out archive.json
 python -m betting_model.cli archive stats
+python -m betting_model.cli archive analyze
+python -m betting_model.cli archive analyze --db data/pregame_archive.sqlite --out out
+python -m betting_model.cli archive analyze --format json
 ```
+
+`archive analyze` does not modify archived snapshots, results, or corrections. Opening an existing database can apply a pending schema migration, the same way the other archive commands do, so the command is not strictly read-only when a migration is pending. It reports how many predictions were archived, how many settled, how many can be scored, and why the rest were left out. Conditional win probability (pushes left out), unconditional win/loss/push probabilities, and projection error (MAE, RMSE, and bias) are separate. Each of those groups also stays inside one archived model version. A missing version is labeled and is not combined with a known version. A snapshot with two results that nobody superseded is left out of the scores. Events are split by kickoff so a later result is not used to score an earlier prediction. A small sample is printed with a warning. The report does not claim the model is calibrated, does not change Qualified, and does not report profit or ROI. If `--db` points at a file that is not there, the report says the archive is empty and does not create the file. `--out` writes `calibration_report.md` and `calibration_report.json`.
 
 The default file is `data/pregame_archive.sqlite`. Pass `--db` to use another path. `pregame.json` must include `event_id`, `event_start`, `projection_at`, `projection_source`, `retrieved_at`, and `book`, plus the usual prop fields. There is no historical archive in this repository. Nothing here was reconstructed from old averages.
 

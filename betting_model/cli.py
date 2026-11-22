@@ -28,6 +28,7 @@ from .archive import (
     list_ungraded,
     load_props_file,
 )
+from .archive_analysis import analyze_archive, render_markdown
 from .books import BOOKS
 from .pairing import attach_opposites
 from .parlays import evaluate_parlay
@@ -299,6 +300,23 @@ def _add_archive_parser(sub: argparse._SubParsersAction) -> None:
     correct.add_argument("--source", default=None)
     stats = commands.add_parser("stats", help="Counts only. This does not claim the model is accurate.")
     stats.add_argument("--db", type=Path, default=None)
+    analyze = commands.add_parser(
+        "analyze",
+        help="Score archived probabilities and projections. Does not claim the model is calibrated.",
+    )
+    analyze.add_argument("--db", type=Path, default=None)
+    analyze.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="Directory for calibration_report.md and calibration_report.json.",
+    )
+    analyze.add_argument(
+        "--format",
+        default="markdown",
+        choices=("markdown", "json"),
+        help="What to print. markdown is the default. json prints the full report.",
+    )
 
 
 def _db_path(args: argparse.Namespace) -> Path:
@@ -380,6 +398,25 @@ def _archive_command(args: argparse.Namespace) -> int:
         return 0 if result.get("ok") else 2
     if args.archive_cmd == "stats":
         print(json.dumps(archive_stats(database), indent=2))
+        return 0
+    if args.archive_cmd == "analyze":
+        report = analyze_archive(database)
+        if not report.get("ok"):
+            print(json.dumps(report, indent=2), file=sys.stderr)
+            return 2
+        rendered = render_markdown(report)
+        if args.out is not None:
+            args.out.mkdir(parents=True, exist_ok=True)
+            json_path = args.out / "calibration_report.json"
+            md_path = args.out / "calibration_report.md"
+            json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+            md_path.write_text(rendered, encoding="utf-8")
+            print(f"Wrote {json_path}")
+            print(f"Wrote {md_path}")
+        if args.format == "json":
+            print(json.dumps(report, indent=2))
+        else:
+            print(rendered)
         return 0
     return 2
 
