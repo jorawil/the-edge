@@ -145,6 +145,21 @@ def test_pairs_only_the_same_book_line_and_close_timestamps():
     assert "opposite" not in attach_opposites([no_book, under])[0]
 
 
+def test_string_true_and_false_pair_for_no_vig():
+    over = _priced(is_over="true", odds=-120)
+    under = _priced(is_over="false", odds=100, projected=180.0)
+    paired = attach_opposites([over, under])
+    assert paired[0]["fair_pair"] == "paired"
+    assert paired[1]["fair_pair"] == "paired"
+    assert paired[0]["opposite"]["odds"] == 100
+    row = evaluate_prop(paired[0], as_of=AS_OF)
+    assert row["is_over"] is True
+    assert row["fair_market_probability"] is not None
+    under_row = evaluate_prop(paired[1], as_of=AS_OF)
+    assert under_row["is_over"] is False
+    assert under_row["fair_market_probability"] is not None
+
+
 def test_historical_rush_sample_is_not_qualified():
     import json
     from pathlib import Path

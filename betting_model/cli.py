@@ -19,6 +19,7 @@ from .books import BOOKS
 from .pairing import attach_opposites
 from .parlays import evaluate_parlay
 from .reports import group_rows, plain_header
+from .core import parse_side
 from .sports import evaluate_prop
 from .version import MODEL_VERSION
 
@@ -30,8 +31,12 @@ def default_out_dir() -> Path:
     return Path.cwd() / "out"
 
 
-def _side_label(is_over: bool) -> str:
-    return "O" if is_over else "U"
+def _side_label(is_over: object) -> str:
+    """O or U. The string ``false`` is Under; ``bool("false")`` is not used."""
+    try:
+        return "O" if parse_side(is_over) else "U"
+    except ValueError:
+        return "?"
 
 
 def _rank_key(row: dict[str, Any]) -> float:
@@ -148,7 +153,7 @@ def _to_markdown(payload: dict[str, Any]) -> str:
         for i, r in enumerate(pos, 1):
             lines.append(
                 f"| {i} | {r.get('player')} | {r.get('sport')} | {r.get('market')} | "
-                f"{_side_label(bool(r.get('is_over')))} | {r.get('line')} | {r.get('odds')} | "
+                f"{_side_label(r.get('is_over'))} | {r.get('line')} | {r.get('odds')} | "
                 f"{r.get('projected')} | {100*float(r.get('model_prob') or 0):.1f}% | "
                 f"{100*float(r.get('implied_prob') or 0):.1f}% | "
                 f"{100*float(r.get('edge') or 0):+.1f}% | {r.get('proj_source') or r.get('source') or ''} |"
@@ -169,7 +174,7 @@ def _to_markdown(payload: dict[str, Any]) -> str:
                     cells.append(f"{b['line']} ({int(b['odds']):+d}) {100*float(b['edge']):+.1f}%")
             pe = "Y" if r.get("positive_edge") else ""
             lines.append(
-                f"| {r.get('player')} | {r.get('market')} | {_side_label(bool(r.get('is_over')))} | "
+                f"| {r.get('player')} | {r.get('market')} | {_side_label(r.get('is_over'))} | "
                 f"{r.get('projected')} | " + " | ".join(cells) + f" | {r.get('best_book','')} {r.get('line')} "
                 f"({r.get('odds')}) | {100*float(r.get('edge') or 0):+.1f}% | {pe} |"
             )
@@ -198,7 +203,7 @@ def _to_markdown(payload: dict[str, Any]) -> str:
             pe = "Y" if r.get("positive_edge") else ""
             lines.append(
                 f"| {r.get('player')} | {r.get('sport')} | {r.get('market')} | "
-                f"{_side_label(bool(r.get('is_over')))} | {r.get('best_book') or ''} | {r.get('line')} | {r.get('odds')} | "
+                f"{_side_label(r.get('is_over'))} | {r.get('best_book') or ''} | {r.get('line')} | {r.get('odds')} | "
                 f"{r.get('projected')} | {100*float(r.get('edge') or 0):+.1f}% | {pe} |"
             )
 
@@ -210,7 +215,7 @@ def _to_markdown(payload: dict[str, Any]) -> str:
         for r in skipped:
             lines.append(
                 f"- **{r.get('player')}** ({r.get('sport')} {r.get('market')} "
-                f"{_side_label(bool(r.get('is_over')))}{r.get('line')} @ {r.get('odds')}): "
+                f"{_side_label(r.get('is_over'))}{r.get('line')} @ {r.get('odds')}): "
                 f"{r.get('skip_reason')}"
             )
             if r.get("source"):

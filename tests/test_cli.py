@@ -34,6 +34,68 @@ def test_save_as_without_out_uses_the_default_directory(tmp_path: Path, monkeypa
     assert (tmp_path / "out" / "slate.md").exists()
 
 
+def test_string_false_is_labeled_under_in_the_report(tmp_path: Path):
+    props = tmp_path / "props.json"
+    props.write_text(
+        json.dumps(
+            {
+                "props": [
+                    {
+                        "player": "Under Example",
+                        "sport": "nfl",
+                        "market": "rushing_yards",
+                        "line": 50.5,
+                        "odds": -110,
+                        "is_over": "false",
+                        "projected": 40,
+                        "projection_source": "example only",
+                        "projection_at": "2026-01-01T18:00:00+00:00",
+                        "retrieved_at": "2026-01-01T18:00:00+00:00",
+                    },
+                    {
+                        "player": "Bad Under",
+                        "sport": "nfl",
+                        "market": "rushing_yards",
+                        "line": 40.5,
+                        "odds": "nope",
+                        "is_over": "false",
+                        "projected": 30,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = evaluate_props_file(props, tmp_path / "out")
+    text = Path(payload["out_md"]).read_text(encoding="utf-8")
+    assert "| Under Example | rushing_yards | Under |" in text
+    assert "| Under Example | rushing_yards | Over |" not in text
+    assert "Bad Under" in text
+    assert "U40.5" in text
+    assert "O40.5" not in text
+
+
+def test_string_false_is_labeled_under_in_the_grade_table():
+    from betting_model.reports import _grade_table
+
+    lines = _grade_table(
+        [
+            {
+                "player": "String Under",
+                "market": "PTS",
+                "is_over": "false",
+                "line": 10.5,
+                "odds": -110,
+                "projected": 8,
+                "status": "WATCH",
+                "status_reasons": ["example"],
+            }
+        ]
+    )
+    assert any("| String Under | PTS | Under |" in line for line in lines)
+    assert not any("| String Under | PTS | Over |" in line for line in lines)
+
+
 def test_save_as_rejects_paths():
     with pytest.raises(ValueError):
         safe_save_name("../escape")

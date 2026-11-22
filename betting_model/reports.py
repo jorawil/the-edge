@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from .core import parse_side
+
 
 def group_rows(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     groups = {
@@ -121,7 +123,10 @@ def _grade_table(rows: list[dict[str, Any]]) -> list[str]:
         "|---|---|:---:|---:|---:|---|---|---|",
     ]
     for row in rows:
-        side = "Over" if row.get("is_over") else "Under"
+        try:
+            side = "Over" if parse_side(row.get("is_over")) else "Under"
+        except ValueError:
+            side = "Unknown side"
         projection = row.get("projection") or {}
         kind = projection.get("kind") or row.get("projection_kind") or ""
         why = "; ".join(row.get("status_reasons") or [])

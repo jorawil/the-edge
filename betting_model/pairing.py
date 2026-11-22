@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .core import DEFAULT_MAX_SIDE_SKEW_SECONDS, canonical_market
+from .core import DEFAULT_MAX_SIDE_SKEW_SECONDS, canonical_market, parse_side
 from .timeutil import parse_aware_datetime, seconds_apart
 
 
@@ -58,8 +58,17 @@ def attach_opposites(
         groups.setdefault(key, []).append(index)
 
     for indexes in groups.values():
-        overs = [i for i in indexes if copies[i].get("is_over") is True]
-        unders = [i for i in indexes if copies[i].get("is_over") is False]
+        overs = []
+        unders = []
+        for index in indexes:
+            try:
+                side_over = parse_side(copies[index].get("is_over"))
+            except ValueError:
+                continue
+            if side_over:
+                overs.append(index)
+            else:
+                unders.append(index)
         if len(overs) != 1 or len(unders) != 1:
             for index in indexes:
                 copies[index]["fair_pair"] = "ambiguous_or_incomplete"
