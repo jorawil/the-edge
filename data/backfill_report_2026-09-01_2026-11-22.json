@@ -1,0 +1,71 @@
+[
+ {
+  "sport": "nfl",
+  "events_in_window": 162,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 151,
+  "already_covered": 0,
+  "added": 151,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401873070",
+    "name": "Miami Dolphins at Buffalo Bills",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873071",
+    "name": "New Orleans Saints at Chicago Bears",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873073",
+    "name": "Tennessee Titans at Dallas Cowboys",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873072",
+    "name": "Tampa Bay Buccaneers at Detroit Lions",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873067",
+    "name": "Arizona Cardinals at Kansas City Chiefs",
+    "reason": "not final (End of Period)"
+   },
+   {
+    "id": "401873076",
+    "name": "Pittsburgh Steelers at Philadelphia Eagles",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873068",
+    "name": "Baltimore Ravens at Carolina Panthers",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873074",
+    "name": "New York Jets at Los Angeles Chargers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873075",
+    "name": "Las Vegas Raiders at Denver Broncos",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873069",
+    "name": "Jacksonville Jaguars at New York Giants",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873077",
+    "name": "Minnesota Vikings at San Francisco 49ers",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]
