@@ -15,6 +15,10 @@ stops a backdated or reconstructed history.
 
 The older JSON helper ``calibration.archive_projection`` is unchanged. This
 SQLite file is the durable archive for evaluations going forward.
+
+Read-only scoring of these rows lives in ``archive_analysis``. It does not
+rewrite snapshots, results, or corrections, and it does not mark a row
+Qualified.
 """
 
 from __future__ import annotations
