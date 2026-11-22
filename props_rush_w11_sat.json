@@ -1,0 +1,211 @@
+[
+ {
+  "player": "James Cook III",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 90.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 101.65,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "James Cook III (cons FP 101.4)",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 90.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 101.4,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "James Cook III (stale-cons SAO Fri 92)",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 90.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 92.0,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "Bucky Irving",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 62.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 81.8,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "Bucky Irving (cons NUV 72)",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 62.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 72.0,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "Ollie Gordon II",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 52.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 60.0,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "Ollie Gordon II (cons NUV 57.2)",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 52.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 57.2,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "Tony Pollard",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 70.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 68.7,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "Jaylen Warren",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 66.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 75.6,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "Jaylen Warren (cons NUV 61.5)",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 66.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 61.5,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "Chuba Hubbard",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 75.5,
+  "odds": -113,
+  "is_over": true,
+  "projected": 72.4,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "ALT Cook 100+",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 99.5,
+  "odds": 128,
+  "is_over": true,
+  "projected": 101.65,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "ALT Cook 110+",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 109.5,
+  "odds": 194,
+  "is_over": true,
+  "projected": 101.65,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "ALT Cook 125+",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 124.5,
+  "odds": 320,
+  "is_over": true,
+  "projected": 101.65,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "ALT Cook 150+",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 149.5,
+  "odds": 750,
+  "is_over": true,
+  "projected": 101.65,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "ALT Irving 80+",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 79.5,
+  "odds": 194,
+  "is_over": true,
+  "projected": 81.8,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "ALT Irving 80+ (cons 72)",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 79.5,
+  "odds": 194,
+  "is_over": true,
+  "projected": 72.0,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "ALT Irving 100+",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 99.5,
+  "odds": 400,
+  "is_over": true,
+  "projected": 81.8,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ },
+ {
+  "player": "ALT Gordon 70+",
+  "sport": "nfl",
+  "market": "rushing_yards",
+  "line": 69.5,
+  "odds": 198,
+  "is_over": true,
+  "projected": 60.0,
+  "sigma": 25.0,
+  "book": "fanduel_IN"
+ }
+]

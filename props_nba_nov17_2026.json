@@ -1,0 +1,145 @@
+{
+  "date": "2026-11-17",
+  "props": [
+    {
+      "player": "Karl-Anthony Towns",
+      "sport": "nba",
+      "market": "points_rebounds_assists",
+      "line": 36.5,
+      "is_over": true,
+      "projected": 40.2,
+      "sigma": 6.4944420682440285,
+      "notes": "NY@TOR 7:30; Barnes Q",
+      "books": {
+        "fanduel": {
+          "line": 36.5,
+          "odds": -120,
+          "source": "https://betsharp.com/nba/player/karl-anthony-towns; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "draftkings": {
+          "line": 37.5,
+          "odds": -110,
+          "source": "https://betsharp.com/nba/player/karl-anthony-towns; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "bet365": {
+          "reason": "not exposed on opened board"
+        },
+        "fanatics": {
+          "reason": "not exposed on opened board"
+        }
+      }
+    },
+    {
+      "player": "Luka Doncic",
+      "sport": "nba",
+      "market": "points_rebounds_assists",
+      "line": 52.5,
+      "is_over": true,
+      "projected": 56.8,
+      "sigma": 8.547904226573124,
+      "notes": "CHA@LAL 11:00; Reaves out; LAL -7.5",
+      "books": {
+        "fanduel": {
+          "line": 52.5,
+          "odds": -114,
+          "source": "https://betsharp.com/nba/player/luka-doncic; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "draftkings": {
+          "line": 52.5,
+          "odds": -122,
+          "source": "https://betsharp.com/nba/player/luka-doncic; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "bet365": {
+          "reason": "not exposed on opened board"
+        },
+        "fanatics": {
+          "reason": "not exposed on opened board"
+        }
+      }
+    },
+    {
+      "player": "Deni Avdija",
+      "sport": "nba",
+      "market": "points_rebounds_assists",
+      "line": 35.5,
+      "is_over": true,
+      "projected": 36.7,
+      "sigma": 6.848357467305573,
+      "notes": "Q left foot, B2B",
+      "books": {
+        "fanduel": {
+          "line": 35.5,
+          "odds": -125,
+          "source": "https://betsharp.com/nba/player/deni-avdija; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "draftkings": {
+          "line": 35.5,
+          "odds": -124,
+          "source": "https://betsharp.com/nba/player/deni-avdija; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "bet365": {
+          "reason": "not exposed on opened board"
+        },
+        "fanatics": {
+          "reason": "not exposed on opened board"
+        }
+      }
+    },
+    {
+      "player": "De'Aaron Fox",
+      "sport": "nba",
+      "market": "points_rebounds_assists",
+      "line": 22.5,
+      "is_over": false,
+      "projected": 21.8,
+      "sigma": 7.885288693369303,
+      "notes": "SA -9.5, DET depleted",
+      "books": {
+        "fanduel": {
+          "line": 22.5,
+          "odds": -122,
+          "source": "https://betsharp.com/nba/player/de-aaron-fox; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "draftkings": {
+          "line": 22.5,
+          "odds": -113,
+          "source": "https://betsharp.com/nba/player/de-aaron-fox; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "bet365": {
+          "reason": "not exposed on opened board"
+        },
+        "fanatics": {
+          "reason": "not exposed on opened board"
+        }
+      }
+    },
+    {
+      "player": "Donovan Clingan",
+      "sport": "nba",
+      "market": "points_rebounds_assists",
+      "line": 25.5,
+      "is_over": false,
+      "projected": 23.6,
+      "sigma": 8.87192826341101,
+      "notes": "B2B",
+      "books": {
+        "fanduel": {
+          "line": 25.5,
+          "odds": -122,
+          "source": "https://betsharp.com/nba/player/donovan-clingan; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "draftkings": {
+          "line": 26.5,
+          "odds": -124,
+          "source": "https://betsharp.com/nba/player/donovan-clingan; retrieved Nov 17 2026 ~3:55 PM EST; public aggregator, Indiana unconfirmed"
+        },
+        "bet365": {
+          "reason": "not exposed on opened board"
+        },
+        "fanatics": {
+          "reason": "not exposed on opened board"
+        }
+      }
+    }
+  ]
+}

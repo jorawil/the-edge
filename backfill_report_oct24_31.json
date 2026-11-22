@@ -1,0 +1,357 @@
+[
+ {
+  "sport": "nfl",
+  "events_in_window": 14,
+  "final": 14,
+  "already_covered": 0,
+  "added": 14,
+  "missing": []
+ },
+ {
+  "sport": "nba",
+  "events_in_window": 60,
+  "final": 53,
+  "already_covered": 0,
+  "added": 53,
+  "missing": [
+   {
+    "id": "401909896",
+    "name": "Portland Trail Blazers at Utah Jazz",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909897",
+    "name": "Philadelphia 76ers at Charlotte Hornets",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909898",
+    "name": "Atlanta Hawks at New Orleans Pelicans",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909899",
+    "name": "Sacramento Kings at Memphis Grizzlies",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909900",
+    "name": "Cleveland Cavaliers at Milwaukee Bucks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909901",
+    "name": "Minnesota Timberwolves at San Antonio Spurs",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909902",
+    "name": "Oklahoma City Thunder at Houston Rockets",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ },
+ {
+  "sport": "nhl",
+  "events_in_window": 59,
+  "final": 49,
+  "already_covered": 0,
+  "added": 49,
+  "missing": [
+   {
+    "id": "401892614",
+    "name": "Chicago Blackhawks at Boston Bruins",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892615",
+    "name": "St. Louis Blues at Detroit Red Wings",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892616",
+    "name": "Tampa Bay Lightning at Nashville Predators",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892617",
+    "name": "Edmonton Oilers at New York Islanders",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892618",
+    "name": "Buffalo Sabres at Los Angeles Kings",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892619",
+    "name": "Ottawa Senators at San Jose Sharks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892620",
+    "name": "Pittsburgh Penguins at Montreal Canadiens",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892621",
+    "name": "Toronto Maple Leafs at Vancouver Canucks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892622",
+    "name": "Columbus Blue Jackets at Dallas Stars",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401892623",
+    "name": "Calgary Flames at Colorado Avalanche",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ },
+ {
+  "sport": "cfb",
+  "events_in_window": 100,
+  "final": 53,
+  "already_covered": 0,
+  "added": 53,
+  "missing": [
+   {
+    "id": "401859185",
+    "name": "Notre Dame Fighting Irish at Navy Midshipmen",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856842",
+    "name": "Arizona Wildcats at Texas Tech Red Raiders",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858278",
+    "name": "SMU Mustangs at Syracuse Orange",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858502",
+    "name": "Wisconsin Badgers at Iowa Hawkeyes",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858277",
+    "name": "California Golden Bears at NC State Wolfpack",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858279",
+    "name": "Boston College Eagles at Duke Blue Devils",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858503",
+    "name": "Illinois Fighting Illini at Maryland Terrapins",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401862816",
+    "name": "UAB Blazers at South Florida Bulls",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401866452",
+    "name": "Bowling Green Falcons at Western Michigan Broncos",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858507",
+    "name": "Michigan Wolverines at Rutgers Scarlet Knights",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856735",
+    "name": "Auburn Tigers at Ole Miss Rebels",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401871096",
+    "name": "Marshall Thundering Herd at Old Dominion Monarchs",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856846",
+    "name": "Kansas State Wildcats at Colorado Buffaloes",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401869944",
+    "name": "Coastal Carolina Chanticleers at Georgia State Panthers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401861966",
+    "name": "UConn Huskies at Air Force Falcons",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401862815",
+    "name": "Temple Owls at East Carolina Pirates",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401871097",
+    "name": "Louisiana Tech Bulldogs at South Alabama Jaguars",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858283",
+    "name": "Stanford Cardinal at Louisville Cardinals",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856734",
+    "name": "Florida Gators at Georgia Bulldogs",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858501",
+    "name": "Minnesota Golden Gophers at Indiana Hoosiers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856843",
+    "name": "Arizona State Sun Devils at BYU Cougars",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858505",
+    "name": "Northwestern Wildcats at Oregon Ducks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856845",
+    "name": "Kansas Jayhawks at TCU Horned Frogs",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401860910",
+    "name": "Colorado State Rams at Utah State Aggies",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401864531",
+    "name": "UTEP Miners at North Dakota State Bison",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401871059",
+    "name": "Florida International Panthers at Liberty Flames",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401871095",
+    "name": "Southern Miss Golden Eagles at UL Monroe Warhawks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856848",
+    "name": "Utah Utes at Cincinnati Bearcats",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858284",
+    "name": "Virginia Cavaliers at Wake Forest Demon Deacons",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401864529",
+    "name": "New Mexico Lobos at San Jos\u00e9 State Spartans",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858508",
+    "name": "Nevada Wolf Pack at UCLA Bruins",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856736",
+    "name": "South Carolina Gamecocks at Oklahoma Sooners",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858506",
+    "name": "Purdue Boilermakers at Penn State Nittany Lions",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401869846",
+    "name": "App State Mountaineers at Georgia Southern Eagles",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856847",
+    "name": "Oklahoma State Cowboys at Iowa State Cyclones",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858280",
+    "name": "Clemson Tigers at Florida State Seminoles",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401860909",
+    "name": "Washington State Cougars at San Diego State Aztecs",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858282",
+    "name": "Miami Hurricanes at North Carolina Tar Heels",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858509",
+    "name": "Ohio State Buckeyes at USC Trojans",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856737",
+    "name": "Mississippi State Bulldogs at Texas Longhorns",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858281",
+    "name": "Georgia Tech Yellow Jackets at Pittsburgh Panthers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401856733",
+    "name": "Missouri Tigers at Arkansas Razorbacks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401858504",
+    "name": "Washington Huskies at Nebraska Cornhuskers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401862814",
+    "name": "Army Black Knights at Memphis Tigers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401860908",
+    "name": "Texas State Bobcats at Boise State Broncos",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401864530",
+    "name": "Northern Illinois Huskies at UNLV Rebels",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401860924",
+    "name": "Oregon State Beavers at Fresno State Bulldogs",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]
