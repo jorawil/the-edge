@@ -146,7 +146,7 @@ python scripts/walk_forward_backtest.py nba
 python scripts/walk_forward_backtest.py nfl --windows 5,10,20 --min-history 3 --out out/nfl_baseline.json
 ```
 
-The benchmark requires explicit ESPN regular-season metadata (`season_type_id=2`), timezone-aware event timestamps, and stable athlete IDs. Missing or unknown season metadata, DNPs, missing IDs, and missing stat values are not converted to zero. Events with the same kickoff timestamp stay together in one chronological split, and all same-time forecasts are generated before any actual from that timestamp is added to history. Multiple fixed windows are reported separately; the held-out test slice is not used to select a winner. The JSON report flags test metrics with fewer than 30 events as descriptive only, not evidence of predictive skill. Even larger samples do not establish calibration or profitability.
+The benchmark requires explicit ESPN regular-season metadata (`season_type_id=2`), timezone-aware event timestamps, and stable athlete IDs. Missing or unknown season metadata, DNPs, missing IDs, and missing stat values are not converted to zero. Each event belongs to one chronological split. A forecast is calculated before the current game's actual is added to that player's history. Multiple fixed windows are reported separately; the held-out test slice is not used to select a winner. The report is only meaningful after a sufficiently large historical dataset has been collected.
 
 Calibration does **not** run off those box scores alone. It needs a projection that was saved before the game. `betting_model.calibration` and `betting_model.backtest` score an older JSON snapshot file. `archive analyze` scores the SQLite archive. The archive writers refuse a projection that was not saved before the event, and the report leaves those rows out if one is ever stored. None of these tools edit an old snapshot, replace `SIGMA_DEFAULTS`, or mark a row Qualified. This repository does not ship a filled archive, so there is no calibrated sigma and no claim that the model wins money.
 
@@ -202,6 +202,18 @@ python -m betting_model.cli archive collect --projections projections.json \
 ```
 
 The historical odds endpoints are paid and are not called. The archive would reject a backdated projection anyway. `archive run-once --config schedule.json` runs at most one pass and only when the file says `"enabled": true`. It does not start a background service.
+
+## Run historical collection and benchmarks from GitHub
+
+These workflows are designed to run in GitHub without a local computer. They become available after their pull requests are merged into `main`.
+
+1. Open the repository on GitHub and select **Actions**.
+2. Choose **Historical Data Backfill**, select NFL or NBA, keep season type `2` for regular season, and run the workflow. The default date range is September 1 through November 22, 2026; change it when collecting another period.
+3. Run the other sport separately. The workflow saves public ESPN game logs to the separate `historical-data` branch. It does not use Odds API credits.
+4. After both sport folders exist on `historical-data`, choose **Historical Baseline Benchmark** and run **both**.
+5. Open the completed benchmark run to view its artifact. The JSON reports are also committed under `reports/` on the `historical-data` branch.
+
+The benchmark compares fixed 5-, 10-, and 20-game rolling averages by default. It is a historical baseline only—not a calibrated player projection, sportsbook edge, EV, or profit test. Empty or small samples must not be treated as evidence of predictive skill. The benchmark workflow requires the historical-data branch and the selected sport's game file; run backfill first.
 
 ## What this version does not do
 
