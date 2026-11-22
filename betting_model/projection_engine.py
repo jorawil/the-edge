@@ -11,7 +11,7 @@ import math
 from typing import Any
 
 MODEL_VERSION = "opportunity-rate-v1"
-NBA_MARKETS = {"PTS", "REB", "AST", "3PM"}
+NBA_MARKETS = {"PTS", "REB", "AST", "3PM", "PRA"}
 NFL_MARKETS = {"PASS_YDS", "RUSH_YDS", "REC_YDS", "REC"}
 
 
@@ -89,6 +89,8 @@ def _project(
     projected_value = projected_opportunity * efficiency
     if len(rows) < 10:
         warnings.append(f"only {len(rows)} prior player-games")
+    if market == "PRA":
+        warnings.append("PRA joint residual covariance is not modelled; uncertainty is unavailable")
     if context.get("role_change") is True:
         warnings.append("role change flagged; adjustment is not modelled")
     if context.get("injury_uncertain") is True:
