@@ -17,6 +17,7 @@ from zoneinfo import ZoneInfo
 
 from .books import BOOKS
 from .pairing import attach_opposites
+from .parlays import evaluate_parlay
 from .reports import group_rows, plain_header
 from .sports import evaluate_prop
 from .version import MODEL_VERSION
@@ -215,6 +216,25 @@ def _to_markdown(payload: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _parlay_command(args: argparse.Namespace) -> int:
+    raw = json.loads(args.ticket.read_text(encoding="utf-8"))
+    legs = raw.get("legs") if isinstance(raw, dict) else raw
+    quoted = raw.get("quoted_american_odds") if isinstance(raw, dict) else None
+    book = raw.get("quoted_book") if isinstance(raw, dict) else None
+    result = evaluate_parlay(legs or [], quoted_american_odds=quoted, quoted_book=book)
+    out_dir = args.out if args.out is not None else default_out_dir()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / "parlay_latest.json"
+    path.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    print(f"Wrote {path}")
+    print(
+        "Parlay status: NOT EVALUABLE. "
+        "No joint probability was calculated. "
+        f"Leg grades: {', '.join(str(item) for item in result.get('leg_statuses') or []) or 'none'}"
+    )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="betting_model", description="Probability-first edge screening")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -236,7 +256,13 @@ def main(argv: list[str] | None = None) -> int:
         help="Edge threshold in probability points. Default is 0.03 (3 percentage points).",
     )
 
+    parlay = sub.add_parser("parlay", help="Grade parlay legs without inventing a joint probability")
+    parlay.add_argument("--ticket", required=True, type=Path, help="JSON with legs and optional quoted_american_odds")
+    parlay.add_argument("--out", type=Path, default=None, help="Output directory. Default is ./out")
+
     args = parser.parse_args(argv)
+    if args.cmd == "parlay":
+        return _parlay_command(args)
     if args.cmd == "evaluate":
         try:
             save_as = safe_save_name(args.save_as) if args.save_as else None
