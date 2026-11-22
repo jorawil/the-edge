@@ -32,7 +32,7 @@ def _write(root: Path, years=None):
 
 def test_comparison_reports_all_methods_and_ranks_on_validation_only(tmp_path):
     _write(tmp_path)
-    result = run_comparison("nba", root=tmp_path, windows=(3,), min_history=3)
+    result = run_comparison("nba", root=tmp_path, windows=(3, 5, 10), min_history=3)
 
     assert result["ok"] is True
     assert set(result["methods"]) == {
@@ -43,6 +43,29 @@ def test_comparison_reports_all_methods_and_ranks_on_validation_only(tmp_path):
     assert result["validation_rankings"]
     assert all(row["rank"] >= 1 for row in result["validation_rankings"])
     assert all(row["split"] == "test" for row in result["metrics"] if row["split"] == "test")
+
+
+
+def test_recency_weighted_windows_use_comparable_fixed_samples(tmp_path):
+    _write(tmp_path)
+    result = run_comparison("nba", root=tmp_path, windows=(3, 5, 10), min_history=3)
+
+    for split in ("train", "validation", "test"):
+        for market in ("PTS", "REB", "AST"):
+            for window in (3, 5, 10):
+                rolling = next(
+                    row for row in result["metrics"]
+                    if row["split"] == split and row["market"] == market
+                    and row["method"] == "rolling_mean" and row["window_games"] == window
+                )
+                weighted = next(
+                    row for row in result["metrics"]
+                    if row["split"] == split and row["market"] == market
+                    and row["method"] == "recency_weighted_mean"
+                    and row["window_games"] == window
+                )
+                assert weighted["n_player_game_predictions"] == rolling["n_player_game_predictions"]
+                assert weighted["n_events"] == rolling["n_events"]
 
 
 def test_season_to_date_history_resets_at_new_season(tmp_path):
