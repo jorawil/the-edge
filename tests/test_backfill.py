@@ -117,6 +117,19 @@ def _event(event_id, away, home, season_type_id=2):
     return event
 
 
+
+def test_season_metadata_accepts_espn_scalar_and_object_shapes():
+    module = _load()
+    scalar = module._season_metadata({"season": {"year": 2026, "type": 2}})
+    numeric_string = module._season_metadata({"season": {"year": 2026, "type": "2"}})
+    object = module._season_metadata({
+        "season": {"year": 2026, "type": {"id": "2", "name": "Regular Season"}}
+    })
+    assert scalar == {"season_year": 2026, "season_type_id": 2, "season_type_name": None}
+    assert numeric_string == scalar
+    assert object == {"season_year": 2026, "season_type_id": 2, "season_type_name": "Regular Season"}
+
+
 def test_backfill_excludes_preseason_postseason_and_unknown_by_default(tmp_path, monkeypatch):
     module = _load()
     monkeypatch.setattr(module, "DATA", tmp_path)
