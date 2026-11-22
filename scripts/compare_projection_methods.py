@@ -71,12 +71,14 @@ def run_comparison(sport: str, *, root: Path | None = None,
                     value = sum(prior) / len(prior)
                     predictions.append({**common, "method": "rolling_mean",
                                         "window": window, "projection": value})
-                prior = history[-10:]
-                if len(prior) >= min_history:
+                    # Keep the configured lookback label fixed even when a
+                    # player has fewer than window prior appearances. This
+                    # makes each weighted candidate comparable to the
+                    # rolling-mean candidate on the same prediction sample.
                     weights = range(1, len(prior) + 1)
-                    value = sum(x * w for x, w in zip(prior, weights)) / sum(weights)
+                    weighted = sum(x * w for x, w in zip(prior, weights)) / sum(weights)
                     predictions.append({**common, "method": "recency_weighted_mean",
-                                        "window": len(prior), "projection": value})
+                                        "window": window, "projection": weighted})
             if len(season) >= min_history:
                 predictions.append({**common, "method": "season_to_date_mean",
                                     "window": None, "projection": sum(season) / len(season)})
@@ -139,7 +141,7 @@ def run_comparison(sport: str, *, root: Path | None = None,
         "limitations": [
             "All forecasts use only appearances strictly before the forecast event; same-time events are scored before any same-time actual is appended.",
             "Season-to-date history resets by ESPN season_year; calendar year is used only when season_year is absent.",
-            "Recency weighting is a simple linear weighting of up to the last ten appearances, not a calibrated distribution.",
+            "Recency weighting uses linear weights within each configured lookback window; it is not a calibrated distribution.",
             "Validation rankings are descriptive method comparisons, not proof of betting edge or profitability.",
             "The held-out test split is reported but never used to rank or select a method.",
             "No injuries, minutes, role, opponent, rest, lineup context, sportsbook odds, EV, ROI, or calibration are modeled.",

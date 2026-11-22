@@ -139,7 +139,7 @@ python scripts/backfill_espn.py nba --start 2026-10-24 --end 2026-10-31
 
 With no dates, the script uses October 24–31, 2026, which is the original window. It is safe to rerun: a complete game is skipped, and an incomplete box is fetched again. A missing stat is not stored as zero.
 
-Historical projection benchmarks are available for NBA and NFL game logs. The original rolling-mean benchmark remains available, and the comparative benchmark evaluates rolling means (5/10/20 by default), season-to-date means, and a linearly recency-weighted mean over up to ten prior appearances. It reports chronological train/validation/test MAE, RMSE, and signed error. Method rankings are based on validation MAE only; the held-out test split is never used to select a method. Season-to-date history resets by ESPN season year. These are forecast baselines—not calibrated betting projections—and do not use odds, calculate EV, or evaluate profitability:
+Historical projection benchmarks are available for NBA and NFL game logs. The original rolling-mean benchmark remains available, and the comparative benchmark evaluates rolling means (5/10/20 by default), season-to-date means, and linearly recency-weighted means over the same configured 5/10/20-game lookback windows. It reports chronological train/validation/test MAE, RMSE, and signed error. Method rankings are based on validation MAE only; the held-out test split is never used to select a method. Season-to-date history resets by ESPN season year. These are forecast baselines—not calibrated betting projections—and do not use odds, calculate EV, or evaluate profitability:
 
 ```bash
 python scripts/walk_forward_backtest.py nba
