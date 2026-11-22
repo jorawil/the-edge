@@ -77,8 +77,8 @@ jobs:
           minimum = int(os.environ["MIN_HISTORY"])
           if not windows or any(value < 1 for value in windows):
               raise SystemExit("windows must be positive comma-separated integers")
-          if minimum < 1:
-              raise SystemExit("minimum history must be positive")
+          if minimum < 3:
+              raise SystemExit("minimum history must be at least 3 for the projection engine")
           selected = ["nba", "nfl"] if os.environ["SPORT"] == "both" else [os.environ["SPORT"]]
           for sport in selected:
               path = f"historical-data/data/{sport}/games.json"
@@ -118,6 +118,11 @@ jobs:
               --windows "$WINDOWS" \
               --min-history "$MIN_HISTORY" \
               --out "benchmark-reports/opportunity_${sport}_${RUN_ID}.json"
+            python scripts/validate_projection_engine.py --sport "$sport" \
+              --data-root historical-data/data \
+              --windows "$WINDOWS" \
+              --min-history "$MIN_HISTORY" \
+              --out "benchmark-reports/projection_engine_${sport}_${RUN_ID}.json"
           done
 
       - name: Save benchmark reports to durable branch
