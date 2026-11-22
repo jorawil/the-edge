@@ -214,12 +214,14 @@ These workflows are designed to run in GitHub without a local computer. They bec
 4. After both sport folders exist on `historical-data`, choose **Historical Baseline Benchmark** and run **both**.
 5. Open the completed benchmark run to view its artifact. The JSON reports are also committed under `reports/` on the `historical-data` branch.
 
-The workflow now produces both the original rolling-window report and a comparative projection-method report for each selected sport. The comparison includes rolling means, season-to-date means, and recency-weighted means. It ranks methods on validation MAE, while reporting test results separately without using them for selection. These remain historical baselines—not calibrated player projections, sportsbook edge, EV, or profit tests. Empty or small samples must not be treated as evidence of predictive skill. The workflow requires the historical-data branch and the selected sport's game file; run backfill first.
+The workflow produces rolling-window reports, comparative method reports, and field-coverage audits for each selected sport. The comparison includes rolling means, season-to-date means, and recency-weighted means. It ranks methods on validation MAE, while reporting test results separately without using them for selection. A feature audit reports the availability of historical box-score fields without exposing player identities. These remain historical baselines—not calibrated player projections, sportsbook edge, EV, or profit tests. Empty or small samples must not be treated as evidence of predictive skill. The workflow requires the historical-data branch and the selected sport's game file; run backfill first.
+
+The opportunity-aware benchmark additionally tests lagged opportunity/rate projections: NBA points, rebounds, and assists use prior minutes and per-minute production; NBA 3-pointers use prior three-point attempts and makes per attempt; NFL passing yards use prior pass attempts and yards per attempt; receptions and receiving yards use prior targets and catch/yard rates; rushing yards use prior rush attempts and yards per attempt. It compares each candidate with a rolling-mean baseline on the exact same eligible player-game sample for each market and window. It only uses prior appearances, groups simultaneous games before adding outcomes, and reports validation rankings separately from held-out test results. Historical opportunity is not a live pregame minutes/targets/attempts projection, and the method is not calibrated.
 
 ## What this version does not do
 
 - It does not place a bet or log in to a sportsbook.
-- It does not build its own projection from minutes, pace, injuries, or weather.
+- It does not use live projected minutes, attempts, targets, pace, injuries, lineup changes, or weather.
 - It does not know who is hurt unless you put that in the file (`role_uncertain` or `injury_status`).
 - It does not estimate parlay correlation. Every parlay is `correlation_not_modeled`.
 - It does not scrape book websites.
