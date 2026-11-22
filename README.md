@@ -139,6 +139,15 @@ python scripts/backfill_espn.py nba --start 2026-10-24 --end 2026-10-31
 
 With no dates, the script uses October 24–31, 2026, which is the original window. It is safe to rerun: a complete game is skipped, and an incomplete box is fetched again. A missing stat is not stored as zero.
 
+A separate baseline benchmark is available for NBA and NFL historical game logs. It generates rolling-mean forecasts using only a player's earlier appearances and reports chronological train/validation/test MAE, RMSE, and signed error. It is a benchmark—not a calibrated model—and does not use odds, calculate EV, or evaluate profitability:
+
+```bash
+python scripts/walk_forward_backtest.py nba
+python scripts/walk_forward_backtest.py nfl --windows 5,10,20 --min-history 3 --out out/nfl_baseline.json
+```
+
+The benchmark requires explicit ESPN regular-season metadata (`season_type_id=2`), timezone-aware event timestamps, and stable athlete IDs. Missing or unknown season metadata, DNPs, missing IDs, and missing stat values are not converted to zero. Events with the same kickoff timestamp stay together in one chronological split, and all same-time forecasts are generated before any actual from that timestamp is added to history. Multiple fixed windows are reported separately; the held-out test slice is not used to select a winner. The JSON report flags test metrics with fewer than 30 events as descriptive only, not evidence of predictive skill. Even larger samples do not establish calibration or profitability.
+
 Calibration does **not** run off those box scores alone. It needs a projection that was saved before the game. `betting_model.calibration` and `betting_model.backtest` score an older JSON snapshot file. `archive analyze` scores the SQLite archive. The archive writers refuse a projection that was not saved before the event, and the report leaves those rows out if one is ever stored. None of these tools edit an old snapshot, replace `SIGMA_DEFAULTS`, or mark a row Qualified. This repository does not ship a filled archive, so there is no calibrated sigma and no claim that the model wins money.
 
 ## Pregame archive
