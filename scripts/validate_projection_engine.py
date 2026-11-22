@@ -109,7 +109,7 @@ def validate(
     for row in target_rows:
         coverage[row["market"]]["target_rows"] += 1
         player_rows = player_rows_by_event.get((row["event_id"], row["player_id"]), [])
-        opportunity = (_OPP._minutes((player_rows[0].get("stats") or {}).get("minutes"))
+        opportunity = (_OPP._minutes(((next((p for p in player_rows if not p.get("category")), player_rows[0])).get("stats") or {}).get("minutes"))
                        if sport == "nba" and row["market"] == "PRA" and player_rows
                        else _OPP._opportunity(sport, row["market"], player_rows))
         if opportunity is None or (opportunity == 0 and row["actual"] > 0):
