@@ -494,6 +494,68 @@ def test_archive_pairs_only_compatible_opposite_prices(tmp_path: Path):
     assert all(item["stored"] for item in stale)
 
 
+def test_caller_supplied_opposite_cannot_create_no_vig(tmp_path: Path):
+    database = tmp_path / "archive.sqlite"
+    fake_opposite = {
+        "odds": -110,
+        "line": 250.5,
+        "retrieved_at": PRICE_AT,
+        "book": "bet365",
+    }
+    alone = archive_evaluation(database, _prop(event_id="alone", opposite=fake_opposite))
+    alone_row = get_snapshot(database, alone["archive_id"])
+    assert alone_row["no_vig_probability"] is None
+
+    other_book = archive_many(
+        tmp_path / "supplied-book.sqlite",
+        [
+            _prop(event_id="book", opposite={"odds": -110, "line": 250.5, "retrieved_at": PRICE_AT, "book": "bet365"}),
+            _prop(event_id="book", is_over="false", book="bet365", projected=230),
+        ],
+    )
+    assert all(item["stored"] for item in other_book)
+    assert all(row["no_vig_probability"] is None for row in list_snapshots(tmp_path / "supplied-book.sqlite"))
+
+    other_line = archive_many(
+        tmp_path / "supplied-line.sqlite",
+        [
+            _prop(event_id="line", opposite={"odds": -110, "line": 999.5, "retrieved_at": PRICE_AT}),
+        ],
+    )
+    assert list_snapshots(tmp_path / "supplied-line.sqlite")[0]["no_vig_probability"] is None
+
+    other_time = archive_many(
+        tmp_path / "supplied-time.sqlite",
+        [
+            _prop(
+                event_id="time",
+                opposite={"odds": -110, "line": 250.5, "retrieved_at": "2026-11-23T17:04:00Z"},
+            ),
+        ],
+    )
+    assert list_snapshots(tmp_path / "supplied-time.sqlite")[0]["no_vig_probability"] is None
+
+    unmatched = archive_evaluation(tmp_path / "unmatched.sqlite", _prop(event_id="solo"))
+    assert get_snapshot(tmp_path / "unmatched.sqlite", unmatched["archive_id"])["no_vig_probability"] is None
+
+
+def test_player_and_timestamp_aliases_still_pair(tmp_path: Path):
+    database = tmp_path / "aliases.sqlite"
+    over = _prop(event_id="alias")
+    under = _prop(event_id="alias", is_over="false", projected=230, odds=-110)
+    for prop in (over, under):
+        prop["player_name"] = prop.pop("player")
+        prop["odds_retrieved_at"] = prop.pop("retrieved_at")
+    saved = archive_many(database, [over, under])
+    assert saved[0]["stored"] and saved[1]["stored"]
+    rows = list_snapshots(database, event_id="alias")
+    assert rows[0]["player_name"] == "Example Player"
+    assert rows[0]["odds_retrieved_at_source"] == PRICE_AT
+    assert rows[1]["odds_retrieved_at_source"] == PRICE_AT
+    assert rows[0]["no_vig_probability"] == pytest.approx(0.5, abs=1e-6)
+    assert rows[1]["no_vig_probability"] == pytest.approx(0.5, abs=1e-6)
+
+
 def test_invalid_actuals_are_not_graded(tmp_path: Path, clock):
     database = tmp_path / "archive.sqlite"
     saved = archive_evaluation(database, _prop())

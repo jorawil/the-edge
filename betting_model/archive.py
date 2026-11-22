@@ -427,30 +427,51 @@ def _build_row(prop: dict[str, Any], *, now: datetime) -> dict[str, Any]:
     return row
 
 
+def _normalize_pairing_aliases(prop: dict[str, Any]) -> dict[str, Any]:
+    """Copy archive aliases onto the names the pairing helper reads.
+
+    Caller-supplied ``opposite`` is dropped here. A no-vig price is attached
+    later only from another row in the same batch. Original ``player_name``
+    and ``odds_retrieved_at`` are kept so the stored source text is unchanged.
+    """
+    normalized = dict(prop)
+    normalized.pop("opposite", None)
+    if not normalized.get("player") and normalized.get("player_name"):
+        normalized["player"] = normalized["player_name"]
+    if not normalized.get("retrieved_at") and normalized.get("odds_retrieved_at"):
+        normalized["retrieved_at"] = normalized["odds_retrieved_at"]
+    if normalized.get("is_over") is None and normalized.get("side") is not None:
+        normalized["is_over"] = normalized["side"]
+    return normalized
+
+
 def _pair_within_event(props: list[Any]) -> list[Any]:
     """Pair Over and Under only inside one event, using the existing price rules.
 
     Different books, lines, or price times are left unpaired by ``attach_opposites``.
     Splitting by event first stops two games from being treated as one market.
+    Any ``opposite`` on the input is removed before that check.
     """
+    prepared = [
+        _normalize_pairing_aliases(prop) if isinstance(prop, dict) else prop for prop in props
+    ]
     groups: dict[str, list[int]] = {}
-    for index, prop in enumerate(props):
+    for index, prop in enumerate(prepared):
         if not isinstance(prop, dict):
             continue
         event = str(prop.get("event_id") or prop.get("game_id") or "")
         if not event:
             continue
         groups.setdefault(event, []).append(index)
-    prepared = list(props)
     for indexes in groups.values():
-        paired = attach_opposites([props[index] for index in indexes])
+        paired = attach_opposites([prepared[index] for index in indexes])
         for index, item in zip(indexes, paired):
             prepared[index] = item
     return prepared
 
 
-def archive_evaluation(path: Path, prop: dict[str, Any]) -> dict[str, Any]:
-    """Insert one pregame snapshot. ``archived_at`` is the system clock in UTC."""
+def _insert_snapshot(path: Path, prop: dict[str, Any]) -> dict[str, Any]:
+    """Insert one prepared prop. ``archived_at`` is the system clock in UTC."""
     moment = _utc_now()
     supplied = dict(prop)
     supplied.pop("archived_at", None)
@@ -510,6 +531,15 @@ def archive_evaluation(path: Path, prop: dict[str, Any]) -> dict[str, Any]:
     return {"ok": True, "stored": True, "archive_id": archive_id, "duplicate": False, "screening_grade": row["screening_grade"]}
 
 
+def archive_evaluation(path: Path, prop: dict[str, Any]) -> dict[str, Any]:
+    """Archive one prop. A supplied ``opposite`` is ignored.
+
+    No-vig is filled only when ``archive_many`` finds the other side in the
+    same batch. One prop on its own never invents the other price.
+    """
+    return _insert_snapshot(path, _normalize_pairing_aliases(prop))
+
+
 def archive_many(path: Path, props: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Archive each prop. One rejection does not remove the others.
 
@@ -522,7 +552,7 @@ def archive_many(path: Path, props: list[dict[str, Any]]) -> list[dict[str, Any]
         if not isinstance(prop, dict):
             results.append({"ok": False, "stored": False, "index": index, "reason": "prop must be an object"})
             continue
-        item = archive_evaluation(path, prop)
+        item = _insert_snapshot(path, prop)
         item["index"] = index
         item["player"] = prop.get("player") or prop.get("player_name")
         results.append(item)
