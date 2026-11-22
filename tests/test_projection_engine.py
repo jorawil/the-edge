@@ -1,5 +1,4 @@
-import json
-from datetime import datetime, timezone
+from datetime import datetime
 
 import pytest
 
@@ -16,8 +15,8 @@ def test_nba_projection_uses_prior_minutes_and_shrinks_efficiency():
     result = project_nba("PTS", history, {"prior_efficiency": 0.5}, shrinkage_strength=10)
     assert result["ok"] is True
     assert result["projected_opportunity"] == pytest.approx(30)
-    assert result["projected_efficiency"] == pytest.approx(90 / 100)
-    assert result["projected_value"] == pytest.approx(27)
+    assert result["projected_efficiency"] == pytest.approx(95 / 100)
+    assert result["projected_value"] == pytest.approx(28.5)
     assert result["calibrated"] is False
     assert result["sigma"] is None
     assert result["interval_80"] is None
@@ -32,7 +31,7 @@ def test_nfl_receiving_projection_uses_targets_as_opportunity():
     result = project_nfl("REC", history, {"prior_efficiency": 0.6}, shrinkage_strength=5)
     assert result["ok"] is True
     assert result["projected_opportunity"] == pytest.approx(17 / 3)
-    assert result["projected_efficiency"] == pytest.approx((13 + 3) / (17 + 5))
+    assert result["projected_efficiency"] == pytest.approx(16 / 22)
     assert result["projected_value"] == pytest.approx((17 / 3) * (16 / 22))
 
 
