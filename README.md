@@ -225,7 +225,7 @@ python scripts/validate_projection_engine.py --sport nba --data-root data
 python scripts/validate_projection_engine.py --sport nfl --data-root data
 ```
 
-This v1 engine does not apply opponent, rest, home/away, injury, lineup, or role adjustments. It does not forecast PRA, create intervals, estimate calibrated probabilities, or qualify bets. Full methodology and limitations: `docs/PROJECTION_ENGINE_V1.md`.
+This v1 engine does not apply opponent, rest, home/away, injury, lineup, or role adjustments. It can produce a PRA point estimate from PTS + REB + AST, but does not model their joint residual covariance or PRA uncertainty. It does not create intervals, estimate calibrated probabilities, or qualify bets. Full methodology and limitations: `docs/PROJECTION_ENGINE_V1.md`.
 
 ## What this version does not do
 
