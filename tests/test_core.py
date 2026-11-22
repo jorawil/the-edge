@@ -2,7 +2,7 @@
 import math
 import pytest
 
-from the_edge.core import (
+from core import (
     implied_probability,
     calculate_edge,
     resolve_sigma,
