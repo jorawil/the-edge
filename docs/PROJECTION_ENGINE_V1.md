@@ -41,7 +41,7 @@ The output is JSON and can be saved with --out reports/projection_nba.json. The 
 - No opponent, home/away, rest, pace, game-script, injury, lineup, teammate-out, starter/bench, or role-change adjustment is applied yet.
 - The league efficiency prior is not position-specific.
 - ESPN's historical game timestamps are present, but ingestion timestamps are not. The feature builder therefore leaves projection_input_at unknown instead of inventing it.
-- PRA is not projected as a separate market. Its joint uncertainty requires covariance from archived PTS/REB/AST forecast residuals.
+- PRA is projected as PTS + REB + AST for a point estimate. Its joint uncertainty requires covariance from archived PTS/REB/AST forecast residuals, so no PRA sigma or interval is produced.
 - Sigma, 80%/90% intervals, and calibrated distributions are intentionally absent. The engine always returns calibrated=false.
 - A projection from this engine cannot receive QUALIFIED status.
 
