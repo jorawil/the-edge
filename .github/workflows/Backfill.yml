@@ -45,11 +45,12 @@ jobs:
           pip install -e . --no-deps
 
       - name: Run historical backfill
+        env:
+          SPORT: ${{ inputs.sport }}
+          START_DATE: ${{ inputs.start_date }}
+          END_DATE: ${{ inputs.end_date }}
         run: |
-          python scripts/backfill_espn.py \
-            --sport "${{ inputs.sport }}" \
-            --start "${{ inputs.start_date }}" \
-            --end "${{ inputs.end_date }}"
+          python scripts/backfill_espn.py "$SPORT" --start "$START_DATE" --end "$END_DATE"
 
       - name: Upload historical data
         if: always()
@@ -58,6 +59,6 @@ jobs:
           name: edge-${{ inputs.sport }}-historical-data
           path: |
             data/${{ inputs.sport }}/games.json
-            data/${{ inputs.sport }}/*report*
+            data/backfill_report_*.json
           if-no-files-found: warn
           retention-days: 30
