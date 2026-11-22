@@ -203,6 +203,18 @@ python -m betting_model.cli archive collect --projections projections.json \
 
 The historical odds endpoints are paid and are not called. The archive would reject a backdated projection anyway. `archive run-once --config schedule.json` runs at most one pass and only when the file says `"enabled": true`. It does not start a background service.
 
+## Run historical collection and benchmarks from GitHub
+
+These workflows are designed to run in GitHub without a local computer. They become available after their pull requests are merged into `main`.
+
+1. Open the repository on GitHub and select **Actions**.
+2. Choose **Historical Data Backfill**, select NFL or NBA, keep season type `2` for regular season, and run the workflow. The default date range is September 1 through November 22, 2026; change it when collecting another period.
+3. Run the other sport separately. The workflow saves public ESPN game logs to the separate `historical-data` branch. It does not use Odds API credits.
+4. After both sport folders exist on `historical-data`, choose **Historical Baseline Benchmark** and run **both**.
+5. Open the completed benchmark run to view its artifact. The JSON reports are also committed under `reports/` on the `historical-data` branch.
+
+The benchmark compares fixed 5-, 10-, and 20-game rolling averages by default. It is a historical baseline only—not a calibrated player projection, sportsbook edge, EV, or profit test. Empty or small samples must not be treated as evidence of predictive skill. The benchmark workflow requires the historical-data branch and the selected sport's game file; run backfill first.
+
 ## What this version does not do
 
 - It does not place a bet or log in to a sportsbook.
