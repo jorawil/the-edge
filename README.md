@@ -153,7 +153,7 @@ Timestamps are stored in UTC. The original text you typed is kept beside them. `
 
 The same observation saved twice is rejected and the first row is left as it was. A later line or price is a new snapshot, so 24.5 at -110 and 25.5 at -115 are two records.
 
-Results are attached afterward. They never edit the snapshot. A missing stat stays missing. A did-not-play, postponement, or cancellation is Void, not zero. A whole-number counting stat that lands on the line is a Push. A second result is added beside the first; it does not delete it. A correction note works the same way: the original number stays, and the note sits next to it.
+Results are attached afterward. They never edit the snapshot. A result time before kickoff is refused. A missing stat stays missing. A did-not-play, postponement, or cancellation is Void, not zero. An incomplete or suspended game stays Unknown until it is final. If a file contains both the Over and the Under for the same player, game, line, and book at nearly the same time, the no-vig price is stored. Otherwise that field stays empty. A whole-number counting stat that lands on the line is a Push. A second result is added beside the first; it does not delete it. A correction note works the same way: the original number stays, and the note sits next to it.
 
 ```bash
 python -m betting_model.cli archive add --props pregame.json

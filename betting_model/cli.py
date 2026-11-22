@@ -32,7 +32,7 @@ from .books import BOOKS
 from .pairing import attach_opposites
 from .parlays import evaluate_parlay
 from .reports import group_rows, plain_header
-from .core import parse_side
+from .core import parse_finite_number, parse_side
 from .sports import evaluate_prop
 from .version import MODEL_VERSION
 
@@ -338,7 +338,13 @@ def _archive_command(args: argparse.Namespace) -> int:
         return 0
     if args.archive_cmd == "attach-result":
         provided = args.actual is not None
-        actual = float(args.actual) if provided else None
+        actual = None
+        if provided:
+            try:
+                actual = parse_finite_number(args.actual, "actual")
+            except ValueError as exc:
+                print(json.dumps({"ok": False, "reason": str(exc)}))
+                return 2
         result = attach_result(
             database,
             args.id,

@@ -26,6 +26,19 @@ from betting_model.archive import (
 from betting_model.cli import main
 
 NOW = datetime(2026, 11, 23, 17, 5, tzinfo=timezone.utc)
+RESULT_TIME = datetime(2026, 11, 24, 3, 0, tzinfo=timezone.utc)
+
+
+@pytest.fixture(autouse=True)
+def clock(monkeypatch):
+    """Isolated test clock. The public archive API has no timestamp argument."""
+    state = {"moment": NOW}
+
+    def _current():
+        return state["moment"]
+
+    monkeypatch.setattr("betting_model.archive._utc_now", _current)
+    return state
 START = "2026-11-23T18:00:00Z"
 PROJECTED_AT = "2026-11-23T17:00:00Z"
 PRICE_AT = "2026-11-23T17:00:30Z"
@@ -58,7 +71,7 @@ def _prop(**overrides):
 
 def test_snapshot_stores_the_supplied_pregame_record(tmp_path: Path):
     database = tmp_path / "archive.sqlite"
-    saved = archive_evaluation(database, _prop(), now=NOW)
+    saved = archive_evaluation(database, _prop())
     assert saved["ok"] is True
     row = get_snapshot(database, saved["archive_id"])
     assert row["projected_value"] == 270.0
@@ -76,18 +89,18 @@ def test_snapshot_stores_the_supplied_pregame_record(tmp_path: Path):
     assert "actual" not in json.loads(row["payload_json"])
 
 
-def test_later_price_is_a_new_snapshot_and_the_first_is_unchanged(tmp_path: Path):
+def test_later_price_is_a_new_snapshot_and_the_first_is_unchanged(tmp_path: Path, clock):
     database = tmp_path / "archive.sqlite"
-    first = archive_evaluation(database, _prop(), now=NOW)
+    first = archive_evaluation(database, _prop())
+    clock["moment"] = NOW + timedelta(minutes=30)
     second = archive_evaluation(
         database,
         _prop(line=255.5, odds=-115, retrieved_at="2026-11-23T17:30:00Z"),
-        now=NOW + timedelta(minutes=30),
     )
+    clock["moment"] = NOW + timedelta(minutes=40)
     third = archive_evaluation(
         database,
         _prop(odds=100, retrieved_at="2026-11-23T17:40:00Z"),
-        now=NOW + timedelta(minutes=40),
     )
     assert first["ok"] and second["ok"] and third["ok"]
     ids = {first["archive_id"], second["archive_id"], third["archive_id"]}
@@ -101,9 +114,9 @@ def test_later_price_is_a_new_snapshot_and_the_first_is_unchanged(tmp_path: Path
 
 def test_exact_resubmit_does_not_change_the_original(tmp_path: Path):
     database = tmp_path / "archive.sqlite"
-    first = archive_evaluation(database, _prop(), now=NOW)
+    first = archive_evaluation(database, _prop())
     before = get_snapshot(database, first["archive_id"])
-    duplicate = archive_evaluation(database, _prop(), now=NOW + timedelta(minutes=1))
+    duplicate = archive_evaluation(database, _prop())
     assert duplicate["ok"] is False
     assert duplicate["duplicate"] is True
     assert duplicate["archive_id"] == first["archive_id"]
@@ -115,13 +128,13 @@ def test_exact_resubmit_does_not_change_the_original(tmp_path: Path):
 
 def test_missing_and_invalid_fields_are_not_invented(tmp_path: Path):
     database = tmp_path / "archive.sqlite"
-    refused = archive_evaluation(database, _prop(projected=None, odds=None), now=NOW)
+    refused = archive_evaluation(database, _prop(projected=None, odds=None))
     assert refused["stored"] is False
     assert "projected" in refused["reason"]
     assert list_snapshots(database) == []
-    bad_odds = archive_evaluation(database, _prop(odds=0), now=NOW)
+    bad_odds = archive_evaluation(database, _prop(odds=0))
     assert bad_odds["stored"] is False
-    leaked = archive_evaluation(database, _prop(actual=30), now=NOW)
+    leaked = archive_evaluation(database, _prop(actual=30))
     assert leaked["stored"] is False
     assert "postgame" in leaked["reason"]
     assert list_snapshots(database) == []
@@ -132,7 +145,6 @@ def test_utc_storage_and_no_backdating(tmp_path: Path):
     saved = archive_evaluation(
         database,
         _prop(event_start="2026-11-23T13:00:00-05:00"),
-        now=NOW,
     )
     row = get_snapshot(database, saved["archive_id"])
     assert row["event_start"] == "2026-11-23T18:00:00Z"
@@ -140,7 +152,6 @@ def test_utc_storage_and_no_backdating(tmp_path: Path):
     late = archive_evaluation(
         database,
         _prop(event_id="already-started", event_start="2026-11-23T17:00:00Z"),
-        now=NOW,
     )
     assert late["stored"] is False
     assert "already started" in late["reason"]
@@ -151,11 +162,10 @@ def test_utc_storage_and_no_backdating(tmp_path: Path):
             projection_at="2026-11-20T12:00:00Z",
             retrieved_at="2026-11-23T17:00:00Z",
         ),
-        now=NOW,
     )
     assert backdated["stored"] is False
     assert "backdated" in backdated["reason"]
-    naive = archive_evaluation(database, _prop(event_id="naive", projection_at="2026-11-23T17:00:00"), now=NOW)
+    naive = archive_evaluation(database, _prop(event_id="naive", projection_at="2026-11-23T17:00:00"))
     assert naive["stored"] is False
     assert "timezone" in naive["reason"]
 
@@ -165,7 +175,6 @@ def test_string_false_is_under_and_fanduel_is_not_indiana(tmp_path: Path):
     saved = archive_evaluation(
         database,
         _prop(is_over="false", book="fanduel_in", projected=200),
-        now=NOW,
     )
     row = get_snapshot(database, saved["archive_id"])
     assert row["side"] == "Under"
@@ -173,10 +182,11 @@ def test_string_false_is_under_and_fanduel_is_not_indiana(tmp_path: Path):
     assert "Indiana" in row["region_note"]
 
 
-def test_result_attachment_does_not_edit_the_snapshot(tmp_path: Path):
+def test_result_attachment_does_not_edit_the_snapshot(tmp_path: Path, clock):
     database = tmp_path / "archive.sqlite"
-    saved = archive_evaluation(database, _prop(), now=NOW)
+    saved = archive_evaluation(database, _prop())
     before = get_snapshot(database, saved["archive_id"])["payload_json"]
+    clock["moment"] = RESULT_TIME
     graded = attach_result(
         database,
         saved["archive_id"],
@@ -185,7 +195,6 @@ def test_result_attachment_does_not_edit_the_snapshot(tmp_path: Path):
         actual_provided=True,
         result_source="fixture box score",
         result_retrieved_at="2026-11-24T02:00:00Z",
-        now=datetime(2026, 11, 24, 3, 0, tzinfo=timezone.utc),
         event_id="game-1",
         player_id="ex-1",
     )
@@ -203,31 +212,28 @@ def test_result_attachment_does_not_edit_the_snapshot(tmp_path: Path):
         actual_provided=True,
         result_source="wrong game",
         result_retrieved_at="2026-11-24T02:00:00Z",
-        now=datetime(2026, 11, 24, 3, 0, tzinfo=timezone.utc),
         event_id="other-game",
     )
     assert mismatch["ok"] is False
 
 
-def test_win_loss_push_void_unknown_and_a_real_zero(tmp_path: Path):
+def test_win_loss_push_void_unknown_and_a_real_zero(tmp_path: Path, clock):
     database = tmp_path / "archive.sqlite"
-    over = archive_evaluation(database, _prop(event_id="over"), now=NOW)
+    over = archive_evaluation(database, _prop(event_id="over"))
     under = archive_evaluation(
-        database, _prop(event_id="under", is_over="false", projected=200), now=NOW
-    )
+        database, _prop(event_id="under", is_over="false", projected=200)    )
     push = archive_evaluation(
-        database, _prop(event_id="push", market="PTS", line=20, projected=21, sport="nba"), now=NOW
-    )
-    dnp = archive_evaluation(database, _prop(event_id="dnp"), now=NOW)
-    missing = archive_evaluation(database, _prop(event_id="missing"), now=NOW)
+        database, _prop(event_id="push", market="PTS", line=20, projected=21, sport="nba")    )
+    dnp = archive_evaluation(database, _prop(event_id="dnp"))
+    missing = archive_evaluation(database, _prop(event_id="missing"))
     zero = archive_evaluation(
-        database, _prop(event_id="zero", market="PTS", line=0.5, projected=1, sport="nba"), now=NOW
-    )
-    when = datetime(2026, 11, 24, 3, 0, tzinfo=timezone.utc)
+        database, _prop(event_id="zero", market="PTS", line=0.5, projected=1, sport="nba")    )
+    postponed = archive_evaluation(database, _prop(event_id="postponed"))
+    canceled = archive_evaluation(database, _prop(event_id="canceled"))
+    clock["moment"] = RESULT_TIME
     common = {
         "result_source": "fixture",
         "result_retrieved_at": "2026-11-24T02:00:00Z",
-        "now": when,
     }
     assert attach_result(database, over["archive_id"], game_status="final", actual=240, actual_provided=True, **common)["settlement"] == "Loss"
     assert attach_result(database, under["archive_id"], game_status="final", actual=240, actual_provided=True, **common)["settlement"] == "Win"
@@ -242,24 +248,22 @@ def test_win_loss_push_void_unknown_and_a_real_zero(tmp_path: Path):
     zero_result = attach_result(database, zero["archive_id"], game_status="final", actual=0, actual_provided=True, **common)
     assert zero_result["settlement"] == "Loss"
     assert get_snapshot(database, zero["archive_id"])["results"][0]["actual_stat"] == 0
-    postponed = archive_evaluation(database, _prop(event_id="postponed"), now=NOW)
-    canceled = archive_evaluation(database, _prop(event_id="canceled"), now=NOW)
     assert attach_result(database, postponed["archive_id"], game_status="postponed", **common)["settlement"] == "Void"
     assert attach_result(database, canceled["archive_id"], game_status="canceled", **common)["settlement"] == "Void"
 
 
-def test_second_result_and_correction_keep_the_original(tmp_path: Path):
+def test_second_result_and_correction_keep_the_original(tmp_path: Path, clock):
     database = tmp_path / "archive.sqlite"
-    saved = archive_evaluation(database, _prop(), now=NOW)
-    when = datetime(2026, 11, 24, 3, 0, tzinfo=timezone.utc)
+    saved = archive_evaluation(database, _prop())
+    clock["moment"] = RESULT_TIME
     attach_result(
         database,
         saved["archive_id"],
         game_status="final",
         result_source="incomplete box",
         result_retrieved_at="2026-11-24T01:00:00Z",
-        now=when,
     )
+    clock["moment"] = RESULT_TIME + timedelta(hours=2)
     attach_result(
         database,
         saved["archive_id"],
@@ -268,7 +272,6 @@ def test_second_result_and_correction_keep_the_original(tmp_path: Path):
         actual_provided=True,
         result_source="repaired box",
         result_retrieved_at="2026-11-24T04:00:00Z",
-        now=when + timedelta(hours=2),
     )
     snapshot = get_snapshot(database, saved["archive_id"])
     assert len(snapshot["results"]) == 2
@@ -281,7 +284,6 @@ def test_second_result_and_correction_keep_the_original(tmp_path: Path):
         field_name="team",
         corrected_value="AWY",
         reason="example correction, original team was HOM",
-        now=when,
     )
     again = get_snapshot(database, saved["archive_id"])
     assert again["team"] == "HOM"
@@ -290,7 +292,7 @@ def test_second_result_and_correction_keep_the_original(tmp_path: Path):
 
 def test_export_import_and_schema_migration(tmp_path: Path):
     database = tmp_path / "archive.sqlite"
-    archive_evaluation(database, _prop(), now=NOW)
+    archive_evaluation(database, _prop())
     destination = tmp_path / "export.json"
     exported = export_archive(database, destination)
     assert exported["snapshots"] == 1
@@ -322,7 +324,7 @@ def test_export_import_and_schema_migration(tmp_path: Path):
 
 def test_stats_do_not_claim_accuracy_and_one_bad_prop_does_not_drop_a_good_one(tmp_path: Path):
     database = tmp_path / "archive.sqlite"
-    results = archive_many(database, [_prop(), {"sport": "nfl"}], now=NOW)
+    results = archive_many(database, [_prop(), {"sport": "nfl"}])
     assert results[0]["stored"] is True
     assert results[1]["stored"] is False
     stats = archive_stats(database)
@@ -333,14 +335,14 @@ def test_stats_do_not_claim_accuracy_and_one_bad_prop_does_not_drop_a_good_one(t
     assert len(list_ungraded(database)) == 1
 
 
-def test_cli_archive_add_and_attach(tmp_path: Path, monkeypatch):
+def test_cli_archive_add_and_attach(tmp_path: Path, clock):
     props = tmp_path / "pregame.json"
     props.write_text(json.dumps(_prop()), encoding="utf-8")
     database = tmp_path / "archive.sqlite"
-    monkeypatch.setattr("betting_model.cli.archive_many", lambda path, props, now=None: archive_many(path, props, now=NOW))
     code = main(["archive", "add", "--props", str(props), "--db", str(database)])
     assert code == 0
     row = list_snapshots(database)[0]
+    clock["moment"] = RESULT_TIME
     attach_code = main(
         [
             "archive",
@@ -356,16 +358,190 @@ def test_cli_archive_add_and_attach(tmp_path: Path, monkeypatch):
             "--source",
             "fixture",
             "--retrieved-at",
-            "2026-11-22T12:00:00Z",
+            "2026-11-24T02:00:00Z",
         ]
     )
     assert attach_code == 0
     assert get_snapshot(database, row["archive_id"])["results"][0]["actual_stat"] == 0.0
 
 
+def test_public_callers_cannot_set_archived_at(tmp_path: Path):
+    database = tmp_path / "archive.sqlite"
+    with pytest.raises(TypeError):
+        archive_evaluation(database, _prop(), now=NOW)  # type: ignore[call-arg]
+    with pytest.raises(TypeError):
+        archive_many(database, [_prop()], now=NOW)  # type: ignore[call-arg]
+    with pytest.raises(TypeError):
+        attach_result(
+            database,
+            "missing",
+            game_status="final",
+            result_source="fixture",
+            result_retrieved_at=PRICE_AT,
+            now=NOW,  # type: ignore[call-arg]
+        )
+    with pytest.raises(TypeError):
+        add_correction(
+            database,
+            "missing",
+            field_name="team",
+            corrected_value="AWY",
+            reason="example",
+            now=NOW,  # type: ignore[call-arg]
+        )
+    saved = archive_evaluation(database, _prop(archived_at="1999-01-01T00:00:00Z"))
+    assert saved["ok"] is True
+    assert get_snapshot(database, saved["archive_id"])["archived_at"] == "2026-11-23T17:05:00Z"
+
+
+def test_result_time_must_not_be_before_kickoff(tmp_path: Path, clock):
+    database = tmp_path / "archive.sqlite"
+    saved = archive_evaluation(database, _prop())
+    before = get_snapshot(database, saved["archive_id"])["payload_json"]
+    clock["moment"] = RESULT_TIME
+    early = attach_result(
+        database,
+        saved["archive_id"],
+        game_status="final",
+        actual=10,
+        actual_provided=True,
+        result_source="fixture",
+        result_retrieved_at="2026-11-23T17:59:59Z",
+    )
+    assert early["ok"] is False
+    assert "before kickoff" in early["reason"]
+    assert get_snapshot(database, saved["archive_id"])["payload_json"] == before
+    assert get_snapshot(database, saved["archive_id"])["results"] == []
+    at_kickoff = attach_result(
+        database,
+        saved["archive_id"],
+        game_status="final",
+        actual=280,
+        actual_provided=True,
+        result_source="fixture",
+        result_retrieved_at=START,
+    )
+    assert at_kickoff["ok"] is True
+    assert at_kickoff["settlement"] == "Win"
+    after = attach_result(
+        database,
+        saved["archive_id"],
+        game_status="final",
+        actual=240,
+        actual_provided=True,
+        result_source="later box",
+        result_retrieved_at="2026-11-24T02:00:00Z",
+    )
+    assert after["ok"] is True
+    snapshot = get_snapshot(database, saved["archive_id"])
+    assert snapshot["payload_json"] == before
+    assert snapshot["american_odds"] == -110
+
+
+def test_incomplete_and_suspended_stay_unknown(tmp_path: Path, clock):
+    database = tmp_path / "archive.sqlite"
+    incomplete = archive_evaluation(database, _prop(event_id="incomplete"))
+    suspended = archive_evaluation(database, _prop(event_id="suspended"))
+    clock["moment"] = RESULT_TIME
+    common = {
+        "result_source": "fixture",
+        "result_retrieved_at": "2026-11-24T02:00:00Z",
+        "actual": 400,
+        "actual_provided": True,
+    }
+    left = attach_result(database, incomplete["archive_id"], game_status="incomplete", **common)
+    right = attach_result(database, suspended["archive_id"], game_status="suspended", **common)
+    assert left["settlement"] == "Unknown"
+    assert right["settlement"] == "Unknown"
+    assert left["settlement"] not in {"Win", "Loss", "Void"}
+    for archive_id in (incomplete["archive_id"], suspended["archive_id"]):
+        stored = get_snapshot(database, archive_id)["results"][0]
+        assert stored["settlement"] == "Unknown"
+        assert stored["actual_stat"] is None
+
+
+def test_archive_pairs_only_compatible_opposite_prices(tmp_path: Path):
+    database = tmp_path / "archive.sqlite"
+    over = _prop(odds=-110, is_over="true")
+    under = _prop(odds=-110, is_over="false", projected=230)
+    saved = archive_many(database, [over, under])
+    assert saved[0]["stored"] and saved[1]["stored"]
+    rows = list_snapshots(database, event_id="game-1")
+    assert rows[0]["no_vig_probability"] == pytest.approx(0.5, abs=1e-6)
+    assert rows[1]["no_vig_probability"] == pytest.approx(0.5, abs=1e-6)
+
+    other_book = archive_many(
+        tmp_path / "books.sqlite",
+        [_prop(event_id="b"), _prop(event_id="b", is_over="false", book="bet365", projected=230)],
+    )
+    assert all(item["stored"] for item in other_book)
+    assert all(row["no_vig_probability"] is None for row in list_snapshots(tmp_path / "books.sqlite"))
+
+    other_line = archive_many(
+        tmp_path / "lines.sqlite",
+        [_prop(event_id="c"), _prop(event_id="c", is_over="false", line=240.5, projected=230)],
+    )
+    assert all(row["no_vig_probability"] is None for row in list_snapshots(tmp_path / "lines.sqlite"))
+
+    stale = archive_many(
+        tmp_path / "times.sqlite",
+        [
+            _prop(event_id="d"),
+            _prop(event_id="d", is_over="false", retrieved_at="2026-11-23T17:04:00Z", projected=230),
+        ],
+    )
+    assert all(row["no_vig_probability"] is None for row in list_snapshots(tmp_path / "times.sqlite"))
+    assert all(item["stored"] for item in stale)
+
+
+def test_invalid_actuals_are_not_graded(tmp_path: Path, clock):
+    database = tmp_path / "archive.sqlite"
+    saved = archive_evaluation(database, _prop())
+    props = tmp_path / "pregame.json"
+    props.write_text(json.dumps(_prop(event_id="cli-bad")), encoding="utf-8")
+    assert main(["archive", "add", "--props", str(props), "--db", str(database)]) == 0
+    row = list_snapshots(database, event_id="cli-bad")[0]
+    clock["moment"] = RESULT_TIME
+    before = get_snapshot(database, saved["archive_id"])["payload_json"]
+    for bad in (float("nan"), float("inf"), float("-inf"), True, "nope", "nan"):
+        refused = attach_result(
+            database,
+            saved["archive_id"],
+            game_status="final",
+            actual=bad,  # type: ignore[arg-type]
+            actual_provided=True,
+            result_source="fixture",
+            result_retrieved_at="2026-11-24T02:00:00Z",
+        )
+        assert refused["ok"] is False
+        assert refused.get("settlement") not in {"Win", "Loss"}
+    assert get_snapshot(database, saved["archive_id"])["payload_json"] == before
+    assert get_snapshot(database, saved["archive_id"])["results"] == []
+    bad_code = main(
+        [
+            "archive",
+            "attach-result",
+            "--db",
+            str(database),
+            "--id",
+            row["archive_id"],
+            "--game-status",
+            "final",
+            "--actual",
+            "nan",
+            "--source",
+            "fixture",
+            "--retrieved-at",
+            "2026-11-24T02:00:00Z",
+        ]
+    )
+    assert bad_code == 2
+    assert get_snapshot(database, row["archive_id"])["results"] == []
+
+
 def test_snapshot_update_is_rejected_by_the_database(tmp_path: Path):
     database = tmp_path / "archive.sqlite"
-    saved = archive_evaluation(database, _prop(), now=NOW)
+    saved = archive_evaluation(database, _prop())
     conn = sqlite3.connect(database)
     with pytest.raises(sqlite3.IntegrityError, match="immutable"):
         conn.execute(

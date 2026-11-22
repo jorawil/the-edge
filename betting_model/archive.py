@@ -34,6 +34,7 @@ from .core import (
     parse_finite_number,
     parse_side,
 )
+from .pairing import attach_opposites
 from .distributions import INTEGER_COUNT_MARKETS, line_kind
 from .sports import evaluate_prop
 from .timeutil import parse_aware_datetime
@@ -183,6 +184,11 @@ LEAKED_INPUT_FIELDS = {
 
 def default_db_path() -> Path:
     return Path.cwd() / DEFAULT_DB
+
+
+def _utc_now() -> datetime:
+    """The real UTC clock. Callers cannot pass a substitute into the public API."""
+    return datetime.now(timezone.utc)
 
 
 def _utc(moment: datetime) -> datetime:
@@ -421,16 +427,36 @@ def _build_row(prop: dict[str, Any], *, now: datetime) -> dict[str, Any]:
     return row
 
 
-def archive_evaluation(
-    path: Path,
-    prop: dict[str, Any],
-    *,
-    now: datetime | None = None,
-) -> dict[str, Any]:
-    """Insert one pregame snapshot. On failure, nothing new is written."""
-    moment = now or datetime.now(timezone.utc)
+def _pair_within_event(props: list[Any]) -> list[Any]:
+    """Pair Over and Under only inside one event, using the existing price rules.
+
+    Different books, lines, or price times are left unpaired by ``attach_opposites``.
+    Splitting by event first stops two games from being treated as one market.
+    """
+    groups: dict[str, list[int]] = {}
+    for index, prop in enumerate(props):
+        if not isinstance(prop, dict):
+            continue
+        event = str(prop.get("event_id") or prop.get("game_id") or "")
+        if not event:
+            continue
+        groups.setdefault(event, []).append(index)
+    prepared = list(props)
+    for indexes in groups.values():
+        paired = attach_opposites([props[index] for index in indexes])
+        for index, item in zip(indexes, paired):
+            prepared[index] = item
+    return prepared
+
+
+def archive_evaluation(path: Path, prop: dict[str, Any]) -> dict[str, Any]:
+    """Insert one pregame snapshot. ``archived_at`` is the system clock in UTC."""
+    moment = _utc_now()
+    supplied = dict(prop)
+    supplied.pop("archived_at", None)
+    supplied.pop("attached_at", None)
     try:
-        row = _build_row(prop, now=moment)
+        row = _build_row(supplied, now=moment)
     except ValueError as exc:
         return {"ok": False, "stored": False, "reason": str(exc)}
     archive_id = uuid.uuid4().hex
@@ -484,19 +510,19 @@ def archive_evaluation(
     return {"ok": True, "stored": True, "archive_id": archive_id, "duplicate": False, "screening_grade": row["screening_grade"]}
 
 
-def archive_many(
-    path: Path,
-    props: list[dict[str, Any]],
-    *,
-    now: datetime | None = None,
-) -> list[dict[str, Any]]:
-    """Archive each prop. One rejection does not remove the others."""
+def archive_many(path: Path, props: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Archive each prop. One rejection does not remove the others.
+
+    Compatible Over and Under prices in the same file are paired first.
+    The archive clock is still the system clock for every row.
+    """
+    prepared = _pair_within_event(props)
     results = []
-    for index, prop in enumerate(props):
+    for index, prop in enumerate(prepared):
         if not isinstance(prop, dict):
             results.append({"ok": False, "stored": False, "index": index, "reason": "prop must be an object"})
             continue
-        item = archive_evaluation(path, prop, now=now)
+        item = archive_evaluation(path, prop)
         item["index"] = index
         item["player"] = prop.get("player") or prop.get("player_name")
         results.append(item)
@@ -608,10 +634,22 @@ def settle_prop(
     A did-not-play, postponement, or cancellation does not become a zero.
     """
     status = str(game_status or "").strip().lower().replace("-", "_")
-    if status in {"postponed", "canceled", "cancelled", "incomplete"}:
+    if actual_provided:
+        try:
+            actual = parse_finite_number(actual, "actual")
+        except ValueError as exc:
+            raise ValueError(str(exc)) from exc
+    if status in {"postponed", "canceled", "cancelled"}:
         return "Void", f"game status is {status}; no stat was stored", None, True
     if status in {"dnp", "did_not_play"}:
         return "Void", "player did not play; a missing stat was not stored as zero", None, True
+    if status in {"incomplete", "suspended"}:
+        return (
+            "Unknown",
+            f"game status is {status}; it is not final, so it was not graded",
+            None,
+            True,
+        )
     if status not in {"final", "completed"}:
         return "Unknown", "game status is not a known final or void state", None, not actual_provided
     if not actual_provided or actual is None:
@@ -640,7 +678,6 @@ def attach_result(
     game_status: str,
     result_source: str,
     result_retrieved_at: str,
-    now: datetime | None = None,
     actual: float | None = None,
     actual_provided: bool = False,
     event_id: str | None = None,
@@ -653,7 +690,7 @@ def attach_result(
         retrieved, retrieved_source = _parse_pair(result_retrieved_at, "result_retrieved_at")
     except ValueError as exc:
         return {"ok": False, "reason": str(exc)}
-    moment = _utc(now or datetime.now(timezone.utc))
+    moment = _utc(_utc_now())
     if _utc(retrieved) > moment + CLOCK_SKEW:
         return {"ok": False, "reason": "result timestamp is after the archive clock"}
     conn = connect(path)
@@ -665,15 +702,25 @@ def attach_result(
             return {"ok": False, "reason": "event id does not match the archived snapshot"}
         if player_id is not None and str(player_id) != str(before["player_id"]):
             return {"ok": False, "reason": "player id does not match the archived snapshot"}
+        kickoff = parse_aware_datetime(before["event_start"])
+        if kickoff is None or _utc(retrieved) < _utc(kickoff):
+            return {
+                "ok": False,
+                "reason": "result retrieval timestamp is before kickoff",
+                "snapshot_unchanged": True,
+            }
         snapshot_copy = _row_dict(before)
-        settlement, reason, stored_actual, missing = settle_prop(
-            market=before["canonical_market"],
-            line=before["line"],
-            side=before["side"],
-            actual=actual,
-            game_status=game_status,
-            actual_provided=actual_provided,
-        )
+        try:
+            settlement, reason, stored_actual, missing = settle_prop(
+                market=before["canonical_market"],
+                line=before["line"],
+                side=before["side"],
+                actual=actual,
+                game_status=game_status,
+                actual_provided=actual_provided,
+            )
+        except ValueError as exc:
+            return {"ok": False, "reason": str(exc), "snapshot_unchanged": True}
         previous = _current_result(conn, archive_id)
         result_id = uuid.uuid4().hex
         conn.execute(
@@ -723,7 +770,6 @@ def add_correction(
     corrected_value: str,
     reason: str,
     source: str | None = None,
-    now: datetime | None = None,
 ) -> dict[str, Any]:
     """Record a correction beside the snapshot. The snapshot value stays as archived."""
     if not field_name or not reason:
@@ -738,7 +784,7 @@ def add_correction(
         original = before[field_name]
         snapshot_copy = _row_dict(before)
         correction_id = uuid.uuid4().hex
-        moment = _utc(now or datetime.now(timezone.utc))
+        moment = _utc(_utc_now())
         conn.execute(
             """
             INSERT INTO corrections (
