@@ -1,0 +1,63 @@
+
+name: Historical Data Backfill
+
+on:
+  workflow_dispatch:
+    inputs:
+      sport:
+        description: "Sport to collect"
+        required: true
+        type: choice
+        options:
+          - nfl
+          - nba
+      start_date:
+        description: "Start date (YYYY-MM-DD)"
+        required: true
+        default: "2026-10-01"
+        type: string
+      end_date:
+        description: "End date (YYYY-MM-DD)"
+        required: true
+        default: "2026-10-31"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest numpy requests
+          pip install -e . --no-deps
+
+      - name: Run historical backfill
+        run: |
+          python scripts/backfill_espn.py \
+            --sport "${{ inputs.sport }}" \
+            --start "${{ inputs.start_date }}" \
+            --end "${{ inputs.end_date }}"
+
+      - name: Upload historical data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edge-${{ inputs.sport }}-historical-data
+          path: |
+            data/${{ inputs.sport }}/games.json
+            data/${{ inputs.sport }}/*report*
+          if-no-files-found: warn
+          retention-days: 30
