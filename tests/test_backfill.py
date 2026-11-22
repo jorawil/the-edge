@@ -1,6 +1,7 @@
 """Backfill helpers do not turn a missing score into zero. No network call."""
 
 import importlib.util
+import json
 from pathlib import Path
 
 
@@ -10,6 +11,103 @@ def _load():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def test_rerun_repairs_an_incomplete_box_and_skips_a_complete_one(tmp_path, monkeypatch):
+    module = _load()
+    monkeypatch.setattr(module, "DATA", tmp_path)
+    incomplete = {
+        "id": "401",
+        "date_utc": "2026-01-02T00:00:00Z",
+        "name": "A at B",
+        "source": "old",
+        "scores": {"A": 0, "B": 1},
+        "players": [
+            {"player": "Example", "athlete_id": "1", "dnp": False, "stats": {}}
+        ],
+    }
+    complete = {
+        "id": "402",
+        "date_utc": "2026-01-02T00:00:00Z",
+        "name": "C at D",
+        "source": "already complete",
+        "scores": {"C": 2, "D": 2},
+        "players": [
+            {"player": "Keeper", "athlete_id": "2", "dnp": False, "stats": {"points": "4"}}
+        ],
+    }
+    path = tmp_path / "nba" / "games.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        json.dumps({"games": {"401": incomplete, "402": complete}}),
+        encoding="utf-8",
+    )
+    calls = []
+
+    def fake_fetch(url):
+        calls.append(url)
+        if "scoreboard" in url:
+            return {
+                "events": [
+                    _event("401", "A", "B"),
+                    _event("402", "C", "D"),
+                ]
+            }
+        return {
+            "boxscore": {
+                "players": [
+                    {
+                        "team": {"abbreviation": "B"},
+                        "statistics": [
+                            {
+                                "name": "starters",
+                                "keys": ["points"],
+                                "athletes": [
+                                    {
+                                        "athlete": {"displayName": "Example", "id": "1"},
+                                        "stats": ["18"],
+                                        "didNotPlay": False,
+                                    }
+                                ],
+                            }
+                        ],
+                    }
+                ],
+                "teams": [],
+            }
+        }
+
+    report = module.run(
+        "nba",
+        module.dt.date(2026, 1, 2),
+        module.dt.date(2026, 1, 2),
+        fetcher=fake_fetch,
+    )
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    assert stored["games"]["401"]["players"][0]["stats"]["points"] == "18"
+    assert stored["games"]["402"]["source"] == "already complete"
+    assert report["repaired"] == 1
+    assert report["added"] == 0
+    assert sum(1 for url in calls if "summary?event=402" in url) == 0
+    assert sum(1 for url in calls if "summary?event=401" in url) == 1
+
+
+def _event(event_id, away, home):
+    return {
+        "id": event_id,
+        "date": "2026-01-02T00:00:00Z",
+        "name": f"{away} at {home}",
+        "status": {"type": {"completed": True, "description": "Final"}},
+        "week": {"number": 1},
+        "competitions": [
+            {
+                "competitors": [
+                    {"homeAway": "away", "score": "0", "team": {"abbreviation": away}},
+                    {"homeAway": "home", "score": "1", "team": {"abbreviation": home}},
+                ]
+            }
+        ],
+    }
 
 
 def test_missing_score_is_not_zero():

@@ -37,14 +37,45 @@ def parse_box(summ):
              for t in summ.get("boxscore", {}).get("teams", [])]
     return players, teams
 
-def run(sport, start, end):
+def record_is_complete(record) -> bool:
+    """True only when a stored game has the pieces a rerun should not replace.
+
+    A box with at least one player can still be incomplete: a did-not-play flag
+    is fine, an empty stat line for someone who played is not, and a missing
+    final score is not.
+    """
+    if not isinstance(record, dict):
+        return False
+    players = record.get("players")
+    if not isinstance(players, list) or not players:
+        return False
+    if not record.get("date_utc") or not record.get("source"):
+        return False
+    scores = record.get("scores")
+    if not isinstance(scores, dict) or not scores:
+        return False
+    if any(score is None for score in scores.values()):
+        return False
+    for player in players:
+        if not isinstance(player, dict):
+            return False
+        if player.get("dnp"):
+            continue
+        stats = player.get("stats")
+        if not isinstance(stats, dict) or not stats:
+            return False
+    return True
+
+
+def run(sport, start, end, fetcher=None):
+    fetch = fetcher or get
     path = DATA / sport / "games.json"; path.parent.mkdir(parents=True, exist_ok=True)
     store = json.loads(path.read_text()) if path.exists() else {"games": {}}
-    pre = set(store["games"]); added, missing, events = [], [], []
+    pre = set(store["games"]); added, repaired, missing, events = [], [], [], []
     d = start
     while d <= end:
         url = BASE + SPORTS[sport] + f"/scoreboard?dates={d:%Y%m%d}&limit=500" + ("&groups=80" if sport == "cfb" else "")
-        for e in get(url).get("events", []):
+        for e in fetch(url).get("events", []):
             events.append(e)
         d += dt.timedelta(days=1)
     seen = {}
@@ -54,10 +85,12 @@ def run(sport, start, end):
         comp = e["competitions"][0]
         if not st.get("completed"):
             missing.append({"id": gid, "name": e["name"], "reason": f"not final ({st.get('description')})"}); continue
-        if gid in store["games"] and store["games"][gid].get("players"): continue
+        existing = store["games"].get(gid)
+        if existing and record_is_complete(existing):
+            continue
         summ_url = BASE + SPORTS[sport] + f"/summary?event={gid}"
         try:
-            players, teams = parse_box(get(summ_url))
+            players, teams = parse_box(fetch(summ_url))
         except Exception as ex:
             players, teams = [], []; missing.append({"id": gid, "name": e["name"], "reason": f"box fetch failed {ex}"})
         if not players: missing.append({"id": gid, "name": e["name"], "reason": "no player box in source"})
@@ -72,11 +105,15 @@ def run(sport, start, end):
         if any(score is None for score in record["scores"].values()):
             missing.append({"id": gid, "name": e.get("name"), "reason": "final score missing; stored as null, not zero"})
         store["games"][gid] = record
-        added.append(gid)
+        if gid in pre:
+            repaired.append(gid)
+        else:
+            added.append(gid)
     store["updated"] = dt.datetime.now(dt.timezone.utc).isoformat()
     path.write_text(json.dumps(store, indent=1))
     rep = {"sport": sport, "events_in_window": len(seen), "final": len(seen) - sum(1 for m in missing if m["reason"].startswith("not final")),
-           "already_covered": len([g for g in seen if g in pre]), "added": len(added), "missing": missing}
+           "already_covered": len([g for g in seen if g in pre and record_is_complete(store["games"].get(g, {}))]),
+           "added": len(added), "repaired": len(repaired), "missing": missing}
     print(json.dumps({k: v for k, v in rep.items() if k != "missing"}), len(missing))
     return rep
 

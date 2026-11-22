@@ -87,14 +87,15 @@ The top of the report is the grade. The tables further down are the older screen
 
 | Grade | Meaning |
 |---|---|
-| QUALIFIED | The projection you supplied, and a fresh price, cleared the threshold. Not a lock. |
+| QUALIFIED | Reserved for a calibrated sigma and distribution. This version does not assign it. |
+| SCREEN PASS UNCALIBRATED | The projection and a fresh price cleared the threshold. The sigma and the normal curve are still uncalibrated, so this is not Qualified. |
 | WATCH | Close, or missing a timestamp, a source, or a fresh price. |
 | REJECTED | The edge does not clear the threshold. |
 | NOT EVALUABLE | Something required is missing, the market's pushes are not defined, or the only number is a recent average. |
 
 Two different "edge" ideas:
 
-- **Raw implied probability** is what the American odds say by themselves. The sportsbook's vig is still in that number. The old field `edge` is model probability minus this number. `positive_edge` uses that old difference.
+- **Raw implied probability** is what the American odds say by themselves. The sportsbook's vig is still in that number. On a whole-number line that can push, that price is the chance of winning given that the bet does not push, so the pass/fail edge uses win / (win + loss). Expected value still uses the raw win, loss, and push chances. The old field `edge` is the original model probability minus the raw price, and it ignores pushes. `positive_edge` uses that old difference.
 - **Fair probability** divides the two sides so the vig is taken out. It is filled in only when the file has both the Over and the Under for the same player, market, line, and book, with timestamps a few minutes apart. If either side is missing, the fair number is left blank.
 
 Expected value is profit per 1 unit staked, using the win/loss/push split. It is omitted when that split is not defined. It is not a guaranteed profit.

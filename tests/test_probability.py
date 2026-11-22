@@ -53,6 +53,7 @@ def test_half_point_over_and_under_still_sum_to_one():
     assert over["push_handling"] == "no_push_half_point"
     assert over["edge"] == over["edge_vs_raw_implied"]
     assert over["raw_implied_probability"] == over["implied_prob"]
+    assert over["conditional_win_probability"] == pytest.approx(over["model_probability"])
 
 
 def test_whole_number_line_reports_a_push_without_changing_legacy_edge():
@@ -66,7 +67,20 @@ def test_whole_number_line_reports_a_push_without_changing_legacy_edge():
     assert over["model_probability_ignores_push"] is False
     # The old field still ignores the push, and it is labeled that way.
     assert over["edge"] == pytest.approx(over["model_prob"] - over["implied_prob"])
-    assert over["settlement_edge_vs_raw_implied"] != pytest.approx(over["edge"])
+    conditional = over["win_probability"] / (over["win_probability"] + over["loss_probability"])
+    assert over["conditional_win_probability"] == pytest.approx(conditional, abs=1e-6)
+    assert over["settlement_edge_vs_raw_implied"] == pytest.approx(
+        over["conditional_win_probability"] - over["raw_implied_probability"],
+        abs=1e-6,
+    )
+    assert over["settlement_edge_vs_raw_implied"] != pytest.approx(
+        over["win_probability"] - over["raw_implied_probability"]
+    )
+    profit = 100 / 110
+    assert over["expected_value_per_unit"] == pytest.approx(
+        over["win_probability"] * profit - over["loss_probability"],
+        abs=1e-6,
+    )
 
 
 def test_unknown_market_on_a_whole_line_does_not_invent_a_push():

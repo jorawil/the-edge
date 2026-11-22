@@ -83,13 +83,16 @@ def _edge_sentence(row: dict[str, Any]) -> str:
     metric = row.get("threshold_edge_metric")
     if metric == "edge_vs_fair_market":
         return (
-            "The pass/fail edge is the model win probability minus the "
-            "no-vig fair probability."
+            "The pass/fail edge is the chance of winning if the bet does not push, "
+            "minus the no-vig fair probability. Expected value still counts a push "
+            "as a returned stake."
         )
     if metric == "settlement_edge_vs_raw_implied":
         return (
-            "The pass/fail edge removes the push chance, then subtracts the "
-            "raw implied probability. The vig is still inside that price."
+            "The pass/fail edge is the chance of winning if the bet does not push "
+            "(win divided by win plus loss), minus the raw implied probability. "
+            "The vig is still inside that price. Expected value still counts a push "
+            "as a returned stake."
         )
     if metric == "edge_vs_raw_implied":
         return (
@@ -173,8 +176,21 @@ def assess(
                 reasons.extend(blockers)
                 status = "WATCH" if cleared or near else "REJECTED"
             elif cleared:
-                status = "QUALIFIED"
-                reasons.append("supplied inputs cleared the threshold and the checks above")
+                calibrated = (
+                    row.get("sigma_calibrated") is True
+                    and row.get("distribution_calibrated") is True
+                )
+                if calibrated:
+                    status = "QUALIFIED"
+                    reasons.append(
+                        "supplied inputs cleared the threshold and the sigma and distribution are calibrated"
+                    )
+                else:
+                    status = "SCREEN_PASS_UNCALIBRATED"
+                    reasons.append(
+                        "the edge cleared the threshold, but the sigma and the normal "
+                        "distribution are not calibrated, so this is not QUALIFIED"
+                    )
             elif near:
                 status = "WATCH"
                 reasons.append("the edge is within 1 percentage point under the threshold")
@@ -188,6 +204,8 @@ def assess(
         quality = "incomplete"
     elif status == "QUALIFIED" and fresh["state"] == "fresh":
         quality = "fresh"
+    elif status == "SCREEN_PASS_UNCALIBRATED":
+        quality = "uncertain"
     else:
         quality = "uncertain"
 

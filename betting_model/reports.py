@@ -8,6 +8,7 @@ from typing import Any
 def group_rows(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     groups = {
         "QUALIFIED": [],
+        "SCREEN_PASS_UNCALIBRATED": [],
         "WATCH": [],
         "REJECTED": [],
         "NOT_EVALUABLE": [],
@@ -42,8 +43,12 @@ def plain_header(payload: dict[str, Any]) -> str:
         "",
         "## What the grades mean",
         "",
-        "- **QUALIFIED**: the supplied projection and a fresh price cleared the threshold, "
-        "and the checks this program knows how to do were satisfied.",
+        "- **QUALIFIED**: the edge cleared the threshold and the sigma and distribution "
+        "used for that edge have been calibrated. This version does not assign Qualified, "
+        "because those pieces are not calibrated yet.",
+        "- **SCREEN PASS UNCALIBRATED**: the supplied projection and a fresh price cleared "
+        "the threshold, but the sigma and the normal curve are still uncalibrated defaults. "
+        "This is not Qualified.",
         "- **WATCH**: interesting or close, but something is missing, stale, or uncertain.",
         "- **REJECTED**: the edge does not clear the threshold, or a data problem rules it out.",
         "- **NOT EVALUABLE**: a required piece is missing, or the only number is a recent average. "
@@ -52,6 +57,7 @@ def plain_header(payload: dict[str, Any]) -> str:
         "## Counts",
         "",
         f"- Qualified: **{summary.get('qualified', 0)}**",
+        f"- Screen pass, uncalibrated: **{summary.get('screen_pass_uncalibrated', 0)}**",
         f"- Watch: {summary.get('watch', 0)}",
         f"- Rejected: {summary.get('rejected', 0)}",
         f"- Not evaluable: {summary.get('not_evaluable', 0)}",
@@ -67,6 +73,21 @@ def plain_header(payload: dict[str, Any]) -> str:
         lines.append("")
     else:
         lines.extend(_grade_table(qualified))
+    screen = payload.get("screen_pass_uncalibrated") or []
+    lines.append("## Screen pass, uncalibrated")
+    lines.append("")
+    if not screen:
+        lines.append("_None._")
+        lines.append("")
+    else:
+        lines.append(
+            "These cleared the edge screen. They are not Qualified, because the "
+            "sigma and the normal curve are not calibrated."
+        )
+        lines.append("")
+        lines.append(f"Showing {min(15, len(screen))} of {len(screen)}. The JSON file has every row.")
+        lines.append("")
+        lines.extend(_grade_table(screen[:15]))
     watch = payload.get("watch") or []
     lines.append("## Watch")
     lines.append("")

@@ -428,8 +428,14 @@ def calculate_edge(
         max_side_skew_seconds=max_side_skew_seconds,
     )
 
-    settlement_edge = None if win is None else win - raw_implied
-    fair_edge = None if fair is None or win is None else win - fair
+    # The sportsbook price is the chance of winning given that the bet does not
+    # push. Compare that price with win / (win + loss). Expected value still
+    # uses the unconditional win, loss, and push chances.
+    conditional = None
+    if win is not None and loss is not None and (float(win) + float(loss)) > 0:
+        conditional = float(win) / (float(win) + float(loss))
+    settlement_edge = None if conditional is None else conditional - raw_implied
+    fair_edge = None if fair is None or conditional is None else conditional - fair
 
     ev = None
     ev_reason = None
@@ -477,6 +483,7 @@ def calculate_edge(
         "win_probability": _round6(win),
         "loss_probability": _round6(loss),
         "push_probability": _round6(push),
+        "conditional_win_probability": _round6(conditional),
         "raw_implied_probability": _round6(raw_implied),
         "edge_vs_raw_implied": _round6(legacy_edge),
         "settlement_edge_vs_raw_implied": _round6(settlement_edge),

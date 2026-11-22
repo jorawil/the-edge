@@ -12,10 +12,11 @@ from __future__ import annotations
 
 import json
 import math
+from datetime import timezone
 from pathlib import Path
 from typing import Any
 
-from .core import SIGMA_DEFAULTS, calculate_edge
+from .core import SIGMA_DEFAULTS, calculate_edge, parse_side
 from .timeutil import parse_aware_datetime
 from .version import MODEL_VERSION
 
@@ -133,8 +134,13 @@ def chronological_split(
     if train_fraction <= 0 or validation_fraction < 0 or train_fraction + validation_fraction >= 1:
         raise ValueError("fractions must leave a non-empty test slice at the end")
 
-    def sort_key(row: dict[str, Any]) -> str:
-        return str(row.get("event_start") or row.get("generated_at") or "")
+    def sort_key(row: dict[str, Any]) -> tuple:
+        raw = row.get("event_start") or row.get("generated_at")
+        parsed = parse_aware_datetime(raw)
+        if parsed is None:
+            # Unreadable times sort after real instants and are not ordered as text.
+            return (1, "")
+        return (0, parsed.astimezone(timezone.utc))
 
     ordered = sorted(rows, key=sort_key)
     count = len(ordered)
@@ -295,16 +301,26 @@ def score_snapshots(
             except ValueError as exc:
                 row["edge_error"] = str(exc)
             else:
-                win_probability = edge.get("model_probability")
-                if win_probability is None:
-                    win_probability = edge.get("model_prob")
-                won = _won(actual, float(snapshot["line"]), bool(snapshot["is_over"]))
-                row["model_probability"] = win_probability
-                row["outcome"] = None if won is None else int(won)
-                row["push"] = won is None
-                row["positive_edge"] = edge.get("positive_edge")
-                row["threshold_cleared"] = edge.get("threshold_cleared")
-                row["expected_value_per_unit"] = edge.get("expected_value_per_unit")
+                try:
+                    side_over = parse_side(snapshot.get("is_over"))
+                except ValueError as exc:
+                    row["edge_error"] = str(exc)
+                    row["probability_scored"] = False
+                else:
+                    scored_probability, outcome, pushed, skip_reason = _score_probability(
+                        edge,
+                        actual,
+                        float(snapshot["line"]),
+                        side_over,
+                    )
+                    row["model_probability"] = scored_probability
+                    row["outcome"] = outcome
+                    row["push"] = pushed
+                    row["probability_scored"] = scored_probability is not None and outcome is not None
+                    row["probability_skip_reason"] = skip_reason
+                    row["positive_edge"] = edge.get("positive_edge")
+                    row["threshold_cleared"] = edge.get("threshold_cleared")
+                    row["expected_value_per_unit"] = edge.get("expected_value_per_unit")
         rows.append(row)
     return {"scored": rows, "excluded_leakage": excluded, "missing_actuals": missing}
 
@@ -314,6 +330,38 @@ def _won(actual: float, line: float, is_over: bool) -> bool | None:
         return None
     over_hit = actual > line
     return over_hit if is_over else not over_hit
+
+
+def _score_probability(
+    edge: dict[str, Any],
+    actual: float,
+    line: float,
+    side_over: bool,
+) -> tuple[float | None, int | None, bool, str | None]:
+    """Probability used for Brier score and log loss.
+
+    Pushes are left out. Unsupported push markets are left out rather than
+    scored with the old push-ignoring probability. The number that is scored
+    is win / (win + loss), matching a price that is conditional on no push.
+    """
+    if edge.get("push_handling") == "unsupported":
+        return (
+            None,
+            None,
+            False,
+            "push rules are not defined, so the legacy probability was not scored",
+        )
+    win = edge.get("win_probability")
+    loss = edge.get("loss_probability")
+    if win is None or loss is None:
+        return None, None, False, "win and loss were not available"
+    won = _won(actual, line, side_over)
+    if won is None:
+        return None, None, True, "push; left out of Brier score and log loss"
+    denom = float(win) + float(loss)
+    if denom <= 0:
+        return None, None, False, "win and loss were both zero"
+    return float(win) / denom, int(won), False, None
 
 
 def _group_metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:

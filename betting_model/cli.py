@@ -89,16 +89,20 @@ def evaluate_props_file(
             "skipped": len(skipped),
             "positive_edge": len(positive),
             "qualified": len(groups["QUALIFIED"]),
+            "screen_pass_uncalibrated": len(groups["SCREEN_PASS_UNCALIBRATED"]),
             "watch": len(groups["WATCH"]),
             "rejected": len(groups["REJECTED"]),
             "not_evaluable": len(groups["NOT_EVALUABLE"]),
             "edge_threshold": threshold if threshold is not None else 0.03,
             "note": (
                 "positive_edge is the older vig-inclusive screen. "
-                "qualified is the stricter grade. Neither one places a bet."
+                "SCREEN_PASS_UNCALIBRATED cleared that screen with an uncalibrated "
+                "sigma and normal curve. QUALIFIED is reserved for a calibrated model. "
+                "None of these grades places a bet."
             ),
         },
         "qualified": groups["QUALIFIED"],
+        "screen_pass_uncalibrated": groups["SCREEN_PASS_UNCALIBRATED"],
         "watch": groups["WATCH"],
         "rejected": groups["REJECTED"],
         "not_evaluable": groups["NOT_EVALUABLE"],
@@ -274,8 +278,8 @@ def main(argv: list[str] | None = None) -> int:
         if save_as:
             import shutil
             for ext in ("md", "json"):
-                shutil.copyfile(args.out / f"edges_latest.{ext}", args.out / f"{save_as}.{ext}")
-                print(f"Wrote {args.out / f'{save_as}.{ext}'}")
+                shutil.copyfile(out_dir / f"edges_latest.{ext}", out_dir / f"{save_as}.{ext}")
+                print(f"Wrote {out_dir / f'{save_as}.{ext}'}")
         print(f"Wrote {payload['out_json']}")
         print(f"Wrote {payload['out_md']}")
         print(

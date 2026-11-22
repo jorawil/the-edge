@@ -2,6 +2,7 @@
 
 from datetime import datetime, timezone
 
+from betting_model.assessment import assess
 from betting_model.pairing import attach_opposites
 from betting_model.sports import evaluate_prop
 
@@ -31,8 +32,9 @@ def _priced(**overrides):
 
 def test_complete_fresh_prop_can_qualify_and_says_sigma_is_not_calibrated():
     row = evaluate_prop(_priced(), as_of=AS_OF)
-    assert row["status"] == "QUALIFIED"
-    assert row["qualified"] is True
+    assert row["status"] == "SCREEN_PASS_UNCALIBRATED"
+    assert row["qualified"] is False
+    assert "not QUALIFIED" in " ".join(row["status_reasons"])
     assert row["projection_kind"] == "manual"
     assert row["projection"]["provenance_complete"] is True
     assert row["projection"]["model_projection"] is None
@@ -41,6 +43,16 @@ def test_complete_fresh_prop_can_qualify_and_says_sigma_is_not_calibrated():
     assert "not calibrated" in row["explanation"] or "uncalibrated" in row["explanation"]
     assert "vig" in row["explanation"]
     assert row["fair_market_probability"] is None
+
+
+def test_qualified_requires_a_calibrated_sigma_and_distribution():
+    prop = _priced()
+    row = evaluate_prop(prop, as_of=AS_OF)
+    row["sigma_calibrated"] = True
+    row["distribution_calibrated"] = True
+    graded = assess(prop, row, as_of=AS_OF)
+    assert graded["status"] == "QUALIFIED"
+    assert graded["qualified"] is True
 
 
 def test_missing_timestamp_is_not_qualified_even_when_the_old_flag_is_true():

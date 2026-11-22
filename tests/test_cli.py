@@ -8,6 +8,32 @@ import pytest
 from betting_model.cli import evaluate_props_file, main, safe_save_name
 
 
+def test_save_as_without_out_uses_the_default_directory(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    props = tmp_path / "props.json"
+    props.write_text(
+        json.dumps(
+            [
+                {
+                    "player": "Example",
+                    "sport": "nba",
+                    "market": "PTS",
+                    "line": 10.5,
+                    "odds": -110,
+                    "is_over": True,
+                    "projected": 12,
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+    code = main(["evaluate", "--props", str(props), "--save-as", "slate"])
+    assert code == 0
+    assert (tmp_path / "out" / "edges_latest.json").exists()
+    assert (tmp_path / "out" / "slate.json").exists()
+    assert (tmp_path / "out" / "slate.md").exists()
+
+
 def test_save_as_rejects_paths():
     with pytest.raises(ValueError):
         safe_save_name("../escape")
