@@ -96,6 +96,11 @@ jobs:
               --windows "$WINDOWS" \
               --min-history "$MIN_HISTORY" \
               --out "benchmark-reports/baseline_${sport}_${RUN_ID}.json"
+            python scripts/compare_projection_methods.py "$sport" \
+              --data-root historical-data/data \
+              --windows "$WINDOWS" \
+              --min-history "$MIN_HISTORY" \
+              --out "benchmark-reports/comparison_${sport}_${RUN_ID}.json"
           done
 
       - name: Save benchmark reports to durable branch
