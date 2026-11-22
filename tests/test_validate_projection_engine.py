@@ -32,7 +32,7 @@ def test_projection_validation_selects_on_validation_and_reports_test_separately
 
     result = _MODULE.validate(
         "nba", root=tmp_path, windows=(3,), shrinkage_values=(0.0, 5.0),
-        min_history=2,
+        min_history=3,
     )
 
     assert result["ok"] is True
