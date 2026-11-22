@@ -101,6 +101,9 @@ jobs:
               --windows "$WINDOWS" \
               --min-history "$MIN_HISTORY" \
               --out "benchmark-reports/comparison_${sport}_${RUN_ID}.json"
+            python scripts/audit_projection_features.py "$sport" \
+              --data-root historical-data/data \
+              --out "benchmark-reports/feature_audit_${sport}_${RUN_ID}.json"
           done
 
       - name: Save benchmark reports to durable branch
