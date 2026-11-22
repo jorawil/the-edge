@@ -118,6 +118,11 @@ jobs:
               --windows "$WINDOWS" \
               --min-history "$MIN_HISTORY" \
               --out "benchmark-reports/opportunity_${sport}_${RUN_ID}.json"
+            python scripts/validate_projection_engine.py "$sport" \
+              --data-root historical-data/data \
+              --windows "$WINDOWS" \
+              --min-history "$MIN_HISTORY" \
+              --out "benchmark-reports/projection_engine_${sport}_${RUN_ID}.json"
           done
 
       - name: Save benchmark reports to durable branch
