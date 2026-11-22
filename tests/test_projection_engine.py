@@ -36,8 +36,14 @@ def test_nfl_receiving_projection_uses_targets_as_opportunity():
 
 
 def test_engine_refuses_unsupported_markets_and_insufficient_history():
+    pra = project_nba("PRA", [{"actual": 10, "opportunity": 20},
+                              {"actual": 15, "opportunity": 30},
+                              {"actual": 20, "opportunity": 40}], {})
+    assert pra["ok"] is True
+    assert pra["sigma"] is None
+    assert any("PRA joint residual covariance" in warning for warning in pra["warnings"])
     with pytest.raises(ValueError):
-        project_nba("PRA", [], {})
+        project_nba("NOT_A_MARKET", [], {})
     result = project_nfl("PASS_YDS", [{"actual": 100, "opportunity": 20}], {})
     assert result["ok"] is False
     assert result["reason"] == "insufficient_history"
