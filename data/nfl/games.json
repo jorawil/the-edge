@@ -1608317,7 +1608317,1211 @@
    ],
    "source": "ESPN https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873074",
    "retrieved_at": "2026-11-23T00:11:00.612780+00:00"
+  },
+  "401873075": {
+   "id": "401873075",
+   "date_utc": "2026-11-22T21:25Z",
+   "name": "Las Vegas Raiders at Denver Broncos",
+   "status": "Final",
+   "season_year": 2026,
+   "season_type_id": 2,
+   "season_type_name": null,
+   "scores": {
+    "DEN": 38,
+    "LV": 24
+   },
+   "home": "DEN",
+   "week": 11,
+   "players": [
+    {
+     "team": "LV",
+     "player": "Fernando Mendoza",
+     "athlete_id": "4837248",
+     "category": "passing",
+     "stats": {
+      "completions/passingAttempts": "18/37",
+      "passingYards": "267",
+      "yardsPerPassAttempt": "7.2",
+      "passingTouchdowns": "3",
+      "interceptions": "1",
+      "sacks-sackYardsLost": "5-40",
+      "adjQBR": "88.5"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Ashton Jeanty",
+     "athlete_id": "4890973",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "11",
+      "rushingYards": "79",
+      "yardsPerRushAttempt": "7.2",
+      "rushingTouchdowns": "0",
+      "longRushing": "46"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Mike Washington Jr.",
+     "athlete_id": "4686658",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "9",
+      "rushingYards": "42",
+      "yardsPerRushAttempt": "4.7",
+      "rushingTouchdowns": "0",
+      "longRushing": "9"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Fernando Mendoza",
+     "athlete_id": "4837248",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "4",
+      "rushingYards": "22",
+      "yardsPerRushAttempt": "5.5",
+      "rushingTouchdowns": "0",
+      "longRushing": "11"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Ashton Jeanty",
+     "athlete_id": "4890973",
+     "category": "receiving",
+     "stats": {
+      "receptions": "5",
+      "receivingYards": "90",
+      "yardsPerReception": "18.0",
+      "receivingTouchdowns": "1",
+      "longReception": "68",
+      "receivingTargets": "8"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Jack Bech",
+     "athlete_id": "4603186",
+     "category": "receiving",
+     "stats": {
+      "receptions": "8",
+      "receivingYards": "88",
+      "yardsPerReception": "11.0",
+      "receivingTouchdowns": "1",
+      "longReception": "19",
+      "receivingTargets": "9"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Tre Tucker",
+     "athlete_id": "4428718",
+     "category": "receiving",
+     "stats": {
+      "receptions": "2",
+      "receivingYards": "50",
+      "yardsPerReception": "25.0",
+      "receivingTouchdowns": "0",
+      "longReception": "39",
+      "receivingTargets": "10"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Ian Thomas",
+     "athlete_id": "4045305",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "19",
+      "yardsPerReception": "19.0",
+      "receivingTouchdowns": "1",
+      "longReception": "19",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Jalen Nailor",
+     "athlete_id": "4382466",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "16",
+      "yardsPerReception": "16.0",
+      "receivingTouchdowns": "0",
+      "longReception": "16",
+      "receivingTargets": "5"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Michael Mayer",
+     "athlete_id": "4429086",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "4",
+      "yardsPerReception": "4.0",
+      "receivingTouchdowns": "0",
+      "longReception": "4",
+      "receivingTargets": "4"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Mike Washington Jr.",
+     "athlete_id": "4686658",
+     "category": "fumbles",
+     "stats": {
+      "fumbles": "1",
+      "fumblesLost": "0",
+      "fumblesRecovered": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Nakobe Dean",
+     "athlete_id": "4426340",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "12",
+      "soloTackles": "6",
+      "sacks": "1",
+      "tacklesForLoss": "2",
+      "passesDefended": "1",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Quay Walker",
+     "athlete_id": "4379416",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "11",
+      "soloTackles": "7",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Jeremy Chinn",
+     "athlete_id": "4043169",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "7",
+      "soloTackles": "5",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Folorunso Fatukasi",
+     "athlete_id": "3045172",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "7",
+      "soloTackles": "2",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Eric Stokes",
+     "athlete_id": "4259561",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "6",
+      "soloTackles": "4",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Jermod McCoy",
+     "athlete_id": "5157289",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "5",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Kwity Paye",
+     "athlete_id": "4258194",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Taron Johnson",
+     "athlete_id": "3121003",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Chris Williams",
+     "athlete_id": "4034530",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Treydan Stukes",
+     "athlete_id": "4697757",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Carter Runyon",
+     "athlete_id": "5155825",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Isaiah Pola-Mao",
+     "athlete_id": "4259632",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Segun Olubi",
+     "athlete_id": "4260703",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Maxx Crosby",
+     "athlete_id": "3916655",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "2",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Connor Heyward",
+     "athlete_id": "4241961",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "JJ Pegues",
+     "athlete_id": "4430896",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Malcolm Koonce",
+     "athlete_id": "4239719",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "0",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Isaiah Pola-Mao",
+     "athlete_id": "4259632",
+     "category": "interceptions",
+     "stats": {
+      "interceptions": "1",
+      "interceptionYards": "0",
+      "interceptionTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Dylan Laube",
+     "athlete_id": "4366963",
+     "category": "kickReturns",
+     "stats": {
+      "kickReturns": "6",
+      "kickReturnYards": "134",
+      "yardsPerKickReturn": "22.3",
+      "longKickReturn": "28",
+      "kickReturnTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Dylan Laube",
+     "athlete_id": "4366963",
+     "category": "puntReturns",
+     "stats": {
+      "puntReturns": "1",
+      "puntReturnYards": "13",
+      "yardsPerPuntReturn": "13.0",
+      "longPuntReturn": "13",
+      "puntReturnTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "Matt Gay",
+     "athlete_id": "4249087",
+     "category": "kicking",
+     "stats": {
+      "fieldGoalsMade/fieldGoalAttempts": "1/1",
+      "fieldGoalPct": "100.0",
+      "longFieldGoalMade": "28",
+      "extraPointsMade/extraPointAttempts": "3/3",
+      "totalKickingPoints": "6"
+     },
+     "dnp": false
+    },
+    {
+     "team": "LV",
+     "player": "AJ Cole",
+     "athlete_id": "3686689",
+     "category": "punting",
+     "stats": {
+      "punts": "6",
+      "puntYards": "256",
+      "grossAvgPuntYards": "42.7",
+      "touchbacks": "0",
+      "puntsInside20": "1",
+      "longPunt": "69"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Bo Nix",
+     "athlete_id": "4426338",
+     "category": "passing",
+     "stats": {
+      "completions/passingAttempts": "19/35",
+      "passingYards": "225",
+      "yardsPerPassAttempt": "6.4",
+      "passingTouchdowns": "1",
+      "interceptions": "1",
+      "sacks-sackYardsLost": "1-7",
+      "adjQBR": "71.7"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Jonah Coleman",
+     "athlete_id": "4702555",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "24",
+      "rushingYards": "111",
+      "yardsPerRushAttempt": "4.6",
+      "rushingTouchdowns": "3",
+      "longRushing": "14"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Marvin Mims Jr.",
+     "athlete_id": "4686472",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "1",
+      "rushingYards": "11",
+      "yardsPerRushAttempt": "11.0",
+      "rushingTouchdowns": "0",
+      "longRushing": "11"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Bo Nix",
+     "athlete_id": "4426338",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "6",
+      "rushingYards": "5",
+      "yardsPerRushAttempt": "0.8",
+      "rushingTouchdowns": "0",
+      "longRushing": "4"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Adam Prentice",
+     "athlete_id": "3929914",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "1",
+      "rushingYards": "3",
+      "yardsPerRushAttempt": "3.0",
+      "rushingTouchdowns": "0",
+      "longRushing": "3"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Cody Schrader",
+     "athlete_id": "4391845",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "1",
+      "rushingYards": "3",
+      "yardsPerRushAttempt": "3.0",
+      "rushingTouchdowns": "0",
+      "longRushing": "3"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "J.K. Dobbins",
+     "athlete_id": "4241985",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "1",
+      "rushingYards": "0",
+      "yardsPerRushAttempt": "0.0",
+      "rushingTouchdowns": "0",
+      "longRushing": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Evan Engram",
+     "athlete_id": "3051876",
+     "category": "receiving",
+     "stats": {
+      "receptions": "6",
+      "receivingYards": "74",
+      "yardsPerReception": "12.3",
+      "receivingTouchdowns": "0",
+      "longReception": "21",
+      "receivingTargets": "8"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Jaylen Waddle",
+     "athlete_id": "4372016",
+     "category": "receiving",
+     "stats": {
+      "receptions": "3",
+      "receivingYards": "61",
+      "yardsPerReception": "20.3",
+      "receivingTouchdowns": "0",
+      "longReception": "24",
+      "receivingTargets": "6"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Marvin Mims Jr.",
+     "athlete_id": "4686472",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "36",
+      "yardsPerReception": "36.0",
+      "receivingTouchdowns": "0",
+      "longReception": "36",
+      "receivingTargets": "2"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Pat Bryant",
+     "athlete_id": "4600981",
+     "category": "receiving",
+     "stats": {
+      "receptions": "3",
+      "receivingYards": "32",
+      "yardsPerReception": "10.7",
+      "receivingTouchdowns": "0",
+      "longReception": "20",
+      "receivingTargets": "4"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Jonah Coleman",
+     "athlete_id": "4702555",
+     "category": "receiving",
+     "stats": {
+      "receptions": "4",
+      "receivingYards": "18",
+      "yardsPerReception": "4.5",
+      "receivingTouchdowns": "0",
+      "longReception": "7",
+      "receivingTargets": "5"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Nate Adkins",
+     "athlete_id": "4383440",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "3",
+      "yardsPerReception": "3.0",
+      "receivingTouchdowns": "0",
+      "longReception": "3",
+      "receivingTargets": "2"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Adam Trautman",
+     "athlete_id": "3911853",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "1",
+      "yardsPerReception": "1.0",
+      "receivingTouchdowns": "1",
+      "longReception": "1",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Courtland Sutton",
+     "athlete_id": "3128429",
+     "category": "receiving",
+     "stats": {
+      "receptions": "0",
+      "receivingYards": "0",
+      "yardsPerReception": "0.0",
+      "receivingTouchdowns": "0",
+      "longReception": "0",
+      "receivingTargets": "2"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Troy Franklin",
+     "athlete_id": "4431280",
+     "category": "receiving",
+     "stats": {
+      "receptions": "0",
+      "receivingYards": "0",
+      "yardsPerReception": "0.0",
+      "receivingTouchdowns": "0",
+      "longReception": "0",
+      "receivingTargets": "2"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Alex Singleton",
+     "athlete_id": "2612151",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "11",
+      "soloTackles": "3",
+      "sacks": "1",
+      "tacklesForLoss": "1",
+      "passesDefended": "1",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Ja'Quan McMillian",
+     "athlete_id": "4567462",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "8",
+      "soloTackles": "4",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Justin Strnad",
+     "athlete_id": "3919548",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "6",
+      "soloTackles": "2",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Talanoa Hufanga",
+     "athlete_id": "4360853",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "4",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Pat Surtain II",
+     "athlete_id": "4372012",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Riley Moss",
+     "athlete_id": "4382401",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Devon Key",
+     "athlete_id": "4037559",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "2",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Malcolm Roach",
+     "athlete_id": "4039064",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "1",
+      "sacks": "1",
+      "tacklesForLoss": "1",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Jahdae Barron",
+     "athlete_id": "4430925",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Jonathon Cooper",
+     "athlete_id": "4040608",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "2",
+      "sacks": "2",
+      "tacklesForLoss": "2",
+      "passesDefended": "1",
+      "QBHits": "3",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Zach Allen",
+     "athlete_id": "3915282",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "1",
+      "sacks": "0.5",
+      "tacklesForLoss": "0",
+      "passesDefended": "3",
+      "QBHits": "2",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Taylor Rapp",
+     "athlete_id": "4039007",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Nik Bonitto",
+     "athlete_id": "4360259",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0.5",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "D.J. Jones",
+     "athlete_id": "3894915",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Tyler Onyedim",
+     "athlete_id": "4683535",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Jordan Turner",
+     "athlete_id": "4693373",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Karene Reid",
+     "athlete_id": "4875336",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Dondrea Tillman",
+     "athlete_id": "5216101",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Kris Abrams-Draine",
+     "athlete_id": "4429193",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Que Robinson",
+     "athlete_id": "4692048",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Ja'Quan McMillian",
+     "athlete_id": "4567462",
+     "category": "interceptions",
+     "stats": {
+      "interceptions": "1",
+      "interceptionYards": "35",
+      "interceptionTouchdowns": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Cody Schrader",
+     "athlete_id": "4391845",
+     "category": "kickReturns",
+     "stats": {
+      "kickReturns": "3",
+      "kickReturnYards": "71",
+      "yardsPerKickReturn": "23.7",
+      "longKickReturn": "25",
+      "kickReturnTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Marvin Mims Jr.",
+     "athlete_id": "4686472",
+     "category": "puntReturns",
+     "stats": {
+      "puntReturns": "1",
+      "puntReturnYards": "22",
+      "yardsPerPuntReturn": "22.0",
+      "longPuntReturn": "22",
+      "puntReturnTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Wil Lutz",
+     "athlete_id": "2985659",
+     "category": "kicking",
+     "stats": {
+      "fieldGoalsMade/fieldGoalAttempts": "1/1",
+      "fieldGoalPct": "100.0",
+      "longFieldGoalMade": "38",
+      "extraPointsMade/extraPointAttempts": "5/5",
+      "totalKickingPoints": "8"
+     },
+     "dnp": false
+    },
+    {
+     "team": "DEN",
+     "player": "Jeremy Crawshaw",
+     "athlete_id": "4589212",
+     "category": "punting",
+     "stats": {
+      "punts": "5",
+      "puntYards": "226",
+      "grossAvgPuntYards": "45.2",
+      "touchbacks": "0",
+      "puntsInside20": "2",
+      "longPunt": "48"
+     },
+     "dnp": false
+    }
+   ],
+   "team_stats": [
+    {
+     "team": "LV",
+     "stats": {
+      "firstDowns": "14",
+      "firstDownsPassing": "10",
+      "firstDownsRushing": "4",
+      "firstDownsPenalty": "0",
+      "thirdDownEff": "8-18",
+      "fourthDownEff": "0-2",
+      "totalOffensivePlays": "66",
+      "totalYards": "370",
+      "yardsPerPlay": "5.6",
+      "totalDrives": "13",
+      "netPassingYards": "227",
+      "completionAttempts": "18/37",
+      "yardsPerPass": "5.4",
+      "interceptions": "1",
+      "sacksYardsLost": "5-40",
+      "rushingYards": "143",
+      "rushingAttempts": "24",
+      "yardsPerRushAttempt": "6.0",
+      "redZoneAttempts": "2-3",
+      "totalPenaltiesYards": "9-63",
+      "turnovers": "1",
+      "fumblesLost": "0",
+      "defensiveTouchdowns": "0",
+      "possessionTime": "26:16"
+     }
+    },
+    {
+     "team": "DEN",
+     "stats": {
+      "firstDowns": "25",
+      "firstDownsPassing": "12",
+      "firstDownsRushing": "10",
+      "firstDownsPenalty": "3",
+      "thirdDownEff": "6-13",
+      "fourthDownEff": "0-1",
+      "totalOffensivePlays": "70",
+      "totalYards": "351",
+      "yardsPerPlay": "5.0",
+      "totalDrives": "13",
+      "netPassingYards": "218",
+      "completionAttempts": "19/35",
+      "yardsPerPass": "6.1",
+      "interceptions": "1",
+      "sacksYardsLost": "1-7",
+      "rushingYards": "133",
+      "rushingAttempts": "34",
+      "yardsPerRushAttempt": "3.9",
+      "redZoneAttempts": "4-4",
+      "totalPenaltiesYards": "2-10",
+      "turnovers": "1",
+      "fumblesLost": "0",
+      "defensiveTouchdowns": "1",
+      "possessionTime": "33:44"
+     }
+    }
+   ],
+   "source": "ESPN https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873075",
+   "retrieved_at": "2026-11-23T00:52:02.330674+00:00"
   }
  },
- "updated": "2026-11-23T00:32:09.122144+00:00"
+ "updated": "2026-11-23T00:52:02.330732+00:00"
 }
