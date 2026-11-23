@@ -156,3 +156,17 @@ def test_forecast_archive_adds_metadata_columns_to_existing_v1_database(tmp_path
     assert {"n_history", "n_opportunity", "effective_opportunity", "sigma",
             "distribution", "calibrated"} <= columns
     assert version == "2"
+
+
+
+def test_archive_forecasts_batches_in_one_archive_and_detects_in_batch_duplicates(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    first = _snapshot(now)
+    second = {**_snapshot(now), "event_id": "game-2"}
+    batch = archive.archive_forecasts([first, first, second], tmp_path / "batch.sqlite")
+    assert batch["ok"] is True
+    assert batch["archived"] == 2
+    assert batch["duplicates"] == 1
+    assert batch["rejected"] == 0
+    assert len(archive.pending_forecasts(tmp_path / "batch.sqlite")) == 2
