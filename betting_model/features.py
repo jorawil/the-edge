@@ -170,3 +170,57 @@ def build_player_history(
         "warnings": ([] if input_text else ["source ingestion timestamp is not recorded; projection_input_at remains unknown"]),
         "exclusions": exclusions,
     }
+
+
+
+def build_league_efficiency_prior(
+    games: dict[str, Any],
+    *,
+    sport: str,
+    market: str,
+    before_event_time: str | datetime,
+) -> dict[str, Any]:
+    """Compute a league-wide rate from regular-season games strictly before a target event."""
+    allowed = NBA_MARKETS if sport == "nba" else NFL_MARKETS if sport == "nfl" else set()
+    if market not in allowed:
+        raise ValueError(f"unsupported {sport} market: {market}")
+    cutoff = _event_time(before_event_time) if isinstance(before_event_time, str) else before_event_time
+    if cutoff is None or cutoff.tzinfo is None:
+        raise ValueError("before_event_time must be timezone-aware")
+    cutoff = cutoff.astimezone(timezone.utc)
+
+    total_actual = 0.0
+    total_opportunity = 0.0
+    event_ids: set[str] = set()
+    players: set[str] = set()
+    for event_id, game in games.items():
+        if not isinstance(game, dict) or game.get("season_type_id") != 2:
+            continue
+        when = _event_time(game.get("date_utc"))
+        if when is None or when >= cutoff:
+            continue
+        grouped: dict[str, list[dict[str, Any]]] = {}
+        for player in game.get("players") or []:
+            if not isinstance(player, dict) or player.get("dnp") or player.get("athlete_id") is None:
+                continue
+            grouped.setdefault(str(player["athlete_id"]), []).append(player)
+        for player_id, player_rows in grouped.items():
+            actual, opportunity = _market_values(sport, market, player_rows)
+            if actual is None or opportunity is None or (opportunity == 0 and actual > 0):
+                continue
+            total_actual += actual
+            total_opportunity += opportunity
+            event_ids.add(str(event_id))
+            players.add(player_id)
+
+    return {
+        "ok": total_opportunity > 0,
+        "sport": sport,
+        "market": market,
+        "prior_efficiency": total_actual / total_opportunity if total_opportunity > 0 else None,
+        "total_actual": total_actual,
+        "total_opportunity": total_opportunity,
+        "n_events": len(event_ids),
+        "n_players": len(players),
+        "as_of": cutoff.isoformat(),
+    }
