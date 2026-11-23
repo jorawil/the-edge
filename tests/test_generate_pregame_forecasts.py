@@ -72,6 +72,12 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
 
     assert report["ok"] is True
     assert report["forecasts_archived"] == 10
+    assert report["forecast_rows"] == 10
+    assert len(report["forecasts"]) == 10
+    assert {row["market"] for row in report["forecasts"]} == {"PTS", "REB", "AST", "3PM", "PRA"}
+    assert all(row["calibrated"] is False for row in report["forecasts"])
+    assert all(row["projected_value"] is not None for row in report["forecasts"])
+    assert all(row["warnings"] for row in report["forecasts"])
     assert index_calls == ["nba"]
     assert report["odds_api_calls"] == 0
     assert report["calibration_claimed"] is False
