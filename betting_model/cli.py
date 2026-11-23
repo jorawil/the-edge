@@ -96,8 +96,8 @@ def evaluate_props_file(
     results = [
         evaluate_prop(p, n=n, file_meta=meta, threshold=threshold) for p in props
     ]
-    ranked = sorted(results, key=_rank_key, reverse=True)
-    positive = [r for r in ranked if r.get("positive_edge")]
+    # Legacy probability flags are not a validated ranking signal.
+    ranked = results
     evaluated = [r for r in ranked if r.get("evaluated")]
     skipped = [r for r in ranked if r.get("skipped")]
     groups = group_rows(ranked)
@@ -113,26 +113,20 @@ def evaluate_props_file(
             "total": len(ranked),
             "evaluated": len(evaluated),
             "skipped": len(skipped),
-            "positive_edge": len(positive),
             "qualified": len(groups["QUALIFIED"]),
             "screen_pass_uncalibrated": len(groups["SCREEN_PASS_UNCALIBRATED"]),
             "watch": len(groups["WATCH"]),
             "rejected": len(groups["REJECTED"]),
             "not_evaluable": len(groups["NOT_EVALUABLE"]),
             "edge_threshold": threshold if threshold is not None else 0.03,
-            "note": (
-                "positive_edge is the older vig-inclusive screen. "
-                "SCREEN_PASS_UNCALIBRATED cleared that screen with an uncalibrated "
-                "sigma and normal curve. QUALIFIED is reserved for a calibrated model. "
-                "None of these grades places a bet."
-            ),
+            "note": "No betting edges or recommendations are reported; probability outputs are uncalibrated diagnostics.",
         },
         "qualified": groups["QUALIFIED"],
         "screen_pass_uncalibrated": groups["SCREEN_PASS_UNCALIBRATED"],
         "watch": groups["WATCH"],
         "rejected": groups["REJECTED"],
         "not_evaluable": groups["NOT_EVALUABLE"],
-        "positive_edges": positive,
+        "positive_edges": [],  # compatibility field; legacy flags are not opportunities
         "all": ranked,
     }
 
@@ -150,41 +144,26 @@ def _to_markdown(payload: dict[str, Any]) -> str:
     s = payload["summary"]
     lines = [
         plain_header(payload),
-        "# Edges latest (probability-first)",
+        "# THE EDGE — diagnostic report",
         "",
         f"- Generated: **{payload['generated_at']}** ({payload['timezone']})",
-        f"- Props: `{payload['props_path']}`",
-        f"- Evaluated: {s['evaluated']} / {s['total']} | Skipped: {s['skipped']} | "
-        f"**Positive edge (>3%): {s['positive_edge']}**",
+        f"- Props: {payload['props_path']}",
+        f"- Evaluated: {s['evaluated']} / {s['total']} | Skipped: {s['skipped']}",
         "",
-        "> Model alone never juices a ticket. Only legs with `positive_edge=True` "
-        "**and** desk research agreement become Strong/Med. Muse owns final NFL/WS ticket.",
+        "> No betting edges or recommendations are produced. Probability calculations remain uncalibrated diagnostics.",
         "",
-        "## Positive edges",
+        "## Evaluation rows (descriptive only)",
         "",
     ]
-    pos = payload.get("positive_edges") or []
-    if not pos:
-        lines.append("_None tonight._")
-    else:
-        lines += [
-            "| Rank | Player | Sport | Market | Side | Line | Odds | Proj | Model% | Imp% | Edge | Source |",
-            "|---:|---|---|---|:---:|---:|---:|---:|---:|---:|---:|---|",
-        ]
-        for i, r in enumerate(pos, 1):
-            lines.append(
-                f"| {i} | {r.get('player')} | {r.get('sport')} | {r.get('market')} | "
-                f"{_side_label(r.get('is_over'))} | {r.get('line')} | {r.get('odds')} | "
-                f"{r.get('projected')} | {100*float(r.get('model_prob') or 0):.1f}% | "
-                f"{100*float(r.get('implied_prob') or 0):.1f}% | "
-                f"{100*float(r.get('edge') or 0):+.1f}% | {r.get('proj_source') or r.get('source') or ''} |"
-            )
 
     multi = [r for r in payload["all"] if r.get("books")]
     if multi:
-        lines += ["", "## By book (FanDuel IN / DraftKings / bet365 / Fanatics)", "",
-                  "| Player | Market | Side | Proj | " + " | ".join(lbl for _, lbl in BOOKS) + " | Best | Edge | +? |",
-                  "|---|---|:---:|---:|" + "---|" * len(BOOKS) + "---|---:|:---:|"]
+        lines += [
+            "### Available book prices",
+            "",
+            "| Player | Market | Side | Projection | " + " | ".join(lbl for _, lbl in BOOKS) + " |",
+            "|---|---|:---:|---:|" + "---|" * len(BOOKS),
+        ]
         for r in multi:
             cells = []
             for key, _ in BOOKS:
@@ -192,44 +171,34 @@ def _to_markdown(payload: dict[str, Any]) -> str:
                 if b.get("missing") or not b.get("evaluated"):
                     cells.append("missing")
                 else:
-                    cells.append(f"{b['line']} ({int(b['odds']):+d}) {100*float(b['edge']):+.1f}%")
-            pe = "Y" if r.get("positive_edge") else ""
+                    cells.append(f"{b['line']} ({int(b['odds']):+d})")
             lines.append(
                 f"| {r.get('player')} | {r.get('market')} | {_side_label(r.get('is_over'))} | "
-                f"{r.get('projected')} | " + " | ".join(cells) + f" | {r.get('best_book','')} {r.get('line')} "
-                f"({r.get('odds')}) | {100*float(r.get('edge') or 0):+.1f}% | {pe} |"
+                f"{r.get('projected')} | " + " | ".join(cells) + " |"
             )
-        lines += ["", "### Price cites", ""]
-        seen = set()
-        for r in multi:
-            for key, lbl in BOOKS:
-                b = r["books"].get(key) or {}
-                tag = (r.get('player'), r.get('market'), key)
-                if tag in seen:
-                    continue
-                seen.add(tag)
-                cite = b.get("source") if not b.get("missing") else f"MISSING — {b.get('reason')}"
-                lines.append(f"- {r.get('player')} {r.get('market')} · {lbl}: {cite}")
 
-    lines += ["", "## All evaluated legs (ranked by edge)", ""]
     evaluated = [r for r in payload["all"] if r.get("evaluated")]
+    lines += ["", "### Evaluated props (not ranked)", ""]
     if not evaluated:
         lines.append("_None evaluated._")
     else:
         lines += [
-            "| Player | Sport | Market | Side | Book | Line | Odds | Proj | Edge | +? |",
-            "|---|---|---|:---:|---|---:|---:|---:|---:|:---:|",
+            "| Player | Sport | Market | Side | Book | Line | Odds | Projection | Projection − line (stat units) | Grade |",
+            "|---|---|---|:---:|---|---:|---:|---:|---:|---|",
         ]
         for r in evaluated:
-            pe = "Y" if r.get("positive_edge") else ""
+            projection = r.get("projected")
+            line = r.get("line")
+            gap = None if projection is None or line is None else float(projection) - float(line)
+            gap_text = "n/a" if gap is None else f"{gap:+.2f}"
             lines.append(
                 f"| {r.get('player')} | {r.get('sport')} | {r.get('market')} | "
-                f"{_side_label(r.get('is_over'))} | {r.get('best_book') or ''} | {r.get('line')} | {r.get('odds')} | "
-                f"{r.get('projected')} | {100*float(r.get('edge') or 0):+.1f}% | {pe} |"
+                f"{_side_label(r.get('is_over'))} | {r.get('best_book') or ''} | {line} | "
+                f"{r.get('odds')} | {projection} | {gap_text} | {r.get('status', 'NOT_EVALUABLE')} |"
             )
 
     skipped = [r for r in payload["all"] if r.get("skipped")]
-    lines += ["", "## Skipped (no projection / API miss)", ""]
+    lines += ["", "### Skipped (no usable projection or price)", ""]
     if not skipped:
         lines.append("_None._")
     else:
@@ -239,10 +208,8 @@ def _to_markdown(payload: dict[str, Any]) -> str:
                 f"{_side_label(r.get('is_over'))}{r.get('line')} @ {r.get('odds')}): "
                 f"{r.get('skip_reason')}"
             )
-            if r.get("source"):
-                lines.append(f"  - cite/source: {r.get('source')}")
 
-    lines += ["", "---", "_Never place bets from this file alone._", ""]
+    lines += ["", "---", "_This report is not a betting recommendation._", ""]
     return "\n".join(lines)
 
 
