@@ -168,7 +168,9 @@ def test_missing_stale_and_post_event_records_are_rejected(tmp_path: Path):
         journal_path=journal,
     )
     assert summary["stored"] == 0
+    assert summary["ok"] is False
     assert list_snapshots(database) == []
+    assert Journal(journal).runs("collect")[0]["status"] == "failed"
     reasons = " ".join(item["reason"] for item in summary["items"])
     assert "projected" in reasons
     assert "already started" in reasons
@@ -303,6 +305,7 @@ def test_live_odds_does_not_request_bet365_or_invent_a_price(tmp_path: Path, mon
     assert missing["stored"] == 0
     assert missing["provider_failures"] == 1
     assert missing["called"] is False
+    assert Journal(journal).runs("collect")[0]["status"] == "failed"
     assert list_snapshots(database) == []
 
     monkeypatch.setenv("ODDS_API_KEY", "test-key")
@@ -1055,3 +1058,30 @@ def test_two_current_results_are_not_silently_reduced(tmp_path: Path, clock):
     graded = _grade(database, journal, [_result_event()])
     assert graded["items"][0]["action"] == "conflict"
     assert len(get_snapshot(database, archive_id)["results"]) == 2
+
+
+def test_partial_collection_is_not_recorded_as_a_success(tmp_path: Path):
+    database, journal = _paths(tmp_path)
+    summary = collect_pregame(
+        database,
+        [_prop(), _prop(projected=None, event_id="missing-projection")],
+        journal_path=journal,
+    )
+    assert summary["stored"] == 1
+    assert summary["rejected"] == 1
+    assert summary["ok"] is False
+    run = Journal(journal).runs("collect")[0]
+    assert run["status"] == "partial"
+    assert Journal(journal).last_success("collect") is None
+
+
+def test_collect_cli_returns_nonzero_when_every_prop_is_rejected(tmp_path: Path):
+    props = tmp_path / "props.json"
+    props.write_text(json.dumps([_prop(projected=None)]), encoding="utf-8")
+    code = main([
+        "archive", "collect",
+        "--props", str(props),
+        "--db", str(tmp_path / "archive.sqlite"),
+        "--journal", str(tmp_path / "journal.sqlite"),
+    ])
+    assert code == 2
