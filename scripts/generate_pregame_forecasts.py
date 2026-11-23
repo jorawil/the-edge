@@ -88,6 +88,10 @@ def _aware_time(value: Any) -> datetime | None:
     return parsed.astimezone(timezone.utc)
 
 
+def _utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
 def upcoming_events(sport: str, *, start_day: date, days: int) -> tuple[list[dict[str, Any]], list[str]]:
     events: dict[str, dict[str, Any]] = {}
     errors = []
@@ -200,11 +204,13 @@ def generate(
     counts = Counter()
     by_market = Counter()
     snapshots_to_archive: list[dict[str, Any]] = []
-    now_text = datetime.now(timezone.utc).isoformat()
+    # Freeze the historical cutoff before any roster/API work. This is
+    # conservative: no observation arriving later in this run can leak in.
+    history_cutoff_text = _utc_now().isoformat()
     source = f"ESPN schedule/roster and historical box scores; {SELECTION_VERSION}"
     history_index = build_history_index(
         games, sport=sport, markets=tuple(MARKET_SELECTIONS[sport]),
-        before_event_time=now_text, data_updated_at=data_updated,
+        before_event_time=history_cutoff_text, data_updated_at=data_updated,
         data_updated_source=f"historical-data/data/{sport}/games.json updated",
     )
 
@@ -241,7 +247,7 @@ def generate(
                         "projection_input_source": history_index["projection_input_source"],
                     }
                     context = {
-                        "projection_at": now_text,
+                        "projection_at": history_cutoff_text,
                         "projection_input_at": history_result["projection_input_at"],
                         "data_sources": [
                             f"ESPN historical-data/data/{sport}/games.json",
@@ -266,6 +272,15 @@ def generate(
                     if not result.get("ok"):
                         counts[result.get("reason") or "projection_failed"] += 1
                         continue
+                    # API/roster work and projection calculation can cross
+                    # kickoff. Timestamp only after the calculation and never
+                    # archive a snapshot if the event has started in the meantime.
+                    projection_time = _utc_now()
+                    event_start_time = _aware_time(event_start)
+                    if event_start_time is None or projection_time >= event_start_time:
+                        counts["event_started_during_projection"] += 1
+                        continue
+                    projection_at = projection_time.isoformat()
                     warnings = list(result.get("warnings") or [])
                     warnings.extend([
                         "injuries, confirmed starters, teammate availability, opponent, and game script are not adjusted",
@@ -290,7 +305,7 @@ def generate(
                         "distribution": result.get("distribution"),
                         "calibrated": result.get("calibrated") is True,
                         "model_version": model_version,
-                        "projection_at": now_text,
+                        "projection_at": projection_at,
                         "projection_input_at": history_result["projection_input_at"],
                         "projection_input_source": history_result.get("projection_input_source"),
                         "source": source,
