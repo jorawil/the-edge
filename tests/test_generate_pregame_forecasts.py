@@ -58,12 +58,12 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
         }] if team_id == "100" else []),
     )
 
-    history_calls = []
-    original_history = _MODULE.build_player_history
-    def tracked_history(*args, **kwargs):
-        history_calls.append((kwargs["player_id"], kwargs["market"]))
-        return original_history(*args, **kwargs)
-    monkeypatch.setattr(_MODULE, "build_player_history", tracked_history)
+    index_calls = []
+    original_index = _MODULE.build_history_index
+    def tracked_index(*args, **kwargs):
+        index_calls.append(kwargs["sport"])
+        return original_index(*args, **kwargs)
+    monkeypatch.setattr(_MODULE, "build_history_index", tracked_index)
 
     archive_path = tmp_path / "forecasts.sqlite"
     report = _MODULE.generate(
@@ -72,8 +72,7 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
 
     assert report["ok"] is True
     assert report["forecasts_archived"] == 10
-    assert len(history_calls) == 5
-    assert len(set(history_calls)) == 5
+    assert index_calls == ["nba"]
     assert report["odds_api_calls"] == 0
     assert report["calibration_claimed"] is False
     assert report["archive_summary"]["snapshots"] == 10
