@@ -15,7 +15,8 @@ from typing import Any
 
 from betting_model.collection import collect_joined
 from betting_model.forecast_archive import pending_forecasts
-from betting_model.odds import fetch_event_player_props
+from betting_model.odds import fetch_event_player_props, fetch_sport_events
+from betting_model.result_sources import starts_match
 from betting_model.timeutil import parse_aware_datetime
 
 SPORT_KEYS = {"nba": "basketball_nba", "nfl": "americanfootball_nfl"}
@@ -161,6 +162,42 @@ def verify_event_matchup(fetched: dict[str, Any], projections: list[dict[str, An
     }
 
 
+def resolve_odds_event_id(events: list[dict[str, Any]], projections: list[dict[str, Any]]) -> dict[str, Any]:
+    """Resolve one provider event using exact teams and the archived kickoff."""
+    if not projections:
+        return {"ok": False, "reason": "no forecast projections to match"}
+    expected_home = projections[0].get("home_team_name")
+    expected_away = projections[0].get("away_team_name")
+    expected_start = projections[0].get("event_start")
+    if not expected_home or not expected_away or not expected_start:
+        return {"ok": False, "reason": "forecast is missing full matchup names or event start"}
+    candidates = []
+    for event in events:
+        if not isinstance(event, dict):
+            continue
+        if (_team_key(event.get("home_team")) == _team_key(expected_home)
+                and _team_key(event.get("away_team")) == _team_key(expected_away)
+                and starts_match(event.get("commence_time"), expected_start)):
+            candidates.append(event)
+    if len(candidates) != 1:
+        return {
+            "ok": False,
+            "reason": "no unique Odds API event matched the exact home/away teams and kickoff; player props were not requested",
+            "candidate_count": len(candidates),
+            "expected_home": expected_home,
+            "expected_away": expected_away,
+            "expected_start": expected_start,
+        }
+    event = candidates[0]
+    return {
+        "ok": True,
+        "odds_event_id": str(event["id"]),
+        "home_team": event.get("home_team"),
+        "away_team": event.get("away_team"),
+        "commence_time": event.get("commence_time"),
+    }
+
+
 def remap_price_event_ids(prices: list[dict[str, Any]], espn_event_id: str) -> list[dict[str, Any]]:
     """Keep provider IDs for audit while matching archive rows on ESPN IDs."""
     remapped = []
@@ -178,7 +215,6 @@ def scan_event(
     *,
     sport: str,
     event_id: str,
-    odds_event_id: str,
     markets: str,
     bookmakers: str,
     forecast_archive: Path,
@@ -193,10 +229,32 @@ def scan_event(
     projections, counts = build_projection_rows(
         forecasts, sport=sport, event_id=event_id, markets=market_list,
     )
+    event_lookup = fetch_sport_events(SPORT_KEYS[sport])
+    if not event_lookup.get("ok"):
+        return {
+            "ok": False, "sport": sport, "sport_key": SPORT_KEYS[sport],
+            "event_id": str(event_id), "markets_requested": market_list,
+            "bookmakers_requested": book_list.split(","),
+            "forecast_selection": counts, "projections_supplied_to_matcher": len(projections),
+            "event_lookup": event_lookup, "odds_api_event_lookup_requests": 1 if event_lookup.get("called") else 0,
+            "billable_player_prop_calls": 0, "odds_api_calls": 0,
+            "calibration_claimed": False, "automatic_betting": False,
+        }
+    resolution = resolve_odds_event_id(event_lookup.get("events") or [], projections)
+    if not resolution.get("ok"):
+        return {
+            "ok": False, "sport": sport, "sport_key": SPORT_KEYS[sport],
+            "event_id": str(event_id), "markets_requested": market_list,
+            "bookmakers_requested": book_list.split(","),
+            "forecast_selection": counts, "projections_supplied_to_matcher": len(projections),
+            "event_lookup": {"ok": True, "event_count": event_lookup.get("event_count")},
+            "event_resolution": resolution,
+            "odds_api_event_lookup_requests": 1, "billable_player_prop_calls": 0,
+            "odds_api_calls": 0, "calibration_claimed": False, "automatic_betting": False,
+        }
+    odds_event_id = resolution["odds_event_id"]
     fetched = fetch_event_player_props(
-        SPORT_KEYS[sport],
-        odds_event_id,
-        ",".join(market_list),
+        SPORT_KEYS[sport], odds_event_id, ",".join(market_list),
         bookmakers=book_list,
     )
     quota = {
@@ -250,6 +308,14 @@ def scan_event(
         "sport_key": SPORT_KEYS[sport],
         "event_id": str(event_id),
         "odds_event_id": str(odds_event_id),
+        "event_resolution": resolution,
+        "event_lookup_quota": {
+            "requests_remaining": event_lookup.get("requests_remaining"),
+            "requests_used": event_lookup.get("requests_used"),
+            "requests_last": event_lookup.get("requests_last"),
+        },
+        "odds_api_event_lookup_requests": 1,
+        "billable_player_prop_calls": 1 if result.get("called") else 0,
         "markets_requested": market_list,
         "bookmakers_requested": book_list.split(","),
         "forecast_selection": counts,
@@ -272,7 +338,6 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sport", choices=("nba", "nfl"), required=True)
     parser.add_argument("--event-id", required=True, help="ESPN event ID from the forecast report.")
-    parser.add_argument("--odds-event-id", required=True, help="The Odds API event ID for the same matchup.")
     parser.add_argument("--markets", required=True, help="Comma-separated Odds API player market keys.")
     parser.add_argument("--bookmakers", default="fanduel,draftkings")
     parser.add_argument("--forecast-archive", type=Path, required=True)
@@ -284,7 +349,6 @@ def main(argv: list[str] | None = None) -> int:
         report = scan_event(
             sport=args.sport,
             event_id=args.event_id,
-            odds_event_id=args.odds_event_id,
             markets=args.markets,
             bookmakers=args.bookmakers,
             forecast_archive=args.forecast_archive,
