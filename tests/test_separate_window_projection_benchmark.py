@@ -44,6 +44,8 @@ def test_separate_window_benchmark_selects_on_validation_and_reports_test(tmp_pa
     assert pts["held_out_test"]["split"] == "test"
     assert pts["held_out_test"]["n_player_game_predictions"] > 0
     assert pts["held_out_test_rolling_mean_baseline"]["split"] == "test"
+    assert "test_paired_event_bootstrap" in pts
+    assert pts["test_paired_event_bootstrap"]["available"] is False
     assert "PRA" in {row["market"] for row in result["candidate_metrics"]}
 
 
@@ -84,3 +86,13 @@ def test_same_time_events_are_not_added_before_scoring(tmp_path):
     )
     assert result["ok"] is True
     assert result["split_event_counts"]["test"] > 0
+
+
+
+def test_paired_event_bootstrap_detects_consistent_candidate_improvement():
+    candidate = {"sum_abs": 50.0, "n": 50, "by_event": {f"e{i}": [1.0, 1] for i in range(50)}}
+    baseline = {"sum_abs": 100.0, "n": 50, "by_event": {f"e{i}": [2.0, 1] for i in range(50)}}
+    result = _MODULE._paired_event_bootstrap(candidate, baseline, iterations=200, seed=7)
+    assert result["available"] is True
+    assert result["interpretation"] == "candidate_better"
+    assert result["mae_difference_ci95"][1] < 0
