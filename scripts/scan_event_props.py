@@ -314,7 +314,7 @@ def scan_event(
             "requests_used": event_lookup.get("requests_used"),
             "requests_last": event_lookup.get("requests_last"),
         },
-        "odds_api_event_lookup_requests": 1,
+        "odds_api_event_lookup_requests": 1 if event_lookup.get("called") else 0,
         "billable_player_prop_calls": 1 if result.get("called") else 0,
         "markets_requested": market_list,
         "bookmakers_requested": book_list.split(","),
@@ -323,7 +323,7 @@ def scan_event(
         "collection": result,
         "matchup_verification": matchup,
         "quota": result.get("quota"),
-        "odds_api_calls": 1 if result.get("called") else 0,
+        "odds_api_calls": (1 if event_lookup.get("called") else 0) + (1 if result.get("called") else 0),
         "calibration_claimed": False,
         "automatic_betting": False,
         "warnings": [
