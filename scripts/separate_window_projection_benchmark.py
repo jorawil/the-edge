@@ -11,6 +11,7 @@ import argparse
 import importlib.util
 import json
 import math
+import random
 from collections import defaultdict
 from itertools import groupby
 from pathlib import Path
@@ -39,6 +40,67 @@ def _add_metric(store: dict, key: tuple, error: float, event_id: str) -> None:
     item["sum_error"] += error
     item["n"] += 1
     item["events"].add(event_id)
+    by_event = item.setdefault("by_event", {})
+    event_stats = by_event.setdefault(event_id, [0.0, 0])
+    event_stats[0] += abs(error)
+    event_stats[1] += 1
+
+
+def _paired_event_bootstrap(
+    candidate: dict[str, Any],
+    baseline: dict[str, Any],
+    *,
+    iterations: int = 1000,
+    seed: int = 20261123,
+) -> dict[str, Any]:
+    """Paired bootstrap of event-cluster MAE differences on untouched test data."""
+    candidate_events = candidate.get("by_event") or {}
+    baseline_events = baseline.get("by_event") or {}
+    common = sorted(set(candidate_events) & set(baseline_events))
+    if len(common) < 30:
+        return {
+            "available": False,
+            "n_paired_events": len(common),
+            "reason": "at least 30 paired test events are required for this diagnostic",
+        }
+    rng = random.Random(seed)
+    deltas = []
+    for _ in range(iterations):
+        sampled = [rng.choice(common) for _ in range(len(common))]
+        candidate_abs = candidate_n = baseline_abs = baseline_n = 0
+        for event_id in sampled:
+            c_abs, c_n = candidate_events[event_id]
+            b_abs, b_n = baseline_events[event_id]
+            candidate_abs += c_abs
+            candidate_n += c_n
+            baseline_abs += b_abs
+            baseline_n += b_n
+        if candidate_n and baseline_n:
+            deltas.append(candidate_abs / candidate_n - baseline_abs / baseline_n)
+    deltas.sort()
+    if not deltas:
+        return {"available": False, "n_paired_events": len(common), "reason": "no valid bootstrap samples"}
+    lower = deltas[int(0.025 * (len(deltas) - 1))]
+    upper = deltas[int(0.975 * (len(deltas) - 1))]
+    candidate_mae = candidate["sum_abs"] / candidate["n"]
+    baseline_mae = baseline["sum_abs"] / baseline["n"]
+    if upper < 0:
+        interpretation = "candidate_better"
+    elif lower > 0:
+        interpretation = "rolling_mean_better"
+    else:
+        interpretation = "inconclusive"
+    return {
+        "available": True,
+        "n_paired_events": len(common),
+        "iterations": iterations,
+        "candidate_test_mae": candidate_mae,
+        "rolling_mean_test_mae": baseline_mae,
+        "observed_mae_difference": candidate_mae - baseline_mae,
+        "mae_difference_ci95": [lower, upper],
+        "interpretation": interpretation,
+        "definition": "candidate MAE minus rolling-mean MAE; negative favors candidate",
+    }
 
 
 def _render_metrics(store: dict, *, key_fields: tuple[str, ...]) -> list[dict[str, Any]]:
@@ -222,6 +284,15 @@ def benchmark(
         baseline_test = next((row for row in baseline_metrics
                               if row["split"] == "test" and row["market"] == market
                               and row["window_games"] == best["efficiency_window_games"]), None)
+        candidate_key = (
+            "test", market, best["opportunity_window_games"],
+            best["efficiency_window_games"], best["shrinkage_strength"],
+        )
+        baseline_key = ("test", market, best["efficiency_window_games"])
+        paired_test = _paired_event_bootstrap(
+            candidate_store[candidate_key], baseline_store[baseline_key],
+            seed=20261123 + sum(ord(char) for char in market),
+        )
         selections.append({
             "market": market,
             "selected": {
@@ -234,6 +305,7 @@ def benchmark(
             "validation_rolling_mean_baseline": baseline_validation,
             "held_out_test": test,
             "held_out_test_rolling_mean_baseline": baseline_test,
+            "test_paired_event_bootstrap": paired_test,
         })
 
     for market, counts in coverage.items():
