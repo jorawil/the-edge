@@ -68,3 +68,52 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
     assert {row["market"] for row in saved} == {"PTS", "REB", "AST", "3PM", "PRA"}
     assert all(row["projection_input_at"] == (now - timedelta(minutes=5)).isoformat()
                for row in saved)
+
+
+
+def test_roster_parser_handles_nested_position_groups():
+    found = {}
+    _MODULE._walk_roster({
+        "athletes": [{
+            "position": "Guard",
+            "items": [{
+                "id": "123", "fullName": "Example Player",
+                "position": {"abbreviation": "G"},
+            }],
+        }],
+    }, found)
+    assert found["123"]["player_name"] == "Example Player"
+    assert found["123"]["position"] == "G"
+
+
+def test_upcoming_events_filters_non_regular_and_past_games(monkeypatch):
+    from datetime import date
+
+    future = datetime.now(timezone.utc) + timedelta(days=1)
+    payload = {
+        "events": [{
+            "id": "future-regular",
+            "date": future.isoformat(),
+            "season": {"type": {"id": "2"}},
+            "competitions": [{
+                "competitors": [
+                    {"homeAway": "home", "team": {"id": "100", "abbreviation": "HOM"}},
+                    {"homeAway": "away", "team": {"id": "200", "abbreviation": "AWY"}},
+                ],
+            }],
+        }, {
+            "id": "future-postseason",
+            "date": future.isoformat(),
+            "season": {"type": 3},
+            "competitions": [{
+                "competitors": [
+                    {"homeAway": "home", "team": {"id": "100", "abbreviation": "HOM"}},
+                    {"homeAway": "away", "team": {"id": "200", "abbreviation": "AWY"}},
+                ],
+            }],
+        }],
+    }
+    monkeypatch.setattr(_MODULE, "fetch_json", lambda url: payload)
+    events, errors = _MODULE.upcoming_events("nba", start_day=date.today(), days=1)
+    assert errors == []
+    assert [event["event_id"] for event in events] == ["future-regular"]
