@@ -519,7 +519,7 @@ def _grade_command(args: argparse.Namespace) -> int:
         print(f"Could not grade: {exc}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2))
-    return 0
+    return 0 if result.get("ok") is True else 2
 
 
 def _archive_command(args: argparse.Namespace) -> int:
