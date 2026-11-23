@@ -16,7 +16,7 @@ This pipeline stores a pregame evaluation and, later, a verified outcome. It doe
 
 `archive collect` writes snapshots through the existing archive. `archive grade` reads a result source and calls `attach_result`. `archive quality` counts the archive and the command journal. `archive run-once` is an optional single pass for cron. There is no daemon and no sportsbook login.
 
-The journal is `data/collection_journal.sqlite`. It records accepts, duplicates, rejections, conflicts, and provider failures. The archive remains the snapshot and the result.
+The journal is `data/collection_journal.sqlite`. It records accepts, duplicates, skips, rejections, conflicts, and provider failures. Collection and grading runs are marked `completed`, `partial`, or `failed`; only completed runs with no provider failures update the last-success time. A refused scan or unsuccessful collection/grading command exits nonzero so automation can detect it. The archive remains the snapshot and the result.
 
 ## Odds
 
@@ -94,3 +94,8 @@ The manual GitHub Actions workflow stores collected game logs on a separate `his
 The repository is public, so the `historical-data` branch and its game logs are public too. These are historical sports results and player statistics. Do not put sportsbook credentials, personal account data, or API keys in this branch. The backfill uses ESPN's public scoreboard and box-score endpoints and does not need the Odds API secret.
 
 The workflow serializes runs to prevent two backfills from overwriting one another. Use the same date range again to repair incomplete records; complete records are skipped. The script's `EDGE_DATA_DIR` environment override lets the workflow keep its working data separate from the source checkout.
+
+
+## Backfill persistence
+
+ESPN backfills do not store an event when the source returns no player box. The existing game store and generated reports are written to a same-directory temporary file and atomically replaced only after the full content has been flushed. Box-fetch failures, empty player boxes, invalid record shapes, and missing final scores are surfaced as unsuccessful CLI runs; expected not-final events remain non-fatal.
