@@ -39,3 +39,19 @@ This is deliberately not yet a probability calibration system: the forecast arch
 
 
 The daily grader checks only snapshots whose scheduled event start has passed. Future forecasts remain pending in the archive and are counted separately as `future_pending_not_checked`; they are not reported as unresolved or as missing backfill data before their games begin.
+
+## Read-only forecast lookup
+
+`betting_model/forecast_lookup.py::get_latest_forecast` is the only
+supported way for live evaluation to read a forecast snapshot. It opens
+the archive read-only (no migration, no writes, no creation), returns the
+newest fresh snapshot for one (event_id, player_id, market) triple, and
+refuses with a stable reason — `not_found`, `event_started`,
+`stale_projection`, `projection_not_before_event_start`,
+`projection_in_future`, or `ambiguous_snapshots` — when no snapshot may
+be used. Two snapshots sharing the newest projection timestamp with
+different projected values are refused, never averaged. The lookup never
+computes a probability, edge, expected value, or qualification, and every
+successful result carries `probability_permitted: False`. It does not
+join a forecast to a sportsbook price; that join is a later, separately
+reviewed step.
