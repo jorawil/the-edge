@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "checked_pending": 9489,
+  "graded": 0,
+  "void_dnp": 0,
+  "unresolved": {
+    "event_not_backfilled": 9489
+  },
+  "result_rejected": 0,
+  "errors": [],
+  "metrics": {
+    "ok": true,
+    "groups": [],
+    "forecast_rows": 0
+  },
+  "graded_at": "2026-11-23T00:27:04.074135+00:00"
+}
