@@ -1088,8 +1088,9 @@ def test_collect_cli_returns_nonzero_when_every_prop_is_rejected(tmp_path: Path)
     assert code == 2
 
 
-def test_grading_with_unresolved_rows_is_partial_not_success(tmp_path: Path):
+def test_grading_with_unresolved_rows_is_partial_not_success(tmp_path: Path, clock):
     database, journal = _paths(tmp_path)
+    clock["moment"] = LATER
     collect_pregame(database, [_prop()], journal_path=journal)
 
     class MissingPlayer:
