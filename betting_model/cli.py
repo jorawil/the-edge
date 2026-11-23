@@ -36,7 +36,7 @@ from .odds import normalize_player_props
 from .quality import quality_report, render_markdown as render_quality
 from .result_sources import EspnResultSource
 from .schedule import load_schedule, run_once
-from .books import BOOKS
+from .books import BOOKS, normalize_book
 from .pairing import attach_opposites
 from .parlays import evaluate_parlay
 from .reports import group_rows, plain_header
@@ -75,6 +75,66 @@ def safe_save_name(name: str) -> str:
     return name
 
 
+
+def _prop_observation_key(prop: Any) -> str | None:
+    """Stable identity for an exact repeated pregame prop observation."""
+    if not isinstance(prop, dict):
+        return None
+    try:
+        side: Any = parse_side(prop.get("is_over"))
+    except ValueError:
+        side = str(prop.get("is_over") or "").strip().casefold()
+    books = prop.get("books")
+    if isinstance(books, dict):
+        book_quotes = []
+        for name, quote in books.items():
+            if not isinstance(quote, dict):
+                continue
+            book_quotes.append((
+                normalize_book(str(name)) or str(name).strip().casefold(),
+                quote.get("line"),
+                quote.get("odds"),
+                quote.get("retrieved_at"),
+            ))
+        book_identity: Any = sorted(book_quotes, key=lambda item: item[0])
+    else:
+        book_identity = normalize_book(str(prop.get("book") or prop.get("sportsbook") or "")) or str(
+            prop.get("book") or prop.get("sportsbook") or ""
+        ).strip().casefold()
+    identity = {
+        "event": prop.get("event_id") or prop.get("game_id") or prop.get("event_start"),
+        "sport": str(prop.get("sport") or "").strip().casefold(),
+        "player_id": str(prop.get("player_id") or "").strip(),
+        "player": str(prop.get("player") or prop.get("player_name") or "").strip().casefold(),
+        "market": str(prop.get("market") or "").strip().casefold().replace(" ", "_"),
+        "side": side,
+        "line": prop.get("line"),
+        "odds": prop.get("odds"),
+        "book": book_identity,
+        "retrieved_at": prop.get("retrieved_at") or prop.get("odds_retrieved_at"),
+        "projection": prop.get("projected"),
+        "projection_source": prop.get("projection_source") or prop.get("source"),
+        "projection_at": prop.get("projection_at") or prop.get("generated_at"),
+    }
+    return json.dumps(identity, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def _deduplicate_props(props: list[Any]) -> tuple[list[Any], int]:
+    """Drop only exact repeated observations; distinct books, prices, or projections remain."""
+    unique: list[Any] = []
+    seen: set[str] = set()
+    duplicates = 0
+    for prop in props:
+        key = _prop_observation_key(prop)
+        if key is not None and key in seen:
+            duplicates += 1
+            continue
+        if key is not None:
+            seen.add(key)
+        unique.append(prop)
+    return unique, duplicates
+
+
 def evaluate_props_file(
     props_path: Path,
     out_dir: Path,
@@ -92,6 +152,8 @@ def evaluate_props_file(
     else:
         raise ValueError("props JSON must be a list or {props: [...]}")
 
+    submitted_total = len(props)
+    props, duplicates_excluded = _deduplicate_props(props)
     props = attach_opposites(props)
     results = [
         evaluate_prop(p, n=n, file_meta=meta, threshold=threshold) for p in props
@@ -111,6 +173,8 @@ def evaluate_props_file(
         "meta": meta,
         "summary": {
             "total": len(ranked),
+            "submitted_total": submitted_total,
+            "duplicates_excluded": duplicates_excluded,
             "evaluated": len(evaluated),
             "skipped": len(skipped),
             "qualified": len(groups["QUALIFIED"]),
