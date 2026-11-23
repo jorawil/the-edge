@@ -1,10 +1,10 @@
-# Projection engine v1: opportunity × efficiency
+# Projection engine v2: separate opportunity × efficiency windows
 
 This is a research-stage projection engine, not a qualified betting model.
 
 ## Model definition
 
-The engine forecasts expected opportunity from a player's prior opportunities, then multiplies by an efficiency estimate:
+The engine forecasts expected opportunity from a player's shorter or equal trailing opportunity history, then multiplies it by an efficiency estimate from a separately selected trailing history:
 
 - NBA PTS / REB / AST: minutes × production per minute.
 - NBA 3PM: three-point attempts × makes per attempt.
@@ -13,7 +13,7 @@ The engine forecasts expected opportunity from a player's prior opportunities, t
 - NFL REC_YDS: receiving targets × yards per target.
 - NFL REC: receiving targets × catch rate.
 
-The efficiency estimate may be shrunk toward a league rate known before the target event. The shrinkage strength is a candidate parameter selected on the validation split, not a hand-tuned production constant. The v1 benchmark uses a league-wide prior because position-specific priors are not yet validated.
+The efficiency estimate may be shrunk toward a league rate known before the target event. The shrinkage strength is a candidate parameter selected on the validation split, not a hand-tuned production constant. The v2 live engine uses separate trailing windows for expected opportunity and efficiency where held-out event-bootstrap comparisons support the change. It retains a league-wide prior because position-specific priors are not yet validated.
 
 ## Leakage controls
 
