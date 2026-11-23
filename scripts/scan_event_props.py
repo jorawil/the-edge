@@ -237,10 +237,14 @@ def build_point_projection_line_comparisons(
         "unmatched_player_or_market": 0,
         "invalid_line_or_projection": 0,
         "not_fresh_or_unsupported": 0,
+        "duplicate_prices_skipped": 0,
     }
     for price in prices:
         if not isinstance(price, dict) or price.get("supported_shape") is False or price.get("freshness") != "fresh":
             counts["not_fresh_or_unsupported"] += 1
+            continue
+        if price.get("duplicate") is True:
+            counts["duplicate_prices_skipped"] += 1
             continue
         counts["fresh_over_under_prices"] += 1
         forecast_market = MARKET_MAP[sport].get(str(price.get("market") or ""))
@@ -277,6 +281,10 @@ def build_point_projection_line_comparisons(
             "player_id": projection.get("player_id"),
             "market": forecast_market,
             "book": price.get("bookmaker_key"),
+            "book_display": price.get("book_display") or price.get("bookmaker_key"),
+            "region_verified": price.get("region_verified") is True,
+            "region_note": price.get("region_note") or price.get("source_note")
+            or "Sportsbook jurisdiction is not verified by this feed",
             "side": side,
             "line": line,
             "american_odds": odds,
