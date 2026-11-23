@@ -46,12 +46,17 @@ The daily grader checks only snapshots whose scheduled event start has passed. F
 supported way for live evaluation to read a forecast snapshot. It opens
 the archive read-only (no migration, no writes, no creation), returns the
 newest fresh snapshot for one (event_id, player_id, market) triple, and
-refuses with a stable reason — `not_found`, `event_started`,
-`stale_projection`, `projection_not_before_event_start`,
-`projection_in_future`, or `ambiguous_snapshots` — when no snapshot may
-be used. Two snapshots sharing the newest projection timestamp with
-different projected values are refused, never averaged. The lookup never
-computes a probability, edge, expected value, or qualification, and every
+refuses with a stable reason when no snapshot may be used. The full set
+of rejection reasons is: `missing_identifier`, `archive_not_found`,
+`archive_invalid`, `not_found`, `invalid_event_start`,
+`invalid_projection_time`, `event_started`,
+`projection_not_before_event_start`, `projection_in_future`,
+`stale_projection`, and `ambiguous_snapshots`. Candidate timestamps are
+normalized to UTC before any ordering or comparison, so the same instant
+written with a different UTC offset is treated as the same instant. Two
+snapshots sharing the newest projection instant with different projected
+values are refused, never averaged. The lookup never computes a
+probability, edge, expected value, or qualification, and every
 successful result carries `probability_permitted: False`. It does not
 join a forecast to a sportsbook price; that join is a later, separately
 reviewed step.
