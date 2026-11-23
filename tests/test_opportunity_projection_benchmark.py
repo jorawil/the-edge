@@ -47,6 +47,21 @@ def test_nba_opportunity_model_uses_prior_minutes_and_matches_baseline_samples(t
     opportunity = next(m for m in validation if m["method"] == "opportunity_rate_product")
     assert round(opportunity["mae"], 3) == round(abs(25 - (110 / 3) * (5 / 6)), 3)
 
+    # Expected minutes are evaluated separately from the final stat projection.
+    opportunity_metrics = [
+        row for row in result["opportunity_metrics"]
+        if row["split"] == "validation" and row["market"] == "PTS"
+    ]
+    assert len(opportunity_metrics) == 1
+    assert opportunity_metrics[0]["n_player_game_predictions"] == 1
+    assert round(opportunity_metrics[0]["mae"], 3) == round(abs(25 - (110 / 3)), 3)
+    selected = next(
+        row for row in result["opportunity_validation_selections"]
+        if row["market"] == "PTS"
+    )
+    assert selected["selected_window_games"] == 3
+    assert selected["held_out_test"]["split"] == "test"
+
 
 def test_nfl_features_are_joined_across_category_rows(tmp_path):
     games = {}
@@ -79,6 +94,11 @@ def test_nfl_features_are_joined_across_category_rows(tmp_path):
     assert result["opportunity_coverage"]["RUSH_YDS"]["coverage_pct"] == 100.0
     assert any(m["market"] == "PASS_YDS" and m["method"] == "opportunity_rate_product"
                for m in result["metrics"])
+    pass_attempts = next(
+        row for row in result["opportunity_metrics"]
+        if row["split"] == "validation" and row["market"] == "PASS_YDS"
+    )
+    assert pass_attempts["mae"] == 0.0
 
 
 def test_missing_opportunity_is_not_filled_with_zero(tmp_path):

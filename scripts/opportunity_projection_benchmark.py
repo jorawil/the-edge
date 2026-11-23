@@ -136,6 +136,7 @@ def run_opportunity_benchmark(
     split_by_event = _BASELINE._split_events(target_rows)
     histories: dict[tuple[str, str], list[tuple[float, float]]] = defaultdict(list)
     predictions = []
+    opportunity_predictions = []
 
     for _, grouped in groupby(observations, key=lambda r: r["event_time"]):
         batch = list(grouped)
@@ -160,6 +161,14 @@ def run_opportunity_benchmark(
                     "actual": row["actual"],
                     "window": window,
                 }
+                opportunity_predictions.append({
+                    "event_id": row["event_id"],
+                    "split": split_by_event[row["event_id"]],
+                    "market": row["market"],
+                    "window": window,
+                    "actual": row["opportunity"],
+                    "projection": projected_opportunity,
+                })
                 predictions.append({**common, "method": "opportunity_rate_product",
                                     "projection": opportunity_projection})
                 predictions.append({**common, "method": "matched_rolling_mean",
@@ -187,6 +196,46 @@ def run_opportunity_benchmark(
             "mae": sum(abs(e) for e in errors) / len(errors),
             "rmse": math.sqrt(sum(e * e for e in errors) / len(errors)),
             "mean_signed_error": sum(errors) / len(errors),
+        })
+
+    opportunity_groups: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in opportunity_predictions:
+        opportunity_groups[(row["split"], row["market"], row["window"])].append(row)
+
+    opportunity_metrics = []
+    for key in sorted(opportunity_groups):
+        split, market, window = key
+        rows = opportunity_groups[key]
+        errors = [row["actual"] - row["projection"] for row in rows]
+        opportunity_metrics.append({
+            "split": split, "market": market, "window_games": window,
+            "n_player_game_predictions": len(rows),
+            "n_events": len({row["event_id"] for row in rows}),
+            "mae": sum(abs(error) for error in errors) / len(errors),
+            "rmse": math.sqrt(sum(error * error for error in errors) / len(errors)),
+            "mean_signed_error": sum(errors) / len(errors),
+        })
+
+    opportunity_validation_selections = []
+    for market in sorted({row["market"] for row in opportunity_metrics}):
+        candidates = [row for row in opportunity_metrics
+                      if row["split"] == "validation" and row["market"] == market]
+        candidates.sort(key=lambda row: (row["mae"], row["rmse"], row["window_games"]))
+        if not candidates:
+            opportunity_validation_selections.append({
+                "market": market, "selected": None, "reason": "no_validation_predictions",
+            })
+            continue
+        best = candidates[0]
+        held_out = next((row for row in opportunity_metrics
+                         if row["split"] == "test" and row["market"] == market
+                         and row["window_games"] == best["window_games"]), None)
+        opportunity_validation_selections.append({
+            "market": market,
+            "selected_window_games": best["window_games"],
+            "validation_mae": best["mae"],
+            "validation_rmse": best["rmse"],
+            "held_out_test": held_out,
         })
 
     validation = [m for m in metrics if m["split"] == "validation"]
@@ -224,6 +273,8 @@ def run_opportunity_benchmark(
             for split in ("train", "validation", "test")
         },
         "exclusions": exclusions, "metrics": metrics,
+        "opportunity_metrics": opportunity_metrics,
+        "opportunity_validation_selections": opportunity_validation_selections,
         "validation_rankings": rankings, "evaluation_warnings": warnings,
         "limitations": [
             "Opportunity and efficiency inputs are derived only from the player's prior appearances.",
