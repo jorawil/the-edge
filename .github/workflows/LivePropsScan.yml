@@ -1,0 +1,130 @@
+name: Manual Event Player Prop Scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      sport:
+        description: "Sport for the selected event"
+        required: true
+        type: choice
+        options:
+          - nba
+          - nfl
+      event_id:
+        description: "ESPN event ID from the daily forecast report"
+        required: true
+        type: string
+      markets:
+        description: "Comma-separated Odds API player markets"
+        required: true
+        type: string
+      bookmakers:
+        description: "Documented bookmaker keys"
+        required: true
+        default: "fanduel,draftkings"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: historical-data-backfill
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out model code
+        uses: actions/checkout@v4
+
+      - name: Check out durable historical data
+        uses: actions/checkout@v4
+        with:
+          ref: historical-data
+          path: historical-data
+          fetch-depth: 0
+
+      - name: Restore forecast and odds archives
+        run: |
+          mkdir -p historical-data/forecasts historical-data/reports
+          if [ -f historical-data/forecasts/forecast_archive.sqlite.gz ]; then
+            gzip -dc historical-data/forecasts/forecast_archive.sqlite.gz > historical-data/forecasts/forecast_archive.sqlite
+          fi
+          if [ -f historical-data/forecasts/odds_archive.sqlite.gz ]; then
+            gzip -dc historical-data/forecasts/odds_archive.sqlite.gz > historical-data/forecasts/odds_archive.sqlite
+          fi
+          if [ -f historical-data/forecasts/odds_collection_journal.sqlite.gz ]; then
+            gzip -dc historical-data/forecasts/odds_collection_journal.sqlite.gz > historical-data/forecasts/odds_collection_journal.sqlite
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy requests
+          pip install -e . --no-deps
+
+      - name: Scan selected event
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          SPORT: ${{ inputs.sport }}
+          EVENT_ID: ${{ inputs.event_id }}
+          MARKETS: ${{ inputs.markets }}
+          BOOKMAKERS: ${{ inputs.bookmakers }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          python scripts/scan_event_props.py \
+            --sport "$SPORT" \
+            --event-id "$EVENT_ID" \
+            --markets "$MARKETS" \
+            --bookmakers "$BOOKMAKERS" \
+            --forecast-archive historical-data/forecasts/forecast_archive.sqlite \
+            --odds-archive historical-data/forecasts/odds_archive.sqlite \
+            --journal historical-data/forecasts/odds_collection_journal.sqlite \
+            --out "historical-data/reports/live_props_scan_${RUN_ID}.json"
+
+      - name: Compress odds archives
+        run: |
+          if [ -f historical-data/forecasts/odds_archive.sqlite ]; then
+            gzip -9 -c historical-data/forecasts/odds_archive.sqlite > historical-data/forecasts/odds_archive.sqlite.gz
+            rm historical-data/forecasts/odds_archive.sqlite
+          fi
+          if [ -f historical-data/forecasts/odds_collection_journal.sqlite ]; then
+            gzip -9 -c historical-data/forecasts/odds_collection_journal.sqlite > historical-data/forecasts/odds_collection_journal.sqlite.gz
+            rm historical-data/forecasts/odds_collection_journal.sqlite
+          fi
+
+      - name: Save odds archive and scan report
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          cd historical-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/live_props_scan_${RUN_ID}.json
+          if [ -f forecasts/odds_archive.sqlite.gz ]; then
+            git add -f forecasts/odds_archive.sqlite.gz
+          fi
+          if [ -f forecasts/odds_collection_journal.sqlite.gz ]; then
+            git add -f forecasts/odds_collection_journal.sqlite.gz
+          fi
+          if git diff --cached --quiet; then
+            echo "No new scan report or odds archive changes."
+          else
+            git commit -m "Save selected event player prop scan (${RUN_ID})"
+            git push origin HEAD:historical-data
+          fi
+
+      - name: Upload scan report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edge-live-props-scan-${{ github.run_id }}
+          path: historical-data/reports/live_props_scan_${{ github.run_id }}.json
+          if-no-files-found: warn
+          retention-days: 90
