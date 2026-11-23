@@ -118,7 +118,7 @@ def grade_archive(
         if not database.exists():
             summary = _empty("archive does not exist; no file was created")
             summary["run_id"] = run_id
-            journal.finish_run(run_id, "completed", summary)
+            journal.finish_run(run_id, "failed", summary)
             return summary
         summary = _grade(database, source, journal, run_id)
         summary["run_id"] = run_id
@@ -130,7 +130,12 @@ def grade_archive(
         summary["note"] = (
             "Grading attaches verified outcomes. It does not measure calibration, profit, or ROI."
         )
-        journal.finish_run(run_id, "completed", {key: value for key, value in summary.items() if key != "items"})
+        run_status = (
+            "completed" if summary.get("ok") is True
+            else "partial" if summary.get("graded", 0) or summary.get("skipped", 0)
+            else "failed"
+        )
+        journal.finish_run(run_id, run_status, {key: value for key, value in summary.items() if key != "items"})
         logger.info(
             "grading processed=%s graded=%s skipped=%s unresolved=%s conflicts=%s provider_failures=%s",
             summary["processed"],
@@ -171,14 +176,19 @@ def _grade(database: Path, source: Any, journal: Journal, run_id: str) -> dict[s
         item = _one(database, snapshot, source)
         items.append(item)
         _journal(journal, run_id, item, raw=item.pop("raw", None))
+    graded = sum(1 for item in items if item["action"] == "graded")
+    skipped = sum(1 for item in items if item["action"] == "skipped")
+    unresolved = sum(1 for item in items if item["action"] == "unresolved")
+    conflicts = sum(1 for item in items if item["action"] == "conflict")
+    provider_failures = sum(1 for item in items if item["action"] == "provider_failure")
     return {
-        "ok": True,
+        "ok": unresolved == 0 and conflicts == 0 and provider_failures == 0,
         "processed": len(items),
-        "graded": sum(1 for item in items if item["action"] == "graded"),
-        "skipped": sum(1 for item in items if item["action"] == "skipped"),
-        "unresolved": sum(1 for item in items if item["action"] == "unresolved"),
-        "conflicts": sum(1 for item in items if item["action"] == "conflict"),
-        "provider_failures": sum(1 for item in items if item["action"] == "provider_failure"),
+        "graded": graded,
+        "skipped": skipped,
+        "unresolved": unresolved,
+        "conflicts": conflicts,
+        "provider_failures": provider_failures,
         "items": items,
     }
 
