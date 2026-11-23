@@ -8,6 +8,8 @@ on:
       - "scripts/generate_pregame_forecasts.py"
       - "scripts/backfill_espn.py"
       - "scripts/grade_forecast_archive.py"
+      - "scripts/validate_forecast_distributions.py"
+      - "betting_model/forecast_validation.py"
       - "betting_model/forecast_archive.py"
       - "betting_model/features.py"
       - "betting_model/projection_engine.py"
@@ -77,6 +79,14 @@ jobs:
             --archive historical-data/forecasts/forecast_archive.sqlite \
             --data-root historical-data/data \
             --out "historical-data/reports/forecast_grading_${RUN_ID}.json"
+
+      - name: Validate forecast residual distributions
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          python scripts/validate_forecast_distributions.py \
+            --archive historical-data/forecasts/forecast_archive.sqlite \
+            --out "historical-data/reports/forecast_distribution_validation_${RUN_ID}.json"
 
       - name: Generate upcoming pregame forecasts
         env:
