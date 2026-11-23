@@ -182,6 +182,10 @@ python -m betting_model.cli archive analyze --format json
 
 The default file is `data/pregame_archive.sqlite`. Pass `--db` to use another path. `pregame.json` must include `event_id`, `event_start`, `projection_at`, `projection_source`, `retrieved_at`, and `book`, plus the usual prop fields. There is no historical archive in this repository. Nothing here was reconstructed from old averages.
 
+## Daily pregame forecasts
+
+The scheduled workflow refreshes NBA/NFL box scores, grades prior forecast snapshots, and archives new point forecasts for upcoming games. It does not fetch odds or generate betting recommendations. See `docs/DAILY_FORECASTS.md` for the market configurations and limitations.
+
 ## Forecast-only archive
 
 The separate `betting_model.forecast_archive` stores immutable pregame point forecasts even when no sportsbook price is available. Results are appended later, and corrections supersede earlier results without rewriting them. This is the source for genuine forecast-error samples used by future calibration work. It does not calculate betting edge or qualify a pick. See `docs/FORECAST_ARCHIVE.md`.
