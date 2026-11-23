@@ -16,6 +16,7 @@ def _forecast(market, *, projected=20, projection_at=None):
         "sport": "nfl", "event_id": "event-1", "event_start": (now + timedelta(hours=2)).isoformat(),
         "player_id": "123", "player_name": "Example Player", "team": "IND", "opponent": "HOU",
         "market": market, "projected_value": projected,
+        "home_team_name": "Indianapolis Colts", "away_team_name": "Houston Texans",
         "model_version": "test-v1", "projection_at": (projection_at or now - timedelta(minutes=5)).isoformat(),
         "projection_input_at": (now - timedelta(minutes=10)).isoformat(),
     }
@@ -71,3 +72,22 @@ def test_remap_price_event_ids_keeps_provider_id_for_audit():
     assert mapped[0]["event_id"] == "espn-event-4"
     assert mapped[0]["provider_event_id"] == "odds-api-event-9"
     assert prices[0]["event_id"] == "odds-api-event-9"
+
+
+
+def test_verify_event_matchup_requires_exact_home_and_away_names():
+    projections = [{
+        "home_team_name": "Indianapolis Colts",
+        "away_team_name": "Houston Texans",
+    }]
+    good = _MODULE.verify_event_matchup({
+        "home_team": "Indianapolis Colts",
+        "away_team": "Houston Texans",
+    }, projections)
+    assert good["ok"] is True
+    bad = _MODULE.verify_event_matchup({
+        "home_team": "Houston Texans",
+        "away_team": "Indianapolis Colts",
+    }, projections)
+    assert bad["ok"] is False
+    assert "do not exactly match" in bad["reason"]
