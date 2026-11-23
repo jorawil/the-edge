@@ -78,24 +78,11 @@ def test_uncertain_role_is_not_qualified():
     assert "role" in " ".join(row["status_reasons"])
 
 
-def test_recent_average_is_not_a_forecast(monkeypatch):
-    def fake(name, n=10):
-        return {
-            "ok": True,
-            "player": name,
-            "player_id": 7,
-            "season": "2025-26",
-            "games": 10,
-            "PTS": 22.0,
-            "REB": 5.0,
-            "AST": 4.0,
-            "PR": 27.0,
-            "PRA": 31.0,
-            "PA": 26.0,
-            "MIN": 30.0,
-        }
+def test_missing_nba_projection_does_not_use_recent_average_fallback(monkeypatch):
+    def forbidden(*args, **kwargs):
+        raise AssertionError("recent-average provider must not be called by desk evaluation")
 
-    monkeypatch.setattr("betting_model.sports.get_nba_player_recent_avg", fake)
+    monkeypatch.setattr("betting_model.sports.get_nba_player_recent_avg", forbidden)
     row = evaluate_prop(
         {
             "player": "Example Player",
@@ -110,14 +97,13 @@ def test_recent_average_is_not_a_forecast(monkeypatch):
         },
         as_of=AS_OF,
     )
-    assert row["evaluated"] is True
-    assert row["projection_kind"] == "recent_average"
-    assert row["illustrative_only"] is True
+    assert row["evaluated"] is False
     assert row["status"] == "NOT_EVALUABLE"
-    assert row["qualified"] is False
-    assert "not a prediction" in row["explanation"]
-    assert "Season average: unavailable" in row["projection"]["explanation"]
-    assert row["projection"]["model_version"] == "0.2.0"
+    assert row["projected"] is None
+    assert row["model_prob"] is None
+    assert row["projection_kind"] == "unavailable"
+    assert "recent averages are historical context" in row["skip_reason"]
+
 
 
 def test_supplied_projection_keeps_a_separate_recent_average():
