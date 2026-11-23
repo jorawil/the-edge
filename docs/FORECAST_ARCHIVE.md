@@ -36,3 +36,6 @@ The daily workflow runs `scripts/validate_forecast_distributions.py` after gradi
 The report compares central 80% and 90% residual intervals from two diagnostics: a Normal residual fit and empirical residual quantiles. Both are fitted on the earliest training slice; validation reports coverage, width, and interval score; the later test slice is reported separately. Groups below the minimum fit or validation sample remain explicitly insufficient.
 
 This is deliberately not yet a probability calibration system: the forecast archive does not contain sportsbook lines/prices for every forecast, and interval coverage alone does not validate Over/Under probabilities, Brier score, log loss, or betting edge. No distribution is selected or registered, no sigma default changes, and no forecast is promoted to `QUALIFIED`. More distribution families and market-price probability tests require a separately reviewed validation design and sufficient settled data.
+
+
+The daily grader checks only snapshots whose scheduled event start has passed. Future forecasts remain pending in the archive and are counted separately as `future_pending_not_checked`; they are not reported as unresolved or as missing backfill data before their games begin.
