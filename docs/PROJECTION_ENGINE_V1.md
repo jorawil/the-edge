@@ -35,9 +35,25 @@ python scripts/validate_projection_engine.py --sport nfl --data-root data
 
 The output is JSON and can be saved with --out reports/projection_nba.json. The separate opportunity/rate benchmark also reports expected-opportunity MAE, RMSE, signed bias, and validation-selected lookback windows for minutes, attempts, and targets. The separate-window benchmark tests opportunity and efficiency lookbacks independently (5/10/20 by default), evaluates all combinations on the same eligible target rows, and selects the pair using validation MAE/RMSE only. It reports the corresponding held-out test result and a rolling-mean comparison separately. The selected candidate is also compared with the matching rolling-mean baseline using a paired bootstrap that resamples whole test events; the 95% interval is for candidate MAE minus baseline MAE. This avoids treating thousands of correlated player rows as independent. The diagnostic is only reported when at least 30 paired test events are available and never changes the live configuration automatically. This matters because an accurate efficiency estimate cannot rescue a poor minutes/attempts forecast. Neither benchmark changes the live model configuration automatically. The scripts do not place bets, fetch prices, calculate EV, or create probability distributions.
 
+## Live v2 lookback selections
+
+The separate-window benchmark (run 45095216422) selected the following NBA settings on validation. The held-out test comparison then used 1,003 events and a 1,000-resample paired event bootstrap:
+
+| NBA market | Opportunity window | Efficiency window | Shrinkage | Held-out test result vs rolling mean |
+|---|---:|---:|---:|---|
+| PTS | 5 | 20 | 5 | Candidate better; MAE difference 95% CI [-0.089, -0.041] |
+| REB | 5 | 20 | 20 | Candidate better; CI [-0.034, -0.015] |
+| AST | 5 | 20 | 0 | Candidate better; CI [-0.028, -0.015] |
+| PRA | 5 | 20 | 5 | Candidate better; CI [-0.165, -0.084] |
+| 3PM | Rolling mean 20 | — | — | Rolling mean better; candidate CI [0.042, 0.047] |
+
+For NFL, the 255-event held-out test supported the existing 5/5/20 rush-yard setting. The separate-window comparisons for passing yards, receptions, and receiving yards were inconclusive, so those live settings were left unchanged. The NBA changes use distinct 5-game opportunity and 20-game efficiency histories; 3PM remains a 20-game rolling mean. These are point-forecast improvements only, not evidence of calibrated betting probabilities or profitability.
+
+The live generator now records both lookback windows and the number of observations used by each component in the forecast metadata. Historical snapshots remain immutable and retain their original model versions.
+
 ## Deliberate limitations
 
-- The opportunity forecast is currently a prior-game average. Expected-opportunity diagnostics and the separate-window benchmark are research-only; neither changes the live forecast configuration until the selected combinations are reviewed and validated.
+- The opportunity forecast is currently a prior-game average. The live v2 lookbacks are validation-selected and event-bootstrap checked, but still omit future role and lineup context.
 - No opponent, home/away, rest, pace, game-script, injury, lineup, teammate-out, starter/bench, or role-change adjustment is applied yet.
 - The league efficiency prior is not position-specific.
 - ESPN's historical game timestamps are present, but ingestion timestamps are not. The feature builder therefore leaves projection_input_at unknown instead of inventing it.
