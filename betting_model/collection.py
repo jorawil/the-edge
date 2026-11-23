@@ -380,13 +380,15 @@ def _collect(
         ready_meta.append({"raw": raw, "note": note, "player": _player(prop)})
     archived = archive_mod.archive_many(Path(database), ready) if ready else []
     for meta, result in zip(ready_meta, archived):
+        reason = result.get("reason")
         if result.get("stored"):
             action = "stored"
         elif result.get("duplicate"):
             action = "duplicate"
+        elif reason and "already started" in str(reason):
+            action = "skipped"
         else:
             action = "rejected"
-        reason = result.get("reason")
         if meta["note"] and action == "stored":
             reason = meta["note"]
         index = result.get("index")
