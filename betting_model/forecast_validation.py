@@ -66,18 +66,33 @@ def load_active_residual_rows(path: Path) -> list[dict[str, Any]]:
 
 
 def _event_split(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-    event_times = {str(row["event_id"]): parse_aware_datetime(row["event_start"]) for row in rows}
-    if any(value is None for value in event_times.values()):
-        raise ValueError("all event_start values must be timezone-aware timestamps")
-    events = sorted(event_times, key=lambda event: (event_times[event].timestamp(), event))
-    train_end = int(len(events) * 0.6)
-    valid_end = train_end + int(len(events) * 0.2)
-    buckets = {
-        "train": set(events[:train_end]),
-        "validation": set(events[train_end:valid_end]),
-        "test": set(events[valid_end:]),
-    }
-    return {name: [r for r in rows if str(r["event_id"]) in ids]
+    """Split chronologically by unique kickoff instant, never separating simultaneous events."""
+    event_times: dict[str, Any] = {}
+    for row in rows:
+        event_id = str(row["event_id"])
+        parsed = parse_aware_datetime(row["event_start"])
+        if parsed is None:
+            raise ValueError("all event_start values must be timezone-aware timestamps")
+        instant = parsed
+        # Compare true instants, not timezone-formatted strings.
+        from datetime import timezone
+        instant = instant.astimezone(timezone.utc)
+        previous = event_times.get(event_id)
+        if previous is not None and previous != instant:
+            raise ValueError(f"event {event_id} has inconsistent event_start values")
+        event_times[event_id] = instant
+
+    events_by_instant: dict[Any, set[str]] = defaultdict(set)
+    for event_id, instant in event_times.items():
+        events_by_instant[instant].add(event_id)
+    ordered_instants = sorted(events_by_instant)
+    train_end = int(len(ordered_instants) * 0.6)
+    valid_end = train_end + int(len(ordered_instants) * 0.2)
+    buckets = {"train": set(), "validation": set(), "test": set()}
+    for index, instant in enumerate(ordered_instants):
+        split = "train" if index < train_end else "validation" if index < valid_end else "test"
+        buckets[split].update(events_by_instant[instant])
+    return {name: [row for row in rows if str(row["event_id"]) in ids]
             for name, ids in buckets.items()}
 
 
