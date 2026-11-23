@@ -174,6 +174,7 @@ def test_missing_stale_and_post_event_records_are_rejected(tmp_path: Path):
     reasons = " ".join(item["reason"] for item in summary["items"])
     assert "projected" in reasons
     assert "already started" in reasons
+    assert summary["skipped"] == 1
     assert "postgame" in reasons
     assert "last_update" in reasons
     assert "could not be verified" in reasons
