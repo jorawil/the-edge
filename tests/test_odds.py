@@ -4,7 +4,7 @@ import json
 
 import requests
 
-from betting_model.odds import fetch_event_player_props, fetch_live_odds, normalize_player_props
+from betting_model.odds import fetch_event_player_props, fetch_live_odds, fetch_sport_events, normalize_player_props
 
 
 class _Response:
@@ -30,6 +30,10 @@ def test_missing_key_does_not_call_the_network(monkeypatch):
     assert result["ok"] is False
     assert result["reason"] == "no ODDS_API_KEY"
     assert result["called"] is False
+    events = fetch_sport_events("americanfootball_nfl", transport=boom)
+    assert events["ok"] is False
+    assert events["reason"] == "no ODDS_API_KEY"
+    assert events["called"] is False
 
 
 def test_default_request_skips_bet365_and_player_props(monkeypatch):
@@ -153,3 +157,46 @@ def test_stale_provider_timestamp_is_marked():
     )
     assert result["records"][0]["freshness"] == "stale"
     assert result["records"][0]["fair_market_probability"] is None
+
+
+
+def test_fetch_sport_events_uses_metadata_endpoint_and_returns_quota(monkeypatch):
+    monkeypatch.setenv("ODDS_API_KEY", "test-key")
+    seen = {}
+
+    def transport(url, params=None, timeout=None):
+        seen["url"] = url
+        seen["params"] = params
+        return _Response(200, [{
+            "id": "provider-event-1",
+            "home_team": "Indiana Colts",
+            "away_team": "Houston Texans",
+            "commence_time": "2026-11-23T18:00:00Z",
+        }], headers={"x-requests-remaining": "499", "x-requests-used": "1", "x-requests-last": "0"})
+
+    result = fetch_sport_events(
+        "americanfootball_nfl", transport=transport, sleep=lambda _seconds: None,
+    )
+    assert result["ok"] is True
+    assert result["called"] is True
+    assert result["events"][0]["id"] == "provider-event-1"
+    assert result["requests_remaining"] == "499"
+    assert result["requests_last"] == "0"
+    assert seen["url"].endswith("/sports/americanfootball_nfl/events")
+    assert seen["params"] == {"apiKey": "test-key"}
+
+
+
+def test_fetch_sport_events_handles_http_errors_without_echoing_key(monkeypatch):
+    monkeypatch.setenv("ODDS_API_KEY", "secret-key")
+
+    def transport(url, params=None, timeout=None):
+        return _Response(401, {"message": "unauthorized"}, text="apiKey=secret-key")
+
+    result = fetch_sport_events(
+        "basketball_nba", transport=transport, attempts=1, sleep=lambda _seconds: None,
+    )
+    assert result["ok"] is False
+    assert result["reason"] == "http_401"
+    assert "secret-key" not in result.get("body", "")
+    assert result["called"] is True
