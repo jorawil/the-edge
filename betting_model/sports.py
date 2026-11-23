@@ -18,7 +18,6 @@ from .core import (
     parse_side,
 )
 from .assessment import apply_assessment
-from .nba import get_nba_player_recent_avg, map_market_to_avg
 from .validation import price_errors, prop_label
 
 
@@ -186,42 +185,26 @@ def evaluate_nba_prop(
     file_meta: dict[str, Any] | None = None,
     as_of: Any = None,
 ) -> dict[str, Any]:
-    """Evaluate one NBA prop; auto-fill projected from recent avg if missing.
+    """Evaluate an NBA prop only when an explicit projection is supplied.
 
-    A filled recent average is labeled as a recent average and is not a forecast.
+    Recent averages are historical context, not forecasts. This desk path does
+    not fetch them or turn them into probabilities.
     """
     errors = price_errors(prop)
     if errors:
         return _rejected(prop, errors, file_meta=file_meta, as_of=as_of)
     projected = prop.get("projected")
-    proj_source = "manual" if projected is not None else None
-    avg_info = None
     if projected is None:
-        avg_info = get_nba_player_recent_avg(str(prop.get("player") or ""), n=n)
-        if avg_info.get("ok"):
-            mapped = map_market_to_avg(avg_info, str(prop.get("market") or ""))
-            if mapped is not None:
-                projected = mapped
-                proj_source = f"nba_api_l{avg_info.get('games')}_{avg_info.get('season')}"
-            else:
-                return _base_result(
-                    prop,
-                    None,
-                    file_meta=file_meta,
-                    as_of=as_of,
-                    skip_reason="market not mappable to recent avg",
-                    recent_avg=avg_info,
-                )
-        else:
-            return _base_result(
-                prop,
-                None,
-                file_meta=file_meta,
-                as_of=as_of,
-                skip_reason="no projected and nba_api failed",
-                recent_avg=avg_info,
-            )
-
+        return _base_result(
+            prop,
+            None,
+            file_meta=file_meta,
+            as_of=as_of,
+            skip_reason=(
+                "NBA: no explicit projection supplied; recent averages are historical "
+                "context and are not used to calculate probabilities"
+            ),
+        )
     edge = _edge_from_prop(prop, float(projected))
     return _base_result(
         prop,
@@ -229,8 +212,7 @@ def evaluate_nba_prop(
         file_meta=file_meta,
         as_of=as_of,
         projected=float(projected),
-        proj_source=proj_source,
-        recent_avg=avg_info,
+        proj_source="manual",
     )
 
 
