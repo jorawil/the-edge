@@ -362,3 +362,34 @@ def forecast_metrics(path: Path) -> dict[str, Any]:
             "residuals": errors,
         })
     return {"ok": True, "groups": output, "forecast_rows": len(rows)}
+
+
+
+def pending_forecasts(path: Path) -> list[dict[str, Any]]:
+    """Return forecast snapshots without an active result, oldest event first."""
+    if not Path(path).exists():
+        return []
+    with connect(path) as conn:
+        rows = conn.execute("""
+            SELECT s.* FROM forecast_snapshots s
+            WHERE NOT EXISTS (
+                SELECT 1 FROM forecast_results r
+                WHERE r.snapshot_id=s.snapshot_id
+                  AND NOT EXISTS (
+                    SELECT 1 FROM forecast_results newer
+                    WHERE newer.supersedes_result_id=r.result_id
+                  )
+            )
+            ORDER BY s.event_start,s.sport,s.player_id,s.market
+        """).fetchall()
+    output = []
+    for row in rows:
+        item = dict(row)
+        try:
+            item["payload"] = json.loads(item.pop("payload_json"))
+            item["warnings"] = json.loads(item.pop("warnings_json"))
+        except (TypeError, json.JSONDecodeError):
+            item["payload"] = {}
+            item["warnings"] = ["stored snapshot metadata could not be decoded"]
+        output.append(item)
+    return output
