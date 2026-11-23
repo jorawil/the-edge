@@ -1,4 +1,4 @@
-"""Plain-English report header. The legacy tables stay in the CLI."""
+"""Plain-English report header for diagnostic-only evaluation output."""
 
 from __future__ import annotations
 
@@ -33,13 +33,8 @@ def plain_header(payload: dict[str, Any]) -> str:
         f"- Generated: **{payload['generated_at']}** ({payload['timezone']})",
         f"- Props file: `{payload['props_path']}`",
         f"- Model version: `{payload.get('model_version', 'unknown')}`",
-        "- Threshold: **3 percentage points** (0.03) unless this file used a different one. "
-        "The edge must be greater than the threshold. Exactly 0.03 does not pass.",
-        "- When both sides of the same price are present, the pass/fail uses the "
-        "**no-vig (fair) probability**. Otherwise it uses the raw implied probability, "
-        "and the sportsbook's vig is still inside that number.",
-        "- `positive_edge` is the older screen (model probability minus the raw price). "
-        "It can be true on a row that is still Watch, Rejected, or Not evaluable.",
+        "- Probability and expected-value fields are diagnostic only: distribution assumptions "
+        "are not calibrated, so this report does not identify betting edges.",
         "- Sigma values in this version are **not calibrated** to forecast misses. "
         "Do not read them as a proven error bar.",
         "",
@@ -48,9 +43,8 @@ def plain_header(payload: dict[str, Any]) -> str:
         "- **QUALIFIED**: the edge cleared the threshold and the sigma and distribution "
         "used for that edge have been calibrated. This version does not assign Qualified, "
         "because those pieces are not calibrated yet.",
-        "- **SCREEN PASS UNCALIBRATED**: the supplied projection and a fresh price cleared "
-        "the threshold, but the sigma and the normal curve are still uncalibrated defaults. "
-        "This is not Qualified.",
+        "- **SCREEN PASS UNCALIBRATED**: an older diagnostic condition was met, but its "
+        "probability assumptions are uncalibrated. This is not an edge or recommendation.",
         "- **WATCH**: interesting or close, but something is missing, stale, or uncertain.",
         "- **REJECTED**: the edge does not clear the threshold, or a data problem rules it out.",
         "- **NOT EVALUABLE**: a required piece is missing, or the only number is a recent average. "
@@ -63,8 +57,6 @@ def plain_header(payload: dict[str, Any]) -> str:
         f"- Watch: {summary.get('watch', 0)}",
         f"- Rejected: {summary.get('rejected', 0)}",
         f"- Not evaluable: {summary.get('not_evaluable', 0)}",
-        f"- Older positive_edge flag: {summary.get('positive_edge', 0)} "
-        "(this is not the qualified count)",
         "",
     ]
     qualified = payload.get("qualified") or []
@@ -83,8 +75,8 @@ def plain_header(payload: dict[str, Any]) -> str:
         lines.append("")
     else:
         lines.append(
-            "These cleared the edge screen. They are not Qualified, because the "
-            "sigma and the normal curve are not calibrated."
+            "These rows met a legacy diagnostic condition only. Their probabilities are uncalibrated. "
+            "They must not be treated as betting opportunities."
         )
         lines.append("")
         lines.append(f"Showing {min(15, len(screen))} of {len(screen)}. The JSON file has every row.")
@@ -106,8 +98,6 @@ def plain_header(payload: dict[str, Any]) -> str:
         f"Rejected: {summary.get('rejected', 0)}. "
         f"Not evaluable: {summary.get('not_evaluable', 0)}.",
         "Reasons are on each row in the JSON (`status_reasons` and `explanation`).",
-        "",
-        "## Legacy screen",
         "",
         "The tables below use the original formula: normal-model probability minus the "
         "vig-inclusive implied probability, flagged at more than 3 points. "
