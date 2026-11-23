@@ -226,3 +226,46 @@ def test_different_vendor_projection_is_not_silently_deduplicated(tmp_path: Path
     payload = evaluate_props_file(path, tmp_path / "out")
     assert payload["summary"]["duplicates_excluded"] == 0
     assert payload["summary"]["total"] == 2
+
+
+def test_conflicting_vendor_projections_are_not_evaluated_or_scored(tmp_path: Path):
+    base = {
+        "player": "Same Player", "player_id": "player-7", "event_id": "event-7",
+        "sport": "nfl", "market": "passing_yards", "line": 220.5, "odds": -110,
+        "is_over": True, "projection_at": "2026-01-01T18:00:00+00:00",
+        "retrieved_at": "2026-01-01T18:01:00+00:00",
+    }
+    props = [
+        {**base, "projected": 265.0, "projection_source": "vendor-a", "book": "draftkings"},
+        {**base, "projected": 198.0, "projection_source": "vendor-b", "book": "fanduel"},
+    ]
+    path = tmp_path / "props.json"
+    path.write_text(json.dumps(props), encoding="utf-8")
+    payload = evaluate_props_file(path, tmp_path / "out")
+    assert payload["summary"]["projection_conflicts"] == 1
+    assert len(payload["all"]) == 2
+    for row in payload["all"]:
+        assert row["status"] == "NOT_EVALUABLE"
+        assert row["projection_conflict"] is True
+        assert row["model_prob"] is None
+        assert row["expected_value_per_unit"] is None
+        assert row["positive_edge"] is False
+
+
+def test_agreeing_vendor_projection_values_across_books_are_not_conflicts(tmp_path: Path):
+    base = {
+        "player": "Same Player", "player_id": "player-7", "event_id": "event-7",
+        "sport": "nfl", "market": "passing_yards", "line": 220.5, "odds": -110,
+        "is_over": True, "projected": 245.0, "projection_at": "2026-01-01T18:00:00+00:00",
+        "retrieved_at": "2026-01-01T18:01:00+00:00",
+    }
+    props = [
+        {**base, "projection_source": "vendor-a", "book": "draftkings"},
+        {**base, "projection_source": "vendor-b", "book": "fanduel"},
+    ]
+    path = tmp_path / "props.json"
+    path.write_text(json.dumps(props), encoding="utf-8")
+    payload = evaluate_props_file(path, tmp_path / "out")
+    assert payload["summary"]["projection_conflicts"] == 0
+    assert all(row["projection_conflict"] is False for row in payload["all"])
+
