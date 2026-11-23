@@ -477,8 +477,8 @@ def main(argv: list[str] | None = None) -> int:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(rendered + "\n", encoding="utf-8")
     print(rendered)
-    # A refusal before a provider call is a valid report, not a workflow crash.
-    return 0
+    # Preserve the refusal report, but let automation detect that no scan completed.
+    return 0 if report.get("ok") is True else 2
 
 
 if __name__ == "__main__":
