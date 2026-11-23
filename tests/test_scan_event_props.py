@@ -91,3 +91,53 @@ def test_verify_event_matchup_requires_exact_home_and_away_names():
     }, projections)
     assert bad["ok"] is False
     assert "do not exactly match" in bad["reason"]
+
+
+
+def test_resolve_odds_event_id_requires_exact_match_and_start():
+    projections = [{
+        "home_team_name": "Indianapolis Colts",
+        "away_team_name": "Houston Texans",
+        "event_start": "2026-11-23T18:00:00+00:00",
+    }]
+    events = [
+        {
+            "id": "correct",
+            "home_team": "Indianapolis Colts",
+            "away_team": "Houston Texans",
+            "commence_time": "2026-11-23T18:00:00Z",
+        },
+        {
+            "id": "wrong-time",
+            "home_team": "Indianapolis Colts",
+            "away_team": "Houston Texans",
+            "commence_time": "2026-11-23T20:00:00Z",
+        },
+        {
+            "id": "wrong-teams",
+            "home_team": "Houston Texans",
+            "away_team": "Indianapolis Colts",
+            "commence_time": "2026-11-23T18:00:00Z",
+        },
+    ]
+    result = _MODULE.resolve_odds_event_id(events, projections)
+    assert result["ok"] is True
+    assert result["odds_event_id"] == "correct"
+
+
+def test_resolve_odds_event_id_refuses_ambiguous_or_missing_events():
+    projections = [{
+        "home_team_name": "Indianapolis Colts",
+        "away_team_name": "Houston Texans",
+        "event_start": "2026-11-23T18:00:00+00:00",
+    }]
+    event = {
+        "id": "duplicate",
+        "home_team": "Indianapolis Colts",
+        "away_team": "Houston Texans",
+        "commence_time": "2026-11-23T18:00:00Z",
+    }
+    ambiguous = _MODULE.resolve_odds_event_id([event, {**event, "id": "duplicate-2"}], projections)
+    assert ambiguous["ok"] is False
+    missing = _MODULE.resolve_odds_event_id([], projections)
+    assert missing["ok"] is False
