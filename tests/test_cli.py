@@ -185,7 +185,11 @@ def test_report_never_presents_legacy_positive_edge_as_an_opportunity(tmp_path: 
     }]), encoding="utf-8")
     payload = evaluate_props_file(props, tmp_path / "out")
     rendered = Path(payload["out_md"]).read_text(encoding="utf-8")
-    assert payload["all"][0]["positive_edge"] is True
+    assert payload["all"][0]["legacy_positive_edge"] is True
+    assert payload["all"][0]["positive_edge"] is False
+    assert payload["all"][0]["model_prob"] is None
+    assert payload["all"][0]["expected_value_per_unit"] is None
+    assert payload["all"][0]["probability_output_status"] == "SUPPRESSED_UNCALIBRATED"
     assert payload["positive_edges"] == []
     assert "Positive edge" not in rendered
     assert "positive_edge=True" not in rendered
@@ -269,3 +273,22 @@ def test_agreeing_vendor_projection_values_across_books_are_not_conflicts(tmp_pa
     assert payload["summary"]["projection_conflicts"] == 0
     assert all(row["projection_conflict"] is False for row in payload["all"])
 
+
+
+def test_desk_json_suppresses_uncalibrated_probabilities_for_all_rows(tmp_path: Path):
+    props = tmp_path / "props.json"
+    props.write_text(json.dumps([{
+        "player": "Example Player", "sport": "nfl", "market": "rushing_yards",
+        "line": 40.5, "odds": -110, "is_over": True, "projected": 80,
+        "projection_source": "manual", "projection_at": "2026-01-01T18:00:00+00:00",
+        "retrieved_at": "2026-01-01T18:00:00+00:00", "book": "draftkings",
+    }]), encoding="utf-8")
+    payload = evaluate_props_file(props, tmp_path / "out")
+    row = payload["all"][0]
+    assert row["probability_output_status"] == "SUPPRESSED_UNCALIBRATED"
+    assert row["model_prob"] is None
+    assert row["win_probability"] is None
+    assert row["edge"] is None
+    assert row["expected_value_per_unit"] is None
+    assert row["positive_edge"] is False
+    assert row["qualified"] is False
