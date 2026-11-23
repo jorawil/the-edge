@@ -42,3 +42,21 @@ The key stays in the `ODDS_API_KEY` environment variable. Error text is scrubbed
 - Whether any returned FanDuel number matches the Indiana app.
 
 Those need a key and a side-by-side check against the book. This upgrade does not do that check.
+
+
+## Manual one-event player-prop scan
+
+A manual GitHub Actions workflow can compare the latest fresh archived point forecasts with current Odds API Over/Under prices for one selected NBA or NFL event. It makes at most one event-specific API request per workflow run and refuses to call the provider when the event has started, the forecast is older than six hours, or no requested market has a matching forecast.
+
+From the repository's **Actions** tab, choose **Manual Event Player Prop Scan** and enter:
+- Sport and the ESPN event ID shown in the daily forecast report.
+- Odds API market keys for the requested props.
+- Bookmaker keys (default: `fanduel,draftkings`).
+
+NBA keys supported by the scan: `player_points`, `player_rebounds`, `player_assists`, `player_threes`, `player_points_rebounds_assists`.
+
+NFL keys supported by the scan: `player_pass_yds`, `player_rush_yds`, `player_reception_yds`, `player_receptions`. The forecast engine's `REC` market is catches and is mapped to `RECEPTIONS` for matching; it is not treated as receiving yards.
+
+The report records the actual quota headers returned by the provider, prices that were stored or rejected, and missing books. The number of credits used can depend on the requested markets; check the returned `requests_last` and `requests_remaining` values. This workflow is manual only—there is no daily automatic Odds API polling.
+
+The FanDuel feed is the generic US feed, not verified as FanDuel Indiana. Prices are archived as FanDuel, never relabeled as Indiana. Forecasts are still uncalibrated point estimates; a screen pass is not a qualified bet. The workflow does not build or place tickets.
