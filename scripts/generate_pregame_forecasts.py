@@ -133,6 +133,8 @@ def upcoming_events(sport: str, *, start_day: date, days: int) -> tuple[list[dic
             "away_team_id": str(away_team["id"]),
             "home_team": home_team.get("abbreviation") or home_team.get("displayName"),
             "away_team": away_team.get("abbreviation") or away_team.get("displayName"),
+            "home_team_name": home_team.get("displayName") or home_team.get("name") or home_team.get("abbreviation"),
+            "away_team_name": away_team.get("displayName") or away_team.get("name") or away_team.get("abbreviation"),
         })
     output.sort(key=lambda row: (row["event_start"], row["event_id"]))
     return output, errors
@@ -294,6 +296,8 @@ def generate(
                         "player_name": player["player_name"],
                         "team": team,
                         "opponent": opponent,
+                        "home_team_name": event.get("home_team_name"),
+                        "away_team_name": event.get("away_team_name"),
                         "market": market,
                         "projected_value": result["projected_value"],
                         "projected_opportunity": result.get("projected_opportunity"),
@@ -341,6 +345,8 @@ def generate(
             "player_name": snapshot["player_name"],
             "team": snapshot["team"],
             "opponent": snapshot["opponent"],
+            "home_team_name": snapshot.get("home_team_name"),
+            "away_team_name": snapshot.get("away_team_name"),
             "market": snapshot["market"],
             "projected_value": snapshot["projected_value"],
             "projected_opportunity": snapshot.get("projected_opportunity"),

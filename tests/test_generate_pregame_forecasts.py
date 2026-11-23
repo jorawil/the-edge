@@ -46,6 +46,7 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
         "event_start": event_start.isoformat(),
         "home_team_id": "100", "away_team_id": "200",
         "home_team": "HOM", "away_team": "AWY",
+        "home_team_name": "Home City Team", "away_team_name": "Away City Team",
     }
     second_event = {**event, "event_id": "future-game-2",
                     "event_start": (event_start + timedelta(days=1)).isoformat()}
@@ -77,6 +78,8 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
     assert {row["market"] for row in report["forecasts"]} == {"PTS", "REB", "AST", "3PM", "PRA"}
     assert all(row["calibrated"] is False for row in report["forecasts"])
     assert all(row["projected_value"] is not None for row in report["forecasts"])
+    assert all(row["home_team_name"] == "Home City Team" for row in report["forecasts"])
+    assert all(row["away_team_name"] == "Away City Team" for row in report["forecasts"])
     assert all(row["warnings"] for row in report["forecasts"])
     assert index_calls == ["nba"]
     assert report["odds_api_calls"] == 0

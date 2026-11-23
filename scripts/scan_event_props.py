@@ -91,7 +91,8 @@ def build_projection_rows(
             counts["stale_or_invalid_time"] += 1
             continue
         player_id = str(row.get("player_id") or "").strip()
-        if not player_id or row.get("projected_value") is None:
+        if (not player_id or row.get("projected_value") is None
+                or not row.get("home_team_name") or not row.get("away_team_name")):
             counts["stale_or_invalid_time"] += 1
             continue
         key = (player_id, market)
@@ -114,6 +115,8 @@ def build_projection_rows(
                 "event_start": row.get("event_start"),
                 "team": row.get("team"),
                 "opponent": row.get("opponent"),
+                "home_team_name": row.get("home_team_name"),
+                "away_team_name": row.get("away_team_name"),
                 "market": collection_market,
                 "side": side,
                 "projected": row.get("projected_value"),
@@ -128,6 +131,34 @@ def build_projection_rows(
             "the Odds API was not called"
         )
     return projections, counts
+
+
+def _team_key(value: Any) -> str:
+    return "".join(character for character in str(value or "").casefold() if character.isalnum())
+
+
+def verify_event_matchup(fetched: dict[str, Any], projections: list[dict[str, Any]]) -> dict[str, Any]:
+    """Require exact normalized home/away team names before attaching provider prices."""
+    if not projections:
+        return {"ok": False, "reason": "no projection rows to verify"}
+    expected_home = projections[0].get("home_team_name")
+    expected_away = projections[0].get("away_team_name")
+    provider_home = fetched.get("home_team")
+    provider_away = fetched.get("away_team")
+    if not expected_home or not expected_away or not provider_home or not provider_away:
+        return {"ok": False, "reason": "full home/away team names are missing; prices were not archived"}
+    if _team_key(expected_home) != _team_key(provider_home) or _team_key(expected_away) != _team_key(provider_away):
+        return {
+            "ok": False,
+            "reason": "Odds API home/away teams do not exactly match the ESPN forecast matchup; prices were not archived",
+            "expected_home": expected_home, "expected_away": expected_away,
+            "provider_home": provider_home, "provider_away": provider_away,
+        }
+    return {
+        "ok": True,
+        "expected_home": expected_home, "expected_away": expected_away,
+        "provider_home": provider_home, "provider_away": provider_away,
+    }
 
 
 def remap_price_event_ids(prices: list[dict[str, Any]], espn_event_id: str) -> list[dict[str, Any]]:
@@ -173,6 +204,9 @@ def scan_event(
         "requests_used": fetched.get("requests_used"),
         "requests_last": fetched.get("requests_last"),
     }
+    matchup = verify_event_matchup(fetched, projections) if fetched.get("ok") else {
+        "ok": False, "reason": fetched.get("reason") or "Odds API did not return event props",
+    }
     if not fetched.get("ok"):
         result = {
             "ok": False,
@@ -185,6 +219,18 @@ def scan_event(
             "rejected": 0,
             "conflicts": 0,
             "provider_failures": 1,
+        }
+    elif not matchup.get("ok"):
+        result = {
+            "ok": False,
+            "reason": matchup.get("reason"),
+            "called": True,
+            "quota": quota,
+            "stored": 0,
+            "duplicates": 0,
+            "rejected": len(fetched.get("records") or []),
+            "conflicts": 0,
+            "provider_failures": 0,
         }
     else:
         # Odds API event IDs differ from ESPN event IDs. The user supplies
@@ -209,6 +255,7 @@ def scan_event(
         "forecast_selection": counts,
         "projections_supplied_to_matcher": len(projections),
         "collection": result,
+        "matchup_verification": matchup,
         "quota": result.get("quota"),
         "odds_api_calls": 1 if result.get("called") else 0,
         "calibration_claimed": False,
