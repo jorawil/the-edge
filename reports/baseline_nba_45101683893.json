@@ -1,0 +1,401 @@
+{
+  "ok": true,
+  "sport": "nba",
+  "method": "historical rolling mean; prediction uses only prior appearances",
+  "windows": [
+    5,
+    10,
+    20
+  ],
+  "minimum_history": 3,
+  "events_in_regular_season_data": 5178,
+  "player_market_actual_rows": 444512,
+  "prediction_rows": 1300236,
+  "split_event_counts": {
+    "train": 3124,
+    "validation": 1048,
+    "test": 1006
+  },
+  "exclusions": {
+    "excluded_missing_athlete_id": 30
+  },
+  "metrics": [
+    {
+      "split": "test",
+      "market": "3PM",
+      "window_games": 5,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 0.9389766881401492,
+      "rmse": 1.3262881410802458,
+      "mean_signed_error": 0.006928674051072898
+    },
+    {
+      "split": "test",
+      "market": "3PM",
+      "window_games": 10,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 0.912087716859001,
+      "rmse": 1.2790205180504408,
+      "mean_signed_error": 0.007734830812645151
+    },
+    {
+      "split": "test",
+      "market": "3PM",
+      "window_games": 20,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 0.9063462356548454,
+      "rmse": 1.263749793784606,
+      "mean_signed_error": 0.002883603901769673
+    },
+    {
+      "split": "test",
+      "market": "AST",
+      "window_games": 5,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 1.4328552007538893,
+      "rmse": 1.9655291117532332,
+      "mean_signed_error": 0.011389442461880705
+    },
+    {
+      "split": "test",
+      "market": "AST",
+      "window_games": 10,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 1.3961390950534482,
+      "rmse": 1.9102847222165136,
+      "mean_signed_error": 0.011433820256872581
+    },
+    {
+      "split": "test",
+      "market": "AST",
+      "window_games": 20,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 1.3974957306051479,
+      "rmse": 1.9003395717095588,
+      "mean_signed_error": 0.0019719994554290936
+    },
+    {
+      "split": "test",
+      "market": "PTS",
+      "window_games": 5,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 4.888115431555206,
+      "rmse": 6.414563263845459,
+      "mean_signed_error": 0.016874449645455807
+    },
+    {
+      "split": "test",
+      "market": "PTS",
+      "window_games": 10,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 4.76768029375783,
+      "rmse": 6.245581604877584,
+      "mean_signed_error": -0.006793701553167657
+    },
+    {
+      "split": "test",
+      "market": "PTS",
+      "window_games": 20,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 4.782036798171139,
+      "rmse": 6.249765065343361,
+      "mean_signed_error": -0.061773665532957434
+    },
+    {
+      "split": "test",
+      "market": "REB",
+      "window_games": 5,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 1.9965325732647419,
+      "rmse": 2.6562367941464626,
+      "mean_signed_error": 0.003674437286616918
+    },
+    {
+      "split": "test",
+      "market": "REB",
+      "window_games": 10,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 1.9535474097565677,
+      "rmse": 2.5846579218876786,
+      "mean_signed_error": -0.01225112204279836
+    },
+    {
+      "split": "test",
+      "market": "REB",
+      "window_games": 20,
+      "n_player_game_predictions": 21577,
+      "n_events": 1006,
+      "mae": 1.9444221391017829,
+      "rmse": 2.563208927904262,
+      "mean_signed_error": -0.023139834649426042
+    },
+    {
+      "split": "train",
+      "market": "3PM",
+      "window_games": 5,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 0.90392708284913,
+      "rmse": 1.3033929102671882,
+      "mean_signed_error": 0.004541181817712284
+    },
+    {
+      "split": "train",
+      "market": "3PM",
+      "window_games": 10,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 0.880566506237031,
+      "rmse": 1.2580639186410718,
+      "mean_signed_error": 0.008725793214242057
+    },
+    {
+      "split": "train",
+      "market": "3PM",
+      "window_games": 20,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 0.873184066568087,
+      "rmse": 1.2424887602773096,
+      "mean_signed_error": 0.01418320627574043
+    },
+    {
+      "split": "train",
+      "market": "AST",
+      "window_games": 5,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 1.3845677290733769,
+      "rmse": 1.903429867454099,
+      "mean_signed_error": 0.009234468047743739
+    },
+    {
+      "split": "train",
+      "market": "AST",
+      "window_games": 10,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 1.3496843977936805,
+      "rmse": 1.8501780391194083,
+      "mean_signed_error": 0.016761668901072984
+    },
+    {
+      "split": "train",
+      "market": "AST",
+      "window_games": 20,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 1.3409927082806063,
+      "rmse": 1.8351672752878907,
+      "mean_signed_error": 0.026308921757688498
+    },
+    {
+      "split": "train",
+      "market": "PTS",
+      "window_games": 5,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 4.802684165130128,
+      "rmse": 6.344169512065315,
+      "mean_signed_error": 0.024271112557265117
+    },
+    {
+      "split": "train",
+      "market": "PTS",
+      "window_games": 10,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 4.68633114541054,
+      "rmse": 6.1693323035364775,
+      "mean_signed_error": 0.043213830101990744
+    },
+    {
+      "split": "train",
+      "market": "PTS",
+      "window_games": 20,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 4.663341130929103,
+      "rmse": 6.126096274268536,
+      "mean_signed_error": 0.06352184461218252
+    },
+    {
+      "split": "train",
+      "market": "REB",
+      "window_games": 5,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 1.9851270807831958,
+      "rmse": 2.6354486174763134,
+      "mean_signed_error": 0.010566479183129578
+    },
+    {
+      "split": "train",
+      "market": "REB",
+      "window_games": 10,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 1.9352700790982296,
+      "rmse": 2.5632109591927406,
+      "mean_signed_error": 0.017628525092616573
+    },
+    {
+      "split": "train",
+      "market": "REB",
+      "window_games": 20,
+      "n_player_game_predictions": 64539,
+      "n_events": 3081,
+      "mae": 1.9241964573847816,
+      "rmse": 2.5472484179792105,
+      "mean_signed_error": 0.026087099335382936
+    },
+    {
+      "split": "validation",
+      "market": "3PM",
+      "window_games": 5,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 0.937283206667566,
+      "rmse": 1.3319112482683595,
+      "mean_signed_error": 0.004044310533495222
+    },
+    {
+      "split": "validation",
+      "market": "3PM",
+      "window_games": 10,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 0.9098904764046194,
+      "rmse": 1.2819852211479672,
+      "mean_signed_error": 0.0061136665545983345
+    },
+    {
+      "split": "validation",
+      "market": "3PM",
+      "window_games": 20,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 0.9025807607254679,
+      "rmse": 1.2657729746173345,
+      "mean_signed_error": 0.013466244014530412
+    },
+    {
+      "split": "validation",
+      "market": "AST",
+      "window_games": 5,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 1.411402917060155,
+      "rmse": 1.9329382991804183,
+      "mean_signed_error": 0.00484327921931915
+    },
+    {
+      "split": "validation",
+      "market": "AST",
+      "window_games": 10,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 1.3811640259227613,
+      "rmse": 1.882733873929059,
+      "mean_signed_error": 0.013210001063578435
+    },
+    {
+      "split": "validation",
+      "market": "AST",
+      "window_games": 20,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 1.3705152751820973,
+      "rmse": 1.8687705868111524,
+      "mean_signed_error": 0.03486223660732864
+    },
+    {
+      "split": "validation",
+      "market": "PTS",
+      "window_games": 5,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 4.912457465785253,
+      "rmse": 6.507094341827669,
+      "mean_signed_error": 0.036380057261920826
+    },
+    {
+      "split": "validation",
+      "market": "PTS",
+      "window_games": 10,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 4.795910862133824,
+      "rmse": 6.332988473620829,
+      "mean_signed_error": 0.07222768287660135
+    },
+    {
+      "split": "validation",
+      "market": "PTS",
+      "window_games": 20,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 4.792993512975882,
+      "rmse": 6.306263277627644,
+      "mean_signed_error": 0.1594952678921992
+    },
+    {
+      "split": "validation",
+      "market": "REB",
+      "window_games": 5,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 2.0551955449626,
+      "rmse": 2.7188607994542258,
+      "mean_signed_error": 0.0035458919818320816
+    },
+    {
+      "split": "validation",
+      "market": "REB",
+      "window_games": 10,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 1.9953243057652377,
+      "rmse": 2.638647274896933,
+      "mean_signed_error": 0.013793024067566502
+    },
+    {
+      "split": "validation",
+      "market": "REB",
+      "window_games": 20,
+      "n_player_game_predictions": 22237,
+      "n_events": 1048,
+      "mae": 1.9854495302453556,
+      "rmse": 2.623677571730232,
+      "mean_signed_error": 0.02699065233682461
+    }
+  ],
+  "minimum_test_events_for_descriptive_review": 30,
+  "evaluation_warnings": [],
+  "limitations": [
+    "This is a baseline benchmark, not a calibrated projection model.",
+    "No sportsbook odds, historical prices, edge, EV, profit, or ROI are evaluated.",
+    "No projection is generated for a player-market without enough prior appearances.",
+    "Only regular-season records with explicit season_type_id=2 and timezone-aware timestamps are used.",
+    "Players are joined by ESPN athlete ID; rows without IDs are excluded.",
+    "The train/validation/test split is chronological by event and keeps each event in one split.",
+    "Fixed windows are reported separately; no window is selected using the held-out test slice.",
+    "This does not account for injuries, minutes, role changes, opponents, rest, or lineup context."
+  ],
+  "metrics_definition": {
+    "mae": "mean absolute error in stat units; lower is better",
+    "rmse": "root mean squared error in stat units; lower is better",
+    "mean_signed_error": "actual minus projection; positive means underprojection"
+  }
+}

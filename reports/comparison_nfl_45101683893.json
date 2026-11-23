@@ -1,0 +1,1187 @@
+{
+  "ok": true,
+  "sport": "nfl",
+  "methods": [
+    "rolling_mean",
+    "season_to_date_mean",
+    "recency_weighted_mean"
+  ],
+  "windows": [
+    5,
+    10,
+    20
+  ],
+  "minimum_history": 3,
+  "events_in_regular_season_data": 1248,
+  "player_market_actual_rows": 52213,
+  "prediction_rows": 303737,
+  "split_event_counts": {
+    "train": 751,
+    "validation": 242,
+    "test": 255
+  },
+  "exclusions": {
+    "excluded_invalid_stat": 1015
+  },
+  "metrics": [
+    {
+      "split": "test",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 554,
+      "n_events": 255,
+      "mae": 69.95878459687124,
+      "rmse": 86.85229820084065,
+      "mean_signed_error": -2.4539711191335742
+    },
+    {
+      "split": "test",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 554,
+      "n_events": 255,
+      "mae": 66.86821802345268,
+      "rmse": 84.18147227430184,
+      "mean_signed_error": -4.170958684316085
+    },
+    {
+      "split": "test",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 554,
+      "n_events": 255,
+      "mae": 66.5066519716947,
+      "rmse": 83.77562292014596,
+      "mean_signed_error": -4.504928229612346
+    },
+    {
+      "split": "test",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 554,
+      "n_events": 255,
+      "mae": 70.16741877256318,
+      "rmse": 88.14008964499274,
+      "mean_signed_error": -3.0529783393501804
+    },
+    {
+      "split": "test",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 554,
+      "n_events": 255,
+      "mae": 66.77601355223196,
+      "rmse": 84.76338547187662,
+      "mean_signed_error": -4.224563778580025
+    },
+    {
+      "split": "test",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 554,
+      "n_events": 255,
+      "mae": 67.3797383570857,
+      "rmse": 84.91810026882689,
+      "mean_signed_error": -3.1085508933601473
+    },
+    {
+      "split": "test",
+      "market": "PASS_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 382,
+      "n_events": 204,
+      "mae": 65.75609077876749,
+      "rmse": 82.92667393894666,
+      "mean_signed_error": -2.3777458470848525
+    },
+    {
+      "split": "test",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 3796,
+      "n_events": 255,
+      "mae": 1.4213294696171408,
+      "rmse": 1.9106571845693547,
+      "mean_signed_error": -0.014743589743589747
+    },
+    {
+      "split": "test",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 3796,
+      "n_events": 255,
+      "mae": 1.3749211405033324,
+      "rmse": 1.8370140056113144,
+      "mean_signed_error": -0.03528003579373442
+    },
+    {
+      "split": "test",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 3796,
+      "n_events": 255,
+      "mae": 1.3744314266738271,
+      "rmse": 1.82270016596659,
+      "mean_signed_error": -0.08153357449057747
+    },
+    {
+      "split": "test",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 3796,
+      "n_events": 255,
+      "mae": 1.402006498068142,
+      "rmse": 1.882405583694548,
+      "mean_signed_error": -0.019551282051282055
+    },
+    {
+      "split": "test",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 3796,
+      "n_events": 255,
+      "mae": 1.370823924933514,
+      "rmse": 1.8298297085071085,
+      "mean_signed_error": -0.0464735226721528
+    },
+    {
+      "split": "test",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 3796,
+      "n_events": 255,
+      "mae": 1.3999077889716094,
+      "rmse": 1.8463425203300299,
+      "mean_signed_error": -0.11612563142400847
+    },
+    {
+      "split": "test",
+      "market": "REC",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 2702,
+      "n_events": 207,
+      "mae": 1.4272540987360074,
+      "rmse": 1.9090209975153156,
+      "mean_signed_error": -0.055804315276601596
+    },
+    {
+      "split": "test",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 3741,
+      "n_events": 255,
+      "mae": 19.900552436959813,
+      "rmse": 27.518908595257543,
+      "mean_signed_error": -0.20214737592444088
+    },
+    {
+      "split": "test",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 3741,
+      "n_events": 255,
+      "mae": 19.230713462189005,
+      "rmse": 26.438473144576083,
+      "mean_signed_error": -0.450602658501616
+    },
+    {
+      "split": "test",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 3741,
+      "n_events": 255,
+      "mae": 19.126920652435942,
+      "rmse": 26.05407487306223,
+      "mean_signed_error": -0.932263131087368
+    },
+    {
+      "split": "test",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 3741,
+      "n_events": 255,
+      "mae": 19.578397041789184,
+      "rmse": 27.086945890294206,
+      "mean_signed_error": -0.26303573019691706
+    },
+    {
+      "split": "test",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 3741,
+      "n_events": 255,
+      "mae": 19.103411361871665,
+      "rmse": 26.216133315494762,
+      "mean_signed_error": -0.5761138902678599
+    },
+    {
+      "split": "test",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 3741,
+      "n_events": 255,
+      "mae": 19.305907863134745,
+      "rmse": 26.202707740435457,
+      "mean_signed_error": -1.2692862266074507
+    },
+    {
+      "split": "test",
+      "market": "REC_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 2657,
+      "n_events": 207,
+      "mae": 20.319280091312624,
+      "rmse": 27.746901189562493,
+      "mean_signed_error": -0.4269485843217274
+    },
+    {
+      "split": "test",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 1783,
+      "n_events": 255,
+      "mae": 18.490091605907647,
+      "rmse": 26.506737556954363,
+      "mean_signed_error": -0.09405496354458776
+    },
+    {
+      "split": "test",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 1783,
+      "n_events": 255,
+      "mae": 18.215982110990524,
+      "rmse": 25.852648451106226,
+      "mean_signed_error": -0.19624860090367668
+    },
+    {
+      "split": "test",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 1783,
+      "n_events": 255,
+      "mae": 18.151135723388805,
+      "rmse": 25.70988558302164,
+      "mean_signed_error": -0.3352923796233417
+    },
+    {
+      "split": "test",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 1783,
+      "n_events": 255,
+      "mae": 18.543194989717705,
+      "rmse": 26.503935648869522,
+      "mean_signed_error": -0.18888577304169007
+    },
+    {
+      "split": "test",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 1783,
+      "n_events": 255,
+      "mae": 18.47649827738162,
+      "rmse": 26.215179336157906,
+      "mean_signed_error": -0.26640515806247717
+    },
+    {
+      "split": "test",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 1783,
+      "n_events": 255,
+      "mae": 18.336018873358842,
+      "rmse": 26.003651917549092,
+      "mean_signed_error": -0.4143949851426206
+    },
+    {
+      "split": "test",
+      "market": "RUSH_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 1190,
+      "n_events": 207,
+      "mae": 19.549880614250362,
+      "rmse": 27.682594634251657,
+      "mean_signed_error": 1.5014574034742103
+    },
+    {
+      "split": "train",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 1447,
+      "n_events": 695,
+      "mae": 67.2770329417185,
+      "rmse": 85.98547396112754,
+      "mean_signed_error": -2.469062428011979
+    },
+    {
+      "split": "train",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 1447,
+      "n_events": 695,
+      "mae": 65.43543969660071,
+      "rmse": 83.73213600517178,
+      "mean_signed_error": -2.7577043013808735
+    },
+    {
+      "split": "train",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 1447,
+      "n_events": 695,
+      "mae": 65.255747665764,
+      "rmse": 83.50290151657893,
+      "mean_signed_error": -3.36932965786813
+    },
+    {
+      "split": "train",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 1447,
+      "n_events": 695,
+      "mae": 67.0154803040774,
+      "rmse": 85.84135019133957,
+      "mean_signed_error": -1.9044690163556783
+    },
+    {
+      "split": "train",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 1447,
+      "n_events": 695,
+      "mae": 65.6646787003214,
+      "rmse": 83.91770414075265,
+      "mean_signed_error": -2.173150524895514
+    },
+    {
+      "split": "train",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 1447,
+      "n_events": 695,
+      "mae": 65.81108242238003,
+      "rmse": 84.1257779783256,
+      "mean_signed_error": -2.9595803994534102
+    },
+    {
+      "split": "train",
+      "market": "PASS_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 1147,
+      "n_events": 599,
+      "mae": 64.16639291397357,
+      "rmse": 82.47753897041929,
+      "mean_signed_error": 0.5547220652059364
+    },
+    {
+      "split": "train",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 10013,
+      "n_events": 703,
+      "mae": 1.477129731349246,
+      "rmse": 1.967884198034432,
+      "mean_signed_error": -0.023060021971437132
+    },
+    {
+      "split": "train",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 10013,
+      "n_events": 703,
+      "mae": 1.4390108875777508,
+      "rmse": 1.912557184519147,
+      "mean_signed_error": -0.02967680255206471
+    },
+    {
+      "split": "train",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 10013,
+      "n_events": 703,
+      "mae": 1.4373604042088803,
+      "rmse": 1.9024963246418822,
+      "mean_signed_error": -0.04563587930077592
+    },
+    {
+      "split": "train",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 10013,
+      "n_events": 703,
+      "mae": 1.4644994840041279,
+      "rmse": 1.9507878975478297,
+      "mean_signed_error": -0.025047438330170778
+    },
+    {
+      "split": "train",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 10013,
+      "n_events": 703,
+      "mae": 1.4384984837171992,
+      "rmse": 1.9091220075567703,
+      "mean_signed_error": -0.03153182608640513
+    },
+    {
+      "split": "train",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 10013,
+      "n_events": 703,
+      "mae": 1.4479082482653807,
+      "rmse": 1.9100260774015443,
+      "mean_signed_error": -0.046948292366311636
+    },
+    {
+      "split": "train",
+      "market": "REC",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 8133,
+      "n_events": 607,
+      "mae": 1.460988151499033,
+      "rmse": 1.9352126476966878,
+      "mean_signed_error": -0.006637874195970838
+    },
+    {
+      "split": "train",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 9850,
+      "n_events": 703,
+      "mae": 20.28101861252115,
+      "rmse": 28.10958354920337,
+      "mean_signed_error": -0.29500846023688665
+    },
+    {
+      "split": "train",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 9850,
+      "n_events": 703,
+      "mae": 19.72182677390292,
+      "rmse": 27.147841069965413,
+      "mean_signed_error": -0.392152276939079
+    },
+    {
+      "split": "train",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 9850,
+      "n_events": 703,
+      "mae": 19.63220687871025,
+      "rmse": 26.887911037897066,
+      "mean_signed_error": -0.5836339599486808
+    },
+    {
+      "split": "train",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 9850,
+      "n_events": 703,
+      "mae": 20.124744500846024,
+      "rmse": 27.77569936544725,
+      "mean_signed_error": -0.29611167512690356
+    },
+    {
+      "split": "train",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 9850,
+      "n_events": 703,
+      "mae": 19.66497671420514,
+      "rmse": 26.903540536218895,
+      "mean_signed_error": -0.403109580211103
+    },
+    {
+      "split": "train",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 9850,
+      "n_events": 703,
+      "mae": 19.648579573414995,
+      "rmse": 26.801983054062262,
+      "mean_signed_error": -0.6190589297065976
+    },
+    {
+      "split": "train",
+      "market": "REC_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 7977,
+      "n_events": 607,
+      "mae": 20.0312797629223,
+      "rmse": 27.565351150509944,
+      "mean_signed_error": 0.3228185171631956
+    },
+    {
+      "split": "train",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 4537,
+      "n_events": 703,
+      "mae": 19.498655499228565,
+      "rmse": 27.46784280325621,
+      "mean_signed_error": -0.45501432664756447
+    },
+    {
+      "split": "train",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 4537,
+      "n_events": 703,
+      "mae": 19.154881396858475,
+      "rmse": 26.91174613657249,
+      "mean_signed_error": -0.6311173226646006
+    },
+    {
+      "split": "train",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 4537,
+      "n_events": 703,
+      "mae": 19.190276111322007,
+      "rmse": 26.87724169258539,
+      "mean_signed_error": -0.822873888600293
+    },
+    {
+      "split": "train",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 4537,
+      "n_events": 703,
+      "mae": 19.48898317537286,
+      "rmse": 27.480081075892034,
+      "mean_signed_error": -0.5003710234369261
+    },
+    {
+      "split": "train",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 4537,
+      "n_events": 703,
+      "mae": 19.252601712200565,
+      "rmse": 27.150102848271445,
+      "mean_signed_error": -0.5531975188135646
+    },
+    {
+      "split": "train",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 4537,
+      "n_events": 703,
+      "mae": 19.459474344741594,
+      "rmse": 27.267449669136404,
+      "mean_signed_error": -0.6196527863978533
+    },
+    {
+      "split": "train",
+      "market": "RUSH_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 3535,
+      "n_events": 607,
+      "mae": 19.892359704965788,
+      "rmse": 27.778637179136727,
+      "mean_signed_error": 0.28171785349649564
+    },
+    {
+      "split": "validation",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 538,
+      "n_events": 242,
+      "mae": 69.45111524163568,
+      "rmse": 87.06495921488525,
+      "mean_signed_error": -4.164250309789343
+    },
+    {
+      "split": "validation",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 538,
+      "n_events": 242,
+      "mae": 67.81413792733495,
+      "rmse": 85.26308721785063,
+      "mean_signed_error": -4.642708819474619
+    },
+    {
+      "split": "validation",
+      "market": "PASS_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 538,
+      "n_events": 242,
+      "mae": 67.42759601991867,
+      "rmse": 85.1297966303873,
+      "mean_signed_error": -4.961298296748796
+    },
+    {
+      "split": "validation",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 538,
+      "n_events": 242,
+      "mae": 69.78952912019827,
+      "rmse": 88.171461460428,
+      "mean_signed_error": -4.548822800495664
+    },
+    {
+      "split": "validation",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 538,
+      "n_events": 242,
+      "mae": 68.86360196494954,
+      "rmse": 87.28356012004734,
+      "mean_signed_error": -3.625596713282586
+    },
+    {
+      "split": "validation",
+      "market": "PASS_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 538,
+      "n_events": 242,
+      "mae": 68.54172607483164,
+      "rmse": 86.68390428340349,
+      "mean_signed_error": -3.567276199402049
+    },
+    {
+      "split": "validation",
+      "market": "PASS_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 367,
+      "n_events": 193,
+      "mae": 65.8587289300164,
+      "rmse": 82.84720266624342,
+      "mean_signed_error": 3.9314890717819875
+    },
+    {
+      "split": "validation",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 3535,
+      "n_events": 242,
+      "mae": 1.4400471475719,
+      "rmse": 1.9295167094494499,
+      "mean_signed_error": -0.03899104196133899
+    },
+    {
+      "split": "validation",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 3535,
+      "n_events": 242,
+      "mae": 1.4069197327896055,
+      "rmse": 1.8732587305370112,
+      "mean_signed_error": -0.05993544252384422
+    },
+    {
+      "split": "validation",
+      "market": "REC",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 3535,
+      "n_events": 242,
+      "mae": 1.4018923379718349,
+      "rmse": 1.854541788909006,
+      "mean_signed_error": -0.0708456941168744
+    },
+    {
+      "split": "validation",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 3535,
+      "n_events": 242,
+      "mae": 1.4372041489863272,
+      "rmse": 1.9179035838238208,
+      "mean_signed_error": -0.04865157944365866
+    },
+    {
+      "split": "validation",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 3535,
+      "n_events": 242,
+      "mae": 1.4241502211445634,
+      "rmse": 1.8821565317256495,
+      "mean_signed_error": -0.07085460586875014
+    },
+    {
+      "split": "validation",
+      "market": "REC",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 3535,
+      "n_events": 242,
+      "mae": 1.417567955453146,
+      "rmse": 1.8734348201704911,
+      "mean_signed_error": -0.055021429129902114
+    },
+    {
+      "split": "validation",
+      "market": "REC",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 2564,
+      "n_events": 194,
+      "mae": 1.4609425210341747,
+      "rmse": 1.9304162109579535,
+      "mean_signed_error": 0.0742147456461029
+    },
+    {
+      "split": "validation",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 3470,
+      "n_events": 242,
+      "mae": 19.565158501440923,
+      "rmse": 26.988387043736836,
+      "mean_signed_error": -0.5576080691642652
+    },
+    {
+      "split": "validation",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 3470,
+      "n_events": 242,
+      "mae": 19.042315747013152,
+      "rmse": 26.108671980157332,
+      "mean_signed_error": -0.9325720772983022
+    },
+    {
+      "split": "validation",
+      "market": "REC_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 3470,
+      "n_events": 242,
+      "mae": 18.792410946115098,
+      "rmse": 25.658577241355758,
+      "mean_signed_error": -1.2091006455796205
+    },
+    {
+      "split": "validation",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 3470,
+      "n_events": 242,
+      "mae": 19.566844380403456,
+      "rmse": 26.81655017619801,
+      "mean_signed_error": -0.7335878962536023
+    },
+    {
+      "split": "validation",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 3470,
+      "n_events": 242,
+      "mae": 19.083367869722338,
+      "rmse": 26.03270335143496,
+      "mean_signed_error": -1.1380826586158
+    },
+    {
+      "split": "validation",
+      "market": "REC_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 3470,
+      "n_events": 242,
+      "mae": 18.855580203170017,
+      "rmse": 25.697799732396646,
+      "mean_signed_error": -1.1371817231747217
+    },
+    {
+      "split": "validation",
+      "market": "REC_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 2505,
+      "n_events": 194,
+      "mae": 19.751458935830193,
+      "rmse": 27.118494916318546,
+      "mean_signed_error": 0.9818057325242953
+    },
+    {
+      "split": "validation",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 1646,
+      "n_events": 242,
+      "mae": 18.933070068853787,
+      "rmse": 27.907508777612872,
+      "mean_signed_error": -0.1652693398136897
+    },
+    {
+      "split": "validation",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 1646,
+      "n_events": 242,
+      "mae": 18.628341565279595,
+      "rmse": 27.14183457811071,
+      "mean_signed_error": -0.4589288125132596
+    },
+    {
+      "split": "validation",
+      "market": "RUSH_YDS",
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 1646,
+      "n_events": 242,
+      "mae": 18.793994114599606,
+      "rmse": 26.963981643948983,
+      "mean_signed_error": -1.0253522875412793
+    },
+    {
+      "split": "validation",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 5,
+      "n_player_game_predictions": 1646,
+      "n_events": 242,
+      "mae": 18.79933171324423,
+      "rmse": 27.66005169129798,
+      "mean_signed_error": -0.1499392466585662
+    },
+    {
+      "split": "validation",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 10,
+      "n_player_game_predictions": 1646,
+      "n_events": 242,
+      "mae": 18.841682096086714,
+      "rmse": 27.167643025807806,
+      "mean_signed_error": -0.7215385060464039
+    },
+    {
+      "split": "validation",
+      "market": "RUSH_YDS",
+      "method": "rolling_mean",
+      "window_games": 20,
+      "n_player_game_predictions": 1646,
+      "n_events": 242,
+      "mae": 19.13752703256997,
+      "rmse": 27.410643099751038,
+      "mean_signed_error": -1.3571285503202029
+    },
+    {
+      "split": "validation",
+      "market": "RUSH_YDS",
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "n_player_game_predictions": 1118,
+      "n_events": 194,
+      "mae": 20.028968354493845,
+      "rmse": 29.036652876304082,
+      "mean_signed_error": 1.8168337364781908
+    }
+  ],
+  "validation_rankings": [
+    {
+      "market": "PASS_YDS",
+      "rank": 1,
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "validation_mae": 65.8587289300164,
+      "validation_rmse": 82.84720266624342
+    },
+    {
+      "market": "PASS_YDS",
+      "rank": 2,
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "validation_mae": 67.42759601991867,
+      "validation_rmse": 85.1297966303873
+    },
+    {
+      "market": "PASS_YDS",
+      "rank": 3,
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "validation_mae": 67.81413792733495,
+      "validation_rmse": 85.26308721785063
+    },
+    {
+      "market": "PASS_YDS",
+      "rank": 4,
+      "method": "rolling_mean",
+      "window_games": 20,
+      "validation_mae": 68.54172607483164,
+      "validation_rmse": 86.68390428340349
+    },
+    {
+      "market": "PASS_YDS",
+      "rank": 5,
+      "method": "rolling_mean",
+      "window_games": 10,
+      "validation_mae": 68.86360196494954,
+      "validation_rmse": 87.28356012004734
+    },
+    {
+      "market": "PASS_YDS",
+      "rank": 6,
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "validation_mae": 69.45111524163568,
+      "validation_rmse": 87.06495921488525
+    },
+    {
+      "market": "PASS_YDS",
+      "rank": 7,
+      "method": "rolling_mean",
+      "window_games": 5,
+      "validation_mae": 69.78952912019827,
+      "validation_rmse": 88.171461460428
+    },
+    {
+      "market": "REC",
+      "rank": 1,
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "validation_mae": 1.4018923379718349,
+      "validation_rmse": 1.854541788909006
+    },
+    {
+      "market": "REC",
+      "rank": 2,
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "validation_mae": 1.4069197327896055,
+      "validation_rmse": 1.8732587305370112
+    },
+    {
+      "market": "REC",
+      "rank": 3,
+      "method": "rolling_mean",
+      "window_games": 20,
+      "validation_mae": 1.417567955453146,
+      "validation_rmse": 1.8734348201704911
+    },
+    {
+      "market": "REC",
+      "rank": 4,
+      "method": "rolling_mean",
+      "window_games": 10,
+      "validation_mae": 1.4241502211445634,
+      "validation_rmse": 1.8821565317256495
+    },
+    {
+      "market": "REC",
+      "rank": 5,
+      "method": "rolling_mean",
+      "window_games": 5,
+      "validation_mae": 1.4372041489863272,
+      "validation_rmse": 1.9179035838238208
+    },
+    {
+      "market": "REC",
+      "rank": 6,
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "validation_mae": 1.4400471475719,
+      "validation_rmse": 1.9295167094494499
+    },
+    {
+      "market": "REC",
+      "rank": 7,
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "validation_mae": 1.4609425210341747,
+      "validation_rmse": 1.9304162109579535
+    },
+    {
+      "market": "REC_YDS",
+      "rank": 1,
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "validation_mae": 18.792410946115098,
+      "validation_rmse": 25.658577241355758
+    },
+    {
+      "market": "REC_YDS",
+      "rank": 2,
+      "method": "rolling_mean",
+      "window_games": 20,
+      "validation_mae": 18.855580203170017,
+      "validation_rmse": 25.697799732396646
+    },
+    {
+      "market": "REC_YDS",
+      "rank": 3,
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "validation_mae": 19.042315747013152,
+      "validation_rmse": 26.108671980157332
+    },
+    {
+      "market": "REC_YDS",
+      "rank": 4,
+      "method": "rolling_mean",
+      "window_games": 10,
+      "validation_mae": 19.083367869722338,
+      "validation_rmse": 26.03270335143496
+    },
+    {
+      "market": "REC_YDS",
+      "rank": 5,
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "validation_mae": 19.565158501440923,
+      "validation_rmse": 26.988387043736836
+    },
+    {
+      "market": "REC_YDS",
+      "rank": 6,
+      "method": "rolling_mean",
+      "window_games": 5,
+      "validation_mae": 19.566844380403456,
+      "validation_rmse": 26.81655017619801
+    },
+    {
+      "market": "REC_YDS",
+      "rank": 7,
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "validation_mae": 19.751458935830193,
+      "validation_rmse": 27.118494916318546
+    },
+    {
+      "market": "RUSH_YDS",
+      "rank": 1,
+      "method": "recency_weighted_mean",
+      "window_games": 10,
+      "validation_mae": 18.628341565279595,
+      "validation_rmse": 27.14183457811071
+    },
+    {
+      "market": "RUSH_YDS",
+      "rank": 2,
+      "method": "recency_weighted_mean",
+      "window_games": 20,
+      "validation_mae": 18.793994114599606,
+      "validation_rmse": 26.963981643948983
+    },
+    {
+      "market": "RUSH_YDS",
+      "rank": 3,
+      "method": "rolling_mean",
+      "window_games": 5,
+      "validation_mae": 18.79933171324423,
+      "validation_rmse": 27.66005169129798
+    },
+    {
+      "market": "RUSH_YDS",
+      "rank": 4,
+      "method": "rolling_mean",
+      "window_games": 10,
+      "validation_mae": 18.841682096086714,
+      "validation_rmse": 27.167643025807806
+    },
+    {
+      "market": "RUSH_YDS",
+      "rank": 5,
+      "method": "recency_weighted_mean",
+      "window_games": 5,
+      "validation_mae": 18.933070068853787,
+      "validation_rmse": 27.907508777612872
+    },
+    {
+      "market": "RUSH_YDS",
+      "rank": 6,
+      "method": "rolling_mean",
+      "window_games": 20,
+      "validation_mae": 19.13752703256997,
+      "validation_rmse": 27.410643099751038
+    },
+    {
+      "market": "RUSH_YDS",
+      "rank": 7,
+      "method": "season_to_date_mean",
+      "window_games": null,
+      "validation_mae": 20.028968354493845,
+      "validation_rmse": 29.036652876304082
+    }
+  ],
+  "evaluation_warnings": [],
+  "limitations": [
+    "All forecasts use only appearances strictly before the forecast event; same-time events are scored before any same-time actual is appended.",
+    "Season-to-date history resets by ESPN season_year; calendar year is used only when season_year is absent.",
+    "Recency weighting uses linear weights within each configured lookback window; it is not a calibrated distribution.",
+    "Validation rankings are descriptive method comparisons, not proof of betting edge or profitability.",
+    "The held-out test split is reported but never used to rank or select a method.",
+    "No injuries, minutes, role, opponent, rest, lineup context, sportsbook odds, EV, ROI, or calibration are modeled."
+  ]
+}
