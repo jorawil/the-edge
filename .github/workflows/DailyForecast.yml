@@ -92,6 +92,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
+          if [ -f forecasts/forecast_archive.sqlite ]; then
+            # The repository ignores *.sqlite globally; this archive must be durable.
+            git add -f forecasts/forecast_archive.sqlite
+          else
+            echo "::error::Forecast archive was not created."
+            exit 1
+          fi
           if git diff --cached --quiet; then
             echo "No historical data, forecast archive, or report changes."
           else

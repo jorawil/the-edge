@@ -9,5 +9,6 @@ dist/
 build/
 out/
 *.sqlite
+!forecasts/forecast_archive.sqlite
 *.sqlite3
 data/pregame_archive.sqlite
