@@ -374,16 +374,27 @@ def forecast_metrics(path: Path) -> dict[str, Any]:
         return {"ok": True, "groups": [], "reason": "archive_not_created"}
     with connect(path) as conn:
         rows = conn.execute("""
-            SELECT s.sport,s.market,s.model_version,s.event_id,
-                   s.projected_value,r.actual_stat,r.result_id
-            FROM forecast_snapshots s
-            JOIN forecast_results r ON r.snapshot_id=s.snapshot_id
-            WHERE r.game_status='final' AND r.actual_stat IS NOT NULL
-              AND NOT EXISTS (
-                SELECT 1 FROM forecast_results newer
-                WHERE newer.supersedes_result_id=r.result_id
-              )
-            ORDER BY s.sport,s.market,s.model_version,s.event_id
+            WITH active_results AS (
+                SELECT r.* FROM forecast_results r
+                WHERE r.game_status='final' AND r.actual_stat IS NOT NULL
+                  AND NOT EXISTS (
+                    SELECT 1 FROM forecast_results newer
+                    WHERE newer.supersedes_result_id=r.result_id
+                  )
+            ),
+            ranked AS (
+                SELECT s.sport,s.market,s.model_version,s.event_id,s.player_id,
+                       s.projected_value,r.actual_stat,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY s.sport,s.event_id,s.player_id,s.market,s.model_version
+                           ORDER BY s.projection_at DESC,s.archived_at DESC
+                       ) AS forecast_rank
+                FROM forecast_snapshots s
+                JOIN active_results r ON r.snapshot_id=s.snapshot_id
+            )
+            SELECT sport,market,model_version,event_id,player_id,projected_value,actual_stat
+            FROM ranked WHERE forecast_rank=1
+            ORDER BY sport,market,model_version,event_id,player_id
         """).fetchall()
     groups: dict[tuple[str, str, str], list[tuple[float, float, str]]] = {}
     for row in rows:
