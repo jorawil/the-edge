@@ -62,3 +62,12 @@ def test_build_projection_rows_rejects_started_events_and_unknown_markets():
             [_forecast("PASS_YDS")], sport="nfl", event_id="event-1",
             markets=["player_tds"], now=now,
         )
+
+
+
+def test_remap_price_event_ids_keeps_provider_id_for_audit():
+    prices = [{"event_id": "odds-api-event-9", "player": "Example Player", "market": "player_pass_yds"}]
+    mapped = _MODULE.remap_price_event_ids(prices, "espn-event-4")
+    assert mapped[0]["event_id"] == "espn-event-4"
+    assert mapped[0]["provider_event_id"] == "odds-api-event-9"
+    assert prices[0]["event_id"] == "odds-api-event-9"
