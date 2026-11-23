@@ -15,6 +15,7 @@ from typing import Any
 
 from betting_model.collection import collect_joined
 from betting_model.forecast_archive import pending_forecasts
+from betting_model.player_names import match_players
 from betting_model.odds import fetch_event_player_props, fetch_sport_events
 from betting_model.result_sources import starts_match
 from betting_model.timeutil import parse_aware_datetime
@@ -211,6 +212,96 @@ def remap_price_event_ids(prices: list[dict[str, Any]], espn_event_id: str) -> l
     return remapped
 
 
+
+def build_point_projection_line_comparisons(
+    sport: str,
+    projections: list[dict[str, Any]],
+    prices: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Describe fresh sportsbook lines relative to point forecasts, never as probabilities."""
+    if sport not in MARKET_MAP:
+        raise ValueError(f"unsupported sport: {sport}")
+    unique: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in projections:
+        market = str(row.get("market") or "").upper()
+        player_id = str(row.get("player_id") or "").strip()
+        if player_id and market:
+            unique[(player_id, market)] = row
+    candidates = list(unique.values())
+    comparisons = []
+    counts = {
+        "prices_received": len(prices),
+        "fresh_over_under_prices": 0,
+        "matched": 0,
+        "unmatched_player_or_market": 0,
+        "invalid_line_or_projection": 0,
+        "not_fresh_or_unsupported": 0,
+    }
+    for price in prices:
+        if not isinstance(price, dict) or price.get("supported_shape") is False or price.get("freshness") != "fresh":
+            counts["not_fresh_or_unsupported"] += 1
+            continue
+        counts["fresh_over_under_prices"] += 1
+        forecast_market = MARKET_MAP[sport].get(str(price.get("market") or ""))
+        if forecast_market == "REC":
+            forecast_market = "RECEPTIONS"
+        market_candidates = [
+            row for row in candidates
+            if str(row.get("market") or "").upper() == forecast_market
+        ]
+        matched = match_players(
+            price.get("player"), None,
+            [{"name": row.get("player"), "player_id": row.get("player_id")} for row in market_candidates],
+        )
+        if not matched.get("ok"):
+            counts["unmatched_player_or_market"] += 1
+            continue
+        projection = market_candidates[matched["index"]]
+        try:
+            line = float(price.get("line"))
+            projected = float(projection.get("projected"))
+            odds = int(price.get("american_odds"))
+            if not math.isfinite(line) or not math.isfinite(projected):
+                raise ValueError("non-finite line or projection")
+        except (TypeError, ValueError, OverflowError):
+            counts["invalid_line_or_projection"] += 1
+            continue
+        side = str(price.get("side") or "")
+        if side not in {"Over", "Under"}:
+            counts["not_fresh_or_unsupported"] += 1
+            continue
+        gap = projected - line
+        comparisons.append({
+            "player": projection.get("player"),
+            "player_id": projection.get("player_id"),
+            "market": forecast_market,
+            "book": price.get("bookmaker_key"),
+            "side": side,
+            "line": line,
+            "american_odds": odds,
+            "projected_value": projected,
+            "projection_minus_line": round(gap, 4),
+            "side_directional_gap": round(gap if side == "Over" else -gap, 4),
+            "projection_at": projection.get("projection_at"),
+            "model_version": projection.get("projection_source"),
+            "price_retrieved_at": price.get("retrieved_at"),
+            "provider_last_update": price.get("provider_last_update"),
+            "freshness": price.get("freshness"),
+        })
+        counts["matched"] += 1
+    comparisons.sort(key=lambda row: (
+        row["market"], row["player"] or "", row["book"] or "", row["side"]
+    ))
+    return {
+        "comparisons": comparisons,
+        "counts": counts,
+        "interpretation": (
+            "Descriptive point-forecast distance only. A positive side_directional_gap "
+            "does not represent a probability, calibrated edge, expected value, or bet recommendation."
+        ),
+    }
+
+
 def scan_event(
     *,
     sport: str,
@@ -269,6 +360,7 @@ def scan_event(
         "ok": False, "reason": fetched.get("reason") or "Odds API did not return event props",
     }
     if not fetched.get("ok"):
+        line_comparison = build_point_projection_line_comparisons(sport, projections, [])
         result = {
             "ok": False,
             "reason": fetched.get("reason") or "Odds API did not return event props",
@@ -282,6 +374,7 @@ def scan_event(
             "provider_failures": 1,
         }
     elif not matchup.get("ok"):
+        line_comparison = build_point_projection_line_comparisons(sport, projections, [])
         result = {
             "ok": False,
             "reason": matchup.get("reason"),
@@ -294,6 +387,9 @@ def scan_event(
             "provider_failures": 0,
         }
     else:
+        line_comparison = build_point_projection_line_comparisons(
+            sport, projections, fetched.get("records") or []
+        )
         # Odds API event IDs differ from ESPN event IDs. The metadata lookup
         # resolved the provider ID; archive matching uses the ESPN ID while
         # retaining the provider ID in the raw price record for audit.
@@ -323,6 +419,9 @@ def scan_event(
         "bookmakers_requested": book_list.split(","),
         "forecast_selection": counts,
         "projections_supplied_to_matcher": len(projections),
+        "point_projection_line_comparisons": line_comparison["comparisons"],
+        "point_projection_line_comparison_counts": line_comparison["counts"],
+        "point_projection_line_comparison_note": line_comparison["interpretation"],
         "collection": result,
         "matchup_verification": matchup,
         "quota": result.get("quota"),
