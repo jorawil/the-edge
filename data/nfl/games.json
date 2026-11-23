@@ -1610937,7 +1610937,1415 @@
    ],
    "source": "ESPN https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873069",
    "retrieved_at": "2026-11-23T01:07:18.912563+00:00"
+  },
+  "401873077": {
+   "id": "401873077",
+   "date_utc": "2026-11-23T01:20Z",
+   "name": "Minnesota Vikings at San Francisco 49ers",
+   "status": "Final",
+   "season_year": 2026,
+   "season_type_id": 2,
+   "season_type_name": null,
+   "scores": {
+    "SF": 35,
+    "MIN": 10
+   },
+   "home": "SF",
+   "week": 11,
+   "players": [
+    {
+     "team": "MIN",
+     "player": "Kirk Cousins",
+     "athlete_id": "14880",
+     "category": "passing",
+     "stats": {
+      "completions/passingAttempts": "26/38",
+      "passingYards": "235",
+      "yardsPerPassAttempt": "6.2",
+      "passingTouchdowns": "0",
+      "interceptions": "1",
+      "sacks-sackYardsLost": "1-9",
+      "adjQBR": "64.8",
+      "QBRating": "73.9"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Carson Wentz",
+     "athlete_id": "2573079",
+     "category": "passing",
+     "stats": {
+      "completions/passingAttempts": "3/5",
+      "passingYards": "29",
+      "yardsPerPassAttempt": "5.8",
+      "passingTouchdowns": "0",
+      "interceptions": "0",
+      "sacks-sackYardsLost": "0-0",
+      "adjQBR": "26.1",
+      "QBRating": "76.2"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Jordan Mason",
+     "athlete_id": "4360569",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "11",
+      "rushingYards": "38",
+      "yardsPerRushAttempt": "3.5",
+      "rushingTouchdowns": "0",
+      "longRushing": "16"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Aaron Jones Sr.",
+     "athlete_id": "3042519",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "8",
+      "rushingYards": "30",
+      "yardsPerRushAttempt": "3.8",
+      "rushingTouchdowns": "1",
+      "longRushing": "11"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Justin Jefferson",
+     "athlete_id": "4262921",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "1",
+      "rushingYards": "1",
+      "yardsPerRushAttempt": "1.0",
+      "rushingTouchdowns": "0",
+      "longRushing": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Kirk Cousins",
+     "athlete_id": "14880",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "1",
+      "rushingYards": "0",
+      "yardsPerRushAttempt": "0.0",
+      "rushingTouchdowns": "0",
+      "longRushing": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Justin Jefferson",
+     "athlete_id": "4262921",
+     "category": "receiving",
+     "stats": {
+      "receptions": "7",
+      "receivingYards": "86",
+      "yardsPerReception": "12.3",
+      "receivingTouchdowns": "0",
+      "longReception": "29",
+      "receivingTargets": "9"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "T.J. Hockenson",
+     "athlete_id": "4036133",
+     "category": "receiving",
+     "stats": {
+      "receptions": "6",
+      "receivingYards": "55",
+      "yardsPerReception": "9.2",
+      "receivingTouchdowns": "0",
+      "longReception": "20",
+      "receivingTargets": "7"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Tai Felton",
+     "athlete_id": "4565185",
+     "category": "receiving",
+     "stats": {
+      "receptions": "6",
+      "receivingYards": "42",
+      "yardsPerReception": "7.0",
+      "receivingTouchdowns": "0",
+      "longReception": "16",
+      "receivingTargets": "12"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Myles Price",
+     "athlete_id": "4430656",
+     "category": "receiving",
+     "stats": {
+      "receptions": "2",
+      "receivingYards": "26",
+      "yardsPerReception": "13.0",
+      "receivingTouchdowns": "0",
+      "longReception": "22",
+      "receivingTargets": "2"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Jauan Jennings",
+     "athlete_id": "3886598",
+     "category": "receiving",
+     "stats": {
+      "receptions": "3",
+      "receivingYards": "20",
+      "yardsPerReception": "6.7",
+      "receivingTouchdowns": "0",
+      "longReception": "9",
+      "receivingTargets": "6"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Aaron Jones Sr.",
+     "athlete_id": "3042519",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "13",
+      "yardsPerReception": "13.0",
+      "receivingTouchdowns": "0",
+      "longReception": "13",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "DeeJay Dallas",
+     "athlete_id": "4240631",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "10",
+      "yardsPerReception": "10.0",
+      "receivingTouchdowns": "0",
+      "longReception": "10",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Jeshaun Jones",
+     "athlete_id": "4360637",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "8",
+      "yardsPerReception": "8.0",
+      "receivingTouchdowns": "0",
+      "longReception": "8",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Gavin Bartholomew",
+     "athlete_id": "4708049",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "5",
+      "yardsPerReception": "5.0",
+      "receivingTouchdowns": "0",
+      "longReception": "5",
+      "receivingTargets": "3"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Jordan Mason",
+     "athlete_id": "4360569",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "-1",
+      "yardsPerReception": "-1.0",
+      "receivingTouchdowns": "0",
+      "longReception": "-1",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Justin Jefferson",
+     "athlete_id": "4262921",
+     "category": "fumbles",
+     "stats": {
+      "fumbles": "1",
+      "fumblesLost": "1",
+      "fumblesRecovered": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Kirk Cousins",
+     "athlete_id": "14880",
+     "category": "fumbles",
+     "stats": {
+      "fumbles": "1",
+      "fumblesLost": "0",
+      "fumblesRecovered": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Blake Cashman",
+     "athlete_id": "3728281",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "9",
+      "soloTackles": "4",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "James Pierre",
+     "athlete_id": "4259252",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "9",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Joshua Metellus",
+     "athlete_id": "4046537",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "5",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Jalen Redmond",
+     "athlete_id": "4360277",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "2",
+      "passesDefended": "0",
+      "QBHits": "2",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Ivan Pace Jr.",
+     "athlete_id": "4430280",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Dallas Turner",
+     "athlete_id": "4565190",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Byron Murphy Jr.",
+     "athlete_id": "4038999",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Domonique Orange",
+     "athlete_id": "4698728",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "2",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Jake Golday",
+     "athlete_id": "4877652",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Harrison Smith",
+     "athlete_id": "14945",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Andrew Van Ginkel",
+     "athlete_id": "3133487",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Theo Jackson",
+     "athlete_id": "4242436",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Elijah Williams",
+     "athlete_id": "4696782",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "1",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Levi Drake Rodriguez",
+     "athlete_id": "5093973",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Eric Wilson",
+     "athlete_id": "3056916",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "1",
+      "tacklesForLoss": "1",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Jeshaun Jones",
+     "athlete_id": "4360637",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Christian Darrisaw",
+     "athlete_id": "4361985",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Tyrion Ingram-Dawkins",
+     "athlete_id": "4629149",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Jakobe Thomas",
+     "athlete_id": "4710865",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Kyle Van Noy",
+     "athlete_id": "16772",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Chaz Chambliss",
+     "athlete_id": "4431520",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Myles Price",
+     "athlete_id": "4430656",
+     "category": "kickReturns",
+     "stats": {
+      "kickReturns": "4",
+      "kickReturnYards": "94",
+      "yardsPerKickReturn": "23.5",
+      "longKickReturn": "27",
+      "kickReturnTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Myles Price",
+     "athlete_id": "4430656",
+     "category": "puntReturns",
+     "stats": {
+      "puntReturns": "1",
+      "puntReturnYards": "19",
+      "yardsPerPuntReturn": "19.0",
+      "longPuntReturn": "19",
+      "puntReturnTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Will Reichard",
+     "athlete_id": "4567104",
+     "category": "kicking",
+     "stats": {
+      "fieldGoalsMade/fieldGoalAttempts": "1/3",
+      "fieldGoalPct": "33.3",
+      "longFieldGoalMade": "48",
+      "extraPointsMade/extraPointAttempts": "1/1",
+      "totalKickingPoints": "4"
+     },
+     "dnp": false
+    },
+    {
+     "team": "MIN",
+     "player": "Brett Thorson",
+     "athlete_id": "4799994",
+     "category": "punting",
+     "stats": {
+      "punts": "2",
+      "puntYards": "122",
+      "grossAvgPuntYards": "61.0",
+      "touchbacks": "0",
+      "puntsInside20": "2",
+      "longPunt": "64"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Brock Purdy",
+     "athlete_id": "4361741",
+     "category": "passing",
+     "stats": {
+      "completions/passingAttempts": "21/26",
+      "passingYards": "255",
+      "yardsPerPassAttempt": "9.8",
+      "passingTouchdowns": "3",
+      "interceptions": "0",
+      "sacks-sackYardsLost": "1-7",
+      "adjQBR": "98.6",
+      "QBRating": "146.0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Mac Jones",
+     "athlete_id": "4241464",
+     "category": "passing",
+     "stats": {
+      "completions/passingAttempts": "1/1",
+      "passingYards": "5",
+      "yardsPerPassAttempt": "5.0",
+      "passingTouchdowns": "0",
+      "interceptions": "0",
+      "sacks-sackYardsLost": "0-0",
+      "adjQBR": "1.1",
+      "QBRating": "87.5"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Christian McCaffrey",
+     "athlete_id": "3117251",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "12",
+      "rushingYards": "49",
+      "yardsPerRushAttempt": "4.1",
+      "rushingTouchdowns": "1",
+      "longRushing": "10"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Deebo Samuel Sr.",
+     "athlete_id": "3126486",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "2",
+      "rushingYards": "27",
+      "yardsPerRushAttempt": "13.5",
+      "rushingTouchdowns": "0",
+      "longRushing": "20"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Kaelon Black",
+     "athlete_id": "4696044",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "6",
+      "rushingYards": "8",
+      "yardsPerRushAttempt": "1.3",
+      "rushingTouchdowns": "0",
+      "longRushing": "5"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Jordan James",
+     "athlete_id": "4685397",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "2",
+      "rushingYards": "7",
+      "yardsPerRushAttempt": "3.5",
+      "rushingTouchdowns": "0",
+      "longRushing": "4"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Mac Jones",
+     "athlete_id": "4241464",
+     "category": "rushing",
+     "stats": {
+      "rushingAttempts": "3",
+      "rushingYards": "-1",
+      "yardsPerRushAttempt": "-0.3",
+      "rushingTouchdowns": "0",
+      "longRushing": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Mike Evans",
+     "athlete_id": "16737",
+     "category": "receiving",
+     "stats": {
+      "receptions": "6",
+      "receivingYards": "109",
+      "yardsPerReception": "18.2",
+      "receivingTouchdowns": "1",
+      "longReception": "34",
+      "receivingTargets": "7"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Keenan Allen",
+     "athlete_id": "15818",
+     "category": "receiving",
+     "stats": {
+      "receptions": "3",
+      "receivingYards": "38",
+      "yardsPerReception": "12.7",
+      "receivingTouchdowns": "0",
+      "longReception": "17",
+      "receivingTargets": "4"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "George Kittle",
+     "athlete_id": "3040151",
+     "category": "receiving",
+     "stats": {
+      "receptions": "3",
+      "receivingYards": "34",
+      "yardsPerReception": "11.3",
+      "receivingTouchdowns": "2",
+      "longReception": "17",
+      "receivingTargets": "3"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Deebo Samuel Sr.",
+     "athlete_id": "3126486",
+     "category": "receiving",
+     "stats": {
+      "receptions": "3",
+      "receivingYards": "20",
+      "yardsPerReception": "6.7",
+      "receivingTouchdowns": "0",
+      "longReception": "18",
+      "receivingTargets": "4"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Jordan Watkins",
+     "athlete_id": "4431466",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "19",
+      "yardsPerReception": "19.0",
+      "receivingTouchdowns": "0",
+      "longReception": "19",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Kyle Juszczyk",
+     "athlete_id": "16002",
+     "category": "receiving",
+     "stats": {
+      "receptions": "2",
+      "receivingYards": "13",
+      "yardsPerReception": "6.5",
+      "receivingTouchdowns": "0",
+      "longReception": "7",
+      "receivingTargets": "2"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Christian McCaffrey",
+     "athlete_id": "3117251",
+     "category": "receiving",
+     "stats": {
+      "receptions": "2",
+      "receivingYards": "13",
+      "yardsPerReception": "6.5",
+      "receivingTouchdowns": "0",
+      "longReception": "13",
+      "receivingTargets": "3"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Luke Farrell",
+     "athlete_id": "4040612",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "7",
+      "yardsPerReception": "7.0",
+      "receivingTouchdowns": "0",
+      "longReception": "7",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Kaelon Black",
+     "athlete_id": "4696044",
+     "category": "receiving",
+     "stats": {
+      "receptions": "1",
+      "receivingYards": "7",
+      "yardsPerReception": "7.0",
+      "receivingTouchdowns": "0",
+      "longReception": "7",
+      "receivingTargets": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Deommodore Lenoir",
+     "athlete_id": "4242488",
+     "category": "fumbles",
+     "stats": {
+      "fumbles": "0",
+      "fumblesLost": "0",
+      "fumblesRecovered": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Renardo Green",
+     "athlete_id": "4427325",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "9",
+      "soloTackles": "9",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Fred Warner",
+     "athlete_id": "3138826",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "8",
+      "soloTackles": "4",
+      "sacks": "0",
+      "tacklesForLoss": "1",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Jaden Dugger",
+     "athlete_id": "5086161",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "6",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Garret Wallow",
+     "athlete_id": "4241807",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "5",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Ji'Ayir Brown",
+     "athlete_id": "4693644",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Malik Mustapha",
+     "athlete_id": "4696211",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "4",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "1",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Deommodore Lenoir",
+     "athlete_id": "4242488",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "2",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Ephesians Prysock",
+     "athlete_id": "4685523",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "3",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "DeForest Buckner",
+     "athlete_id": "2971282",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "2",
+      "sacks": "0.5",
+      "tacklesForLoss": "1",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Tatum Bethune",
+     "athlete_id": "4426698",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "James Thompson Jr.",
+     "athlete_id": "4693371",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "3",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Upton Stout",
+     "athlete_id": "4565200",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "2",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Osa Odighizuwa",
+     "athlete_id": "4035840",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0.5",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "2",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Mykel Williams",
+     "athlete_id": "4685623",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Marques Sigle",
+     "athlete_id": "4693337",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "1",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Romello Height",
+     "athlete_id": "4432244",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "2",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Siran Neal",
+     "athlete_id": "3057524",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Ashtyn Davis",
+     "athlete_id": "3858271",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Keion White",
+     "athlete_id": "4243493",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "1",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Brayden Willis",
+     "athlete_id": "4360290",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "0",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "C.J. West",
+     "athlete_id": "4686308",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "1",
+      "soloTackles": "1",
+      "sacks": "0",
+      "tacklesForLoss": "1",
+      "passesDefended": "0",
+      "QBHits": "1",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Nick Bosa",
+     "athlete_id": "4040605",
+     "category": "defensive",
+     "stats": {
+      "totalTackles": "0",
+      "soloTackles": "0",
+      "sacks": "0",
+      "tacklesForLoss": "0",
+      "passesDefended": "0",
+      "QBHits": "2",
+      "defensiveTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Ji'Ayir Brown",
+     "athlete_id": "4693644",
+     "category": "interceptions",
+     "stats": {
+      "interceptions": "1",
+      "interceptionYards": "18",
+      "interceptionTouchdowns": "1"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Deebo Samuel Sr.",
+     "athlete_id": "3126486",
+     "category": "kickReturns",
+     "stats": {
+      "kickReturns": "2",
+      "kickReturnYards": "57",
+      "yardsPerKickReturn": "28.5",
+      "longKickReturn": "33",
+      "kickReturnTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Jacob Cowing",
+     "athlete_id": "4575665",
+     "category": "puntReturns",
+     "stats": {
+      "puntReturns": "1",
+      "puntReturnYards": "0",
+      "yardsPerPuntReturn": "0.0",
+      "longPuntReturn": "0",
+      "puntReturnTouchdowns": "0"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Eddy Pineiro",
+     "athlete_id": "4034949",
+     "category": "kicking",
+     "stats": {
+      "fieldGoalsMade/fieldGoalAttempts": "0/0",
+      "fieldGoalPct": "0.0",
+      "longFieldGoalMade": "0",
+      "extraPointsMade/extraPointAttempts": "5/5",
+      "totalKickingPoints": "5"
+     },
+     "dnp": false
+    },
+    {
+     "team": "SF",
+     "player": "Corliss Waitman",
+     "athlete_id": "3125280",
+     "category": "punting",
+     "stats": {
+      "punts": "4",
+      "puntYards": "201",
+      "grossAvgPuntYards": "50.3",
+      "touchbacks": "0",
+      "puntsInside20": "2",
+      "longPunt": "54"
+     },
+     "dnp": false
+    }
+   ],
+   "team_stats": [
+    {
+     "team": "MIN",
+     "stats": {
+      "firstDowns": "19",
+      "firstDownsPassing": "13",
+      "firstDownsRushing": "5",
+      "firstDownsPenalty": "1",
+      "thirdDownEff": "7-14",
+      "fourthDownEff": "1-3",
+      "totalOffensivePlays": "65",
+      "totalYards": "324",
+      "yardsPerPlay": "5.0",
+      "totalDrives": "10",
+      "netPassingYards": "255",
+      "completionAttempts": "29/43",
+      "yardsPerPass": "5.8",
+      "interceptions": "1",
+      "sacksYardsLost": "1-9",
+      "rushingYards": "69",
+      "rushingAttempts": "21",
+      "yardsPerRushAttempt": "3.3",
+      "redZoneAttempts": "1-3",
+      "totalPenaltiesYards": "3-23",
+      "turnovers": "2",
+      "fumblesLost": "1",
+      "defensiveTouchdowns": "0",
+      "possessionTime": "32:23"
+     }
+    },
+    {
+     "team": "SF",
+     "stats": {
+      "firstDowns": "20",
+      "firstDownsPassing": "15",
+      "firstDownsRushing": "4",
+      "firstDownsPenalty": "1",
+      "thirdDownEff": "4-9",
+      "fourthDownEff": "0-0",
+      "totalOffensivePlays": "53",
+      "totalYards": "343",
+      "yardsPerPlay": "6.5",
+      "totalDrives": "9",
+      "netPassingYards": "253",
+      "completionAttempts": "22/27",
+      "yardsPerPass": "9.0",
+      "interceptions": "0",
+      "sacksYardsLost": "1-7",
+      "rushingYards": "90",
+      "rushingAttempts": "25",
+      "yardsPerRushAttempt": "3.6",
+      "redZoneAttempts": "4-4",
+      "totalPenaltiesYards": "6-49",
+      "turnovers": "0",
+      "fumblesLost": "0",
+      "defensiveTouchdowns": "1",
+      "possessionTime": "27:37"
+     }
+    }
+   ],
+   "source": "ESPN https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873077",
+   "retrieved_at": "2026-11-23T11:05:01.554247+00:00"
   }
  },
- "updated": "2026-11-23T02:57:41.598148+00:00"
+ "updated": "2026-11-23T11:05:01.554290+00:00"
 }

@@ -6,16 +6,11 @@
    2
   ],
   "skipped_season_type": [],
-  "final": 10,
+  "final": 11,
   "already_covered": 10,
-  "added": 0,
+  "added": 1,
   "repaired": 0,
   "missing": [
-   {
-    "id": "401873077",
-    "name": "Minnesota Vikings at San Francisco 49ers",
-    "reason": "not final (Halftime)"
-   },
    {
     "id": "401873078",
     "name": "Cincinnati Bengals at Washington Commanders",
