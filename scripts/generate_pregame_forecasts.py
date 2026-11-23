@@ -191,7 +191,8 @@ def generate(
     first_day = start_day or datetime.now(timezone.utc).date()
     events, errors = upcoming_events(sport, start_day=first_day, days=days)
     roster_cache: dict[str, list[dict[str, Any]]] = {}
-    league_cache: dict[tuple[str, str], dict[str, Any]] = {}
+    league_cache: dict[str, dict[str, Any]] = {}
+    history_cache: dict[tuple[str, str], dict[str, Any]] = {}
     counts = Counter()
     by_market = Counter()
     now_text = datetime.now(timezone.utc).isoformat()
@@ -216,12 +217,15 @@ def generate(
                     errors.append(f"roster {sport} team {team_id}: {exc}")
             for player in roster_cache[team_id]:
                 for market, (method, window, shrinkage) in MARKET_SELECTIONS[sport].items():
-                    history_result = build_player_history(
-                        games, sport=sport, player_id=player["player_id"],
-                        market=market, before_event_time=event_start,
-                        data_updated_at=data_updated,
-                        data_updated_source=f"historical-data/data/{sport}/games.json updated",
-                    )
+                    history_key = (player["player_id"], market)
+                    if history_key not in history_cache:
+                        history_cache[history_key] = build_player_history(
+                            games, sport=sport, player_id=player["player_id"],
+                            market=market, before_event_time=now_text,
+                            data_updated_at=data_updated,
+                            data_updated_source=f"historical-data/data/{sport}/games.json updated",
+                        )
+                    history_result = history_cache[history_key]
                     history = history_result["history"][-window:]
                     if len(history) < 3:
                         counts["insufficient_history"] += 1
@@ -238,12 +242,11 @@ def generate(
                         result = project_rolling_mean(market, history, context)
                         model_version = f"rolling-mean-v1:{sport}:{market}:w{window}:{SELECTION_VERSION}"
                     else:
-                        prior_key = (market, event_start)
-                        if prior_key not in league_cache:
-                            league_cache[prior_key] = build_league_efficiency_prior(
-                                games, sport=sport, market=market, before_event_time=event_start
+                        if market not in league_cache:
+                            league_cache[market] = build_league_efficiency_prior(
+                                games, sport=sport, market=market, before_event_time=now_text
                             )
-                        prior = league_cache[prior_key].get("prior_efficiency")
+                        prior = league_cache[market].get("prior_efficiency")
                         result_context = {**context, "prior_efficiency": prior}
                         engine = project_nba if sport == "nba" else project_nfl
                         result = engine(
