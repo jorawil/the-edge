@@ -1,6 +1,6 @@
 # Daily pregame forecast pipeline
 
-The Daily Pregame Forecast Archive workflow runs at 10:00 UTC each day. It refreshes completed NBA/NFL ESPN box scores for yesterday and today, grades pending forecast snapshots against completed ESPN boxes, then creates new point forecasts for upcoming regular-season events over the next seven days.
+The Daily Pregame Forecast Archive workflow runs at 10:00 UTC each day. It refreshes completed NBA/NFL ESPN box scores for yesterday and today, grades pending forecast snapshots against completed ESPN boxes, then creates new point forecasts for the current day’s regular-season slate. The scheduled horizon defaults to one day to limit overlapping snapshots and archive growth; a manual workflow dispatch can extend it to up to 14 days.
 
 The pipeline uses ESPN public scoreboard and roster endpoints plus the historical game logs stored on the private-to-the-workflow `historical-data` branch (the branch is public because the repository is public). It does not call The Odds API and does not consume sportsbook API credits.
 
