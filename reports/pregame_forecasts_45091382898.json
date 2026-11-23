@@ -1,0 +1,91 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "ok": true,
+      "sport": "nba",
+      "days_ahead": 1,
+      "events_found": 10,
+      "players_in_rosters": 353,
+      "forecasts_archived": 1675,
+      "duplicates": 0,
+      "skipped": {
+        "insufficient_history": 90
+      },
+      "forecasts_by_market": {
+        "3PM": 335,
+        "AST": 335,
+        "PRA": 335,
+        "PTS": 335,
+        "REB": 335
+      },
+      "errors": [],
+      "archive_path": "historical-data/forecasts/forecast_archive.sqlite",
+      "archive_storage_format": "gzip-compressed on historical-data branch; SQLite at runtime",
+      "archive_summary": {
+        "ok": true,
+        "exists": true,
+        "snapshots": 35434,
+        "results": 0,
+        "size_bytes": 77504512
+      },
+      "model_selection_version": "walk-forward-selection-2026-11-22",
+      "history_index": {
+        "eligible_events": 5174,
+        "player_market_histories": 4679,
+        "markets": [
+          "PTS",
+          "REB",
+          "AST",
+          "3PM",
+          "PRA"
+        ],
+        "projection_input_at": "2026-11-23T00:53:45.352950+00:00"
+      },
+      "odds_api_calls": 0,
+      "calibration_claimed": false
+    },
+    {
+      "ok": true,
+      "sport": "nfl",
+      "days_ahead": 1,
+      "events_found": 1,
+      "players_in_rosters": 156,
+      "forecasts_archived": 89,
+      "duplicates": 0,
+      "skipped": {
+        "insufficient_history": 535
+      },
+      "forecasts_by_market": {
+        "PASS_YDS": 5,
+        "REC": 32,
+        "REC_YDS": 32,
+        "RUSH_YDS": 20
+      },
+      "errors": [],
+      "archive_path": "historical-data/forecasts/forecast_archive.sqlite",
+      "archive_storage_format": "gzip-compressed on historical-data branch; SQLite at runtime",
+      "archive_summary": {
+        "ok": true,
+        "exists": true,
+        "snapshots": 35523,
+        "results": 0,
+        "size_bytes": 77692928
+      },
+      "model_selection_version": "walk-forward-selection-2026-11-22",
+      "history_index": {
+        "eligible_events": 1247,
+        "player_market_histories": 2840,
+        "markets": [
+          "PASS_YDS",
+          "REC",
+          "REC_YDS",
+          "RUSH_YDS"
+        ],
+        "projection_input_at": "2026-11-23T00:53:47.375364+00:00"
+      },
+      "odds_api_calls": 0,
+      "calibration_claimed": false
+    }
+  ]
+}
