@@ -4,7 +4,7 @@ import json
 
 import requests
 
-from betting_model.odds import fetch_event_player_props, fetch_live_odds, normalize_player_props
+from betting_model.odds import fetch_event_player_props, fetch_live_odds, fetch_sport_events, normalize_player_props
 
 
 class _Response:
@@ -153,3 +153,30 @@ def test_stale_provider_timestamp_is_marked():
     )
     assert result["records"][0]["freshness"] == "stale"
     assert result["records"][0]["fair_market_probability"] is None
+
+
+
+def test_fetch_sport_events_uses_metadata_endpoint_and_returns_quota(monkeypatch):
+    monkeypatch.setenv("ODDS_API_KEY", "test-key")
+    seen = {}
+
+    def transport(url, params=None, timeout=None):
+        seen["url"] = url
+        seen["params"] = params
+        return _Response(200, [{
+            "id": "provider-event-1",
+            "home_team": "Indiana Colts",
+            "away_team": "Houston Texans",
+            "commence_time": "2026-11-23T18:00:00Z",
+        }], headers={"x-requests-remaining": "499", "x-requests-used": "1", "x-requests-last": "0"})
+
+    result = fetch_sport_events(
+        "americanfootball_nfl", transport=transport, sleep=lambda _seconds: None,
+    )
+    assert result["ok"] is True
+    assert result["called"] is True
+    assert result["events"][0]["id"] == "provider-event-1"
+    assert result["requests_remaining"] == "499"
+    assert result["requests_last"] == "0"
+    assert seen["url"].endswith("/sports/americanfootball_nfl/events")
+    assert seen["params"] == {"apiKey": "test-key"}
