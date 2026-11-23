@@ -8,6 +8,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from .timeutil import parse_aware_datetime
+
 MIN_FIT_ROWS = 30
 MIN_EVALUATION_ROWS = 30
 NORMAL_Z = {0.80: 1.2815515655446004, 0.90: 1.6448536269514722}
@@ -64,8 +66,10 @@ def load_active_residual_rows(path: Path) -> list[dict[str, Any]]:
 
 
 def _event_split(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-    event_times = {str(row["event_id"]): str(row["event_start"]) for row in rows}
-    events = sorted(event_times, key=lambda event: (event_times[event], event))
+    event_times = {str(row["event_id"]): parse_aware_datetime(row["event_start"]) for row in rows}
+    if any(value is None for value in event_times.values()):
+        raise ValueError("all event_start values must be timezone-aware timestamps")
+    events = sorted(event_times, key=lambda event: (event_times[event].astimezone().timestamp(), event))
     train_end = int(len(events) * 0.6)
     valid_end = train_end + int(len(events) * 0.2)
     buckets = {
