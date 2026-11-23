@@ -6,16 +6,11 @@
    2
   ],
   "skipped_season_type": [],
-  "final": 9,
+  "final": 10,
   "already_covered": 9,
-  "added": 0,
+  "added": 1,
   "repaired": 0,
   "missing": [
-   {
-    "id": "401873069",
-    "name": "Jacksonville Jaguars at New York Giants",
-    "reason": "not final (In Progress)"
-   },
    {
     "id": "401873077",
     "name": "Minnesota Vikings at San Francisco 49ers",
