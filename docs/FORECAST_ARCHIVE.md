@@ -27,3 +27,12 @@ The archive refuses a projection made after kickoff, a stale projection, an inpu
 For error metrics, multiple daily snapshots for the same player, event, market, and model version are not counted as independent observations. The metrics select the latest available pregame snapshot for that event/player/market/model. All immutable snapshots remain stored for audit and comparison.
 
 The scheduled workflow stores the SQLite archive as `forecasts/forecast_archive.sqlite.gz` on the historical-data branch to reduce repository size. It decompresses the file before grading/generation, then recompresses it before committing. The runtime archive path remains `forecasts/forecast_archive.sqlite`.
+
+
+## Residual interval diagnostics
+
+The daily workflow runs `scripts/validate_forecast_distributions.py` after grading. It reads only active final results from the immutable SQLite archive and keeps the latest pregame snapshot per event/player/market/model version. Events are split chronologically 60/20/20 so one game cannot appear in more than one slice.
+
+The report compares central 80% and 90% residual intervals from two diagnostics: a Normal residual fit and empirical residual quantiles. Both are fitted on the earliest training slice; validation reports coverage, width, and interval score; the later test slice is reported separately. Groups below the minimum fit or validation sample remain explicitly insufficient.
+
+This is deliberately not yet a probability calibration system: the forecast archive does not contain sportsbook lines/prices for every forecast, and interval coverage alone does not validate Over/Under probabilities, Brier score, log loss, or betting edge. No distribution is selected or registered, no sigma default changes, and no forecast is promoted to `QUALIFIED`. More distribution families and market-price probability tests require a separately reviewed validation design and sufficient settled data.
