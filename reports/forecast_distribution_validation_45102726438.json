@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "archive": "historical-data/forecasts/forecast_archive.sqlite",
+  "groups": [],
+  "scored_forecasts": 0,
+  "distribution_registry_changed": false,
+  "sigma_defaults_changed": false,
+  "qualified_promotions": 0,
+  "probability_calibration_claim": false,
+  "method": "60/20/20 chronological event split; residual intervals fit on train only; validation compares candidates; test is untouched; no automatic promotion"
+}

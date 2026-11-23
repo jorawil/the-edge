@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "checked_pending": 0,
+  "future_pending_not_checked": 46107,
+  "total_pending": 46107,
+  "graded": 0,
+  "void_dnp": 0,
+  "unresolved": {},
+  "result_rejected": 0,
+  "errors": [],
+  "metrics": {
+    "ok": true,
+    "groups": [],
+    "forecast_rows": 0
+  },
+  "archive_summary": {
+    "ok": true,
+    "exists": true,
+    "snapshots": 46107,
+    "results": 0,
+    "size_bytes": 110157824
+  },
+  "graded_at": "2026-11-23T02:57:43.806526+00:00"
+}
