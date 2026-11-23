@@ -3,6 +3,8 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import pytest
+
 from betting_model.forecast_archive import pending_forecasts
 
 _SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "generate_pregame_forecasts.py"
@@ -128,3 +130,19 @@ def test_upcoming_events_filters_non_regular_and_past_games(monkeypatch):
     events, errors = _MODULE.upcoming_events("nba", start_day=date.today(), days=1)
     assert errors == []
     assert [event["event_id"] for event in events] == ["future-regular"]
+
+
+
+def test_fetch_json_does_not_retry_permanent_http_errors(monkeypatch):
+    calls = []
+
+    def fail(url_request, timeout):
+        calls.append(url_request.full_url)
+        raise _MODULE.urllib.error.HTTPError(
+            url_request.full_url, 404, "Not Found", hdrs=None, fp=None,
+        )
+
+    monkeypatch.setattr(_MODULE.urllib.request, "urlopen", fail)
+    with pytest.raises(RuntimeError, match="non-retryable HTTP 404"):
+        _MODULE.fetch_json("https://example.invalid/roster")
+    assert len(calls) == 1
