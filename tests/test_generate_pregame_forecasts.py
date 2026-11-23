@@ -3,6 +3,8 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import pytest
+
 from betting_model.forecast_archive import pending_forecasts
 
 _SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "generate_pregame_forecasts.py"
@@ -45,7 +47,9 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
         "home_team_id": "100", "away_team_id": "200",
         "home_team": "HOM", "away_team": "AWY",
     }
-    monkeypatch.setattr(_MODULE, "upcoming_events", lambda *args, **kwargs: ([event], []))
+    second_event = {**event, "event_id": "future-game-2",
+                    "event_start": (event_start + timedelta(days=1)).isoformat()}
+    monkeypatch.setattr(_MODULE, "upcoming_events", lambda *args, **kwargs: ([event, second_event], []))
     monkeypatch.setattr(
         _MODULE, "team_roster",
         lambda sport, team_id: ([{
@@ -54,17 +58,26 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
         }] if team_id == "100" else []),
     )
 
+    history_calls = []
+    original_history = _MODULE.build_player_history
+    def tracked_history(*args, **kwargs):
+        history_calls.append((kwargs["player_id"], kwargs["market"]))
+        return original_history(*args, **kwargs)
+    monkeypatch.setattr(_MODULE, "build_player_history", tracked_history)
+
     archive_path = tmp_path / "forecasts.sqlite"
     report = _MODULE.generate(
         "nba", data_root=tmp_path / "data", archive_path=archive_path, days=7,
     )
 
     assert report["ok"] is True
-    assert report["forecasts_archived"] == 5
+    assert report["forecasts_archived"] == 10
+    assert len(history_calls) == 5
+    assert len(set(history_calls)) == 5
     assert report["odds_api_calls"] == 0
     assert report["calibration_claimed"] is False
     saved = pending_forecasts(archive_path)
-    assert len(saved) == 5
+    assert len(saved) == 10
     assert {row["market"] for row in saved} == {"PTS", "REB", "AST", "3PM", "PRA"}
     assert all(row["projection_input_at"] == (now - timedelta(minutes=5)).isoformat()
                for row in saved)
@@ -117,3 +130,19 @@ def test_upcoming_events_filters_non_regular_and_past_games(monkeypatch):
     events, errors = _MODULE.upcoming_events("nba", start_day=date.today(), days=1)
     assert errors == []
     assert [event["event_id"] for event in events] == ["future-regular"]
+
+
+
+def test_fetch_json_does_not_retry_permanent_http_errors(monkeypatch):
+    calls = []
+
+    def fail(url_request, timeout):
+        calls.append(url_request.full_url)
+        raise _MODULE.urllib.error.HTTPError(
+            url_request.full_url, 404, "Not Found", hdrs=None, fp=None,
+        )
+
+    monkeypatch.setattr(_MODULE.urllib.request, "urlopen", fail)
+    with pytest.raises(RuntimeError, match="non-retryable HTTP 404"):
+        _MODULE.fetch_json("https://example.invalid/roster")
+    assert len(calls) == 1
