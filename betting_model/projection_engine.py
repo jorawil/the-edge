@@ -153,3 +153,49 @@ def project_nfl(
         market, history, context, allowed=NFL_MARKETS,
         shrinkage_strength=shrinkage_strength,
     )
+
+
+
+def project_rolling_mean(
+    market: str,
+    history: list[dict[str, Any]],
+    context: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Transparent rolling-mean point baseline for markets selected by validation."""
+    context = context or {}
+    rows = _clean_history(history)
+    if len(rows) < 3:
+        return {
+            "ok": False, "reason": "insufficient_history", "market": market,
+            "n_history": len(rows), "model_version": "rolling-mean-v1",
+            "calibrated": False,
+        }
+    projected = sum(actual for actual, _ in rows) / len(rows)
+    opportunity = sum(opp for _, opp in rows) / len(rows)
+    total_opportunity = sum(opp for _, opp in rows)
+    efficiency = (
+        sum(actual for actual, _ in rows) / total_opportunity
+        if total_opportunity > 0 else None
+    )
+    warnings = ["rolling-mean baseline selected by chronological validation"]
+    if len(rows) < 10:
+        warnings.append(f"only {len(rows)} prior player-games")
+    return {
+        "ok": True,
+        "market": market,
+        "projected_value": projected,
+        "projected_opportunity": opportunity,
+        "projected_efficiency": efficiency,
+        "n_history": len(rows),
+        "n_opportunity": len(rows),
+        "model_version": "rolling-mean-v1",
+        "calibrated": False,
+        "distribution": None,
+        "sigma": None,
+        "interval_80": None,
+        "interval_90": None,
+        "projection_at": context.get("projection_at"),
+        "projection_input_at": context.get("projection_input_at"),
+        "data_sources": context.get("data_sources") or [],
+        "warnings": warnings,
+    }

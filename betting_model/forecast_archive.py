@@ -17,7 +17,7 @@ from typing import Any
 
 from .timeutil import parse_aware_datetime
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 MAX_PROJECTION_AGE = timedelta(hours=6)
 CLOCK_SKEW = timedelta(minutes=2)
 
@@ -82,6 +82,12 @@ def migrate(conn: sqlite3.Connection) -> int:
         projected_value REAL NOT NULL,
         projected_opportunity REAL,
         projected_efficiency REAL,
+        n_history INTEGER NOT NULL,
+        n_opportunity INTEGER NOT NULL,
+        effective_opportunity REAL,
+        sigma REAL,
+        distribution TEXT,
+        calibrated INTEGER NOT NULL,
         model_version TEXT NOT NULL,
         projection_at TEXT NOT NULL,
         projection_input_at TEXT,
@@ -119,6 +125,20 @@ def migrate(conn: sqlite3.Connection) -> int:
         SELECT RAISE(ABORT, 'forecast results are immutable');
     END;
     """)
+    existing = {
+        row["name"] for row in conn.execute("PRAGMA table_info(forecast_snapshots)").fetchall()
+    }
+    additive_columns = {
+        "n_history": "INTEGER NOT NULL DEFAULT 0",
+        "n_opportunity": "INTEGER NOT NULL DEFAULT 0",
+        "effective_opportunity": "REAL",
+        "sigma": "REAL",
+        "distribution": "TEXT",
+        "calibrated": "INTEGER NOT NULL DEFAULT 0",
+    }
+    for name, definition in additive_columns.items():
+        if name not in existing:
+            conn.execute(f"ALTER TABLE forecast_snapshots ADD COLUMN {name} {definition}")
     conn.execute(
         "INSERT INTO forecast_meta(key,value) VALUES('schema_version',?) "
         "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
@@ -133,6 +153,8 @@ def _snapshot_key(row: dict[str, Any]) -> str:
         "sport": row["sport"], "event_id": row["event_id"],
         "player_id": row["player_id"], "market": row["market"],
         "projected_value": round(row["projected_value"], 6),
+        "n_history": row["n_history"],
+        "n_opportunity": row["n_opportunity"],
         "model_version": row["model_version"],
         "projection_at": row["projection_at"],
         "projection_input_at": row.get("projection_input_at"),
@@ -149,7 +171,8 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
         return {"ok": False, "reason": "postgame fields are not allowed", "fields": leaked}
 
     required = ("sport", "event_id", "event_start", "player_id", "market",
-                "projected_value", "model_version", "projection_at", "source")
+                "projected_value", "model_version", "projection_at", "source",
+                "n_history", "n_opportunity")
     missing = [key for key in required if snapshot.get(key) in (None, "")]
     if missing:
         return {"ok": False, "reason": "missing required fields", "fields": missing}
@@ -164,6 +187,16 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
         efficiency = None if snapshot.get("projected_efficiency") is None else _number(
             snapshot["projected_efficiency"], "projected_efficiency"
         )
+        n_history = int(snapshot["n_history"])
+        n_opportunity = int(snapshot["n_opportunity"])
+        if n_history < 0 or n_opportunity < 0 or n_opportunity > n_history:
+            raise ValueError("n_history and n_opportunity must be non-negative counts with n_opportunity <= n_history")
+        effective_opportunity = None if snapshot.get("effective_opportunity_after_shrinkage") is None else _number(
+            snapshot["effective_opportunity_after_shrinkage"], "effective_opportunity_after_shrinkage"
+        )
+        sigma = None if snapshot.get("sigma") is None else _number(snapshot["sigma"], "sigma")
+        distribution = snapshot.get("distribution")
+        calibrated = snapshot.get("calibrated") is True
         input_at, input_text = (None, None)
         if snapshot.get("projection_input_at") not in (None, ""):
             input_at, input_text = _parsed(snapshot["projection_input_at"], "projection_input_at")
@@ -192,6 +225,12 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
         "projected_value": projected,
         "projected_opportunity": opportunity,
         "projected_efficiency": efficiency,
+        "n_history": n_history,
+        "n_opportunity": n_opportunity,
+        "effective_opportunity": effective_opportunity,
+        "sigma": sigma,
+        "distribution": distribution,
+        "calibrated": 1 if calibrated else 0,
         "model_version": str(snapshot["model_version"]).strip(),
         "projection_at": projection_text,
         "projection_input_at": input_text,
@@ -211,14 +250,17 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
             """INSERT INTO forecast_snapshots(
                 snapshot_id,observation_key,archived_at,sport,event_id,event_start,
                 player_id,player_name,team,opponent,market,projected_value,
-                projected_opportunity,projected_efficiency,model_version,
+                projected_opportunity,projected_efficiency,n_history,n_opportunity,
+                effective_opportunity,sigma,distribution,calibrated,model_version,
                 projection_at,projection_input_at,projection_input_source,
                 source,warnings_json,payload_json
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (snapshot_id, key, _utc_text(now), row["sport"], row["event_id"],
              row["event_start"], row["player_id"], row["player_name"], row["team"],
              row["opponent"], row["market"], row["projected_value"],
              row["projected_opportunity"], row["projected_efficiency"],
+             row["n_history"], row["n_opportunity"], row["effective_opportunity"],
+             row["sigma"], row["distribution"], row["calibrated"],
              row["model_version"], row["projection_at"], row["projection_input_at"],
              row["projection_input_source"], row["source"], row["warnings_json"],
              row["payload_json"]),
@@ -334,3 +376,34 @@ def forecast_metrics(path: Path) -> dict[str, Any]:
             "residuals": errors,
         })
     return {"ok": True, "groups": output, "forecast_rows": len(rows)}
+
+
+
+def pending_forecasts(path: Path) -> list[dict[str, Any]]:
+    """Return forecast snapshots without an active result, oldest event first."""
+    if not Path(path).exists():
+        return []
+    with connect(path) as conn:
+        rows = conn.execute("""
+            SELECT s.* FROM forecast_snapshots s
+            WHERE NOT EXISTS (
+                SELECT 1 FROM forecast_results r
+                WHERE r.snapshot_id=s.snapshot_id
+                  AND NOT EXISTS (
+                    SELECT 1 FROM forecast_results newer
+                    WHERE newer.supersedes_result_id=r.result_id
+                  )
+            )
+            ORDER BY s.event_start,s.sport,s.player_id,s.market
+        """).fetchall()
+    output = []
+    for row in rows:
+        item = dict(row)
+        try:
+            item["payload"] = json.loads(item.pop("payload_json"))
+            item["warnings"] = json.loads(item.pop("warnings_json"))
+        except (TypeError, json.JSONDecodeError):
+            item["payload"] = {}
+            item["warnings"] = ["stored snapshot metadata could not be decoded"]
+        output.append(item)
+    return output

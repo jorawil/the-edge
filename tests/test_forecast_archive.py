@@ -16,6 +16,8 @@ def _snapshot(now):
         "projected_value": 24.5,
         "projected_opportunity": 34.0,
         "projected_efficiency": 0.72,
+        "n_history": 3,
+        "n_opportunity": 3,
         "model_version": "opportunity-rate-v1",
         "projection_at": now.isoformat(),
         "projection_input_at": (now - timedelta(minutes=5)).isoformat(),
@@ -109,3 +111,48 @@ def test_forecast_archive_rejects_postgame_fields_and_future_results(tmp_path, m
     )
     assert result["ok"] is False
     assert "future" in result["reason"]
+
+
+
+def test_forecast_archive_adds_metadata_columns_to_existing_v1_database(tmp_path):
+    import sqlite3
+
+    path = tmp_path / "old-forecast.sqlite"
+    conn = sqlite3.connect(path)
+    conn.executescript("""
+        CREATE TABLE forecast_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+        INSERT INTO forecast_meta(key,value) VALUES('schema_version','1');
+        CREATE TABLE forecast_snapshots (
+            snapshot_id TEXT PRIMARY KEY,
+            observation_key TEXT NOT NULL UNIQUE,
+            archived_at TEXT NOT NULL,
+            sport TEXT NOT NULL,
+            event_id TEXT NOT NULL,
+            event_start TEXT NOT NULL,
+            player_id TEXT NOT NULL,
+            player_name TEXT,
+            team TEXT,
+            opponent TEXT,
+            market TEXT NOT NULL,
+            projected_value REAL NOT NULL,
+            projected_opportunity REAL,
+            projected_efficiency REAL,
+            model_version TEXT NOT NULL,
+            projection_at TEXT NOT NULL,
+            projection_input_at TEXT,
+            projection_input_source TEXT,
+            source TEXT NOT NULL,
+            warnings_json TEXT NOT NULL,
+            payload_json TEXT NOT NULL
+        );
+    """)
+    conn.close()
+
+    with archive.connect(path) as migrated:
+        columns = {row["name"] for row in migrated.execute("PRAGMA table_info(forecast_snapshots)")}
+        version = migrated.execute(
+            "SELECT value FROM forecast_meta WHERE key='schema_version'"
+        ).fetchone()[0]
+    assert {"n_history", "n_opportunity", "effective_opportunity", "sigma",
+            "distribution", "calibrated"} <= columns
+    assert version == "2"
