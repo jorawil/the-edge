@@ -434,3 +434,18 @@ def pending_forecasts(path: Path) -> list[dict[str, Any]]:
             item["warnings"] = ["stored snapshot metadata could not be decoded"]
         output.append(item)
     return output
+
+
+
+def archive_stats(path: Path) -> dict[str, Any]:
+    """Return durable snapshot/result counts and the SQLite file size."""
+    file = Path(path)
+    if not file.exists():
+        return {"ok": True, "exists": False, "snapshots": 0, "results": 0, "size_bytes": 0}
+    with connect(file) as conn:
+        snapshots = int(conn.execute("SELECT COUNT(*) FROM forecast_snapshots").fetchone()[0])
+        results = int(conn.execute("SELECT COUNT(*) FROM forecast_results").fetchone()[0])
+    return {
+        "ok": True, "exists": True, "snapshots": snapshots,
+        "results": results, "size_bytes": file.stat().st_size,
+    }
