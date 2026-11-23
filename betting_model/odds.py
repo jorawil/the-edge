@@ -242,6 +242,55 @@ def fetch_live_odds(
     }
 
 
+def fetch_sport_events(
+    sport_key: str,
+    *,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
+    attempts: int = 3,
+    transport: Callable[..., Any] | None = None,
+    sleep: Callable[[float], None] = time.sleep,
+) -> dict[str, Any]:
+    """List upcoming provider events so an ESPN event can be matched safely.
+
+    This metadata endpoint does not request player markets. It still requires
+    ODDS_API_KEY and returns the provider's quota headers when present.
+    """
+    key = os.environ.get("ODDS_API_KEY", "").strip()
+    if not key:
+        return _no_key(sport_key)
+    url = f"{ODDS_API_BASE}/sports/{sport_key}/events"
+    fetched = _request(
+        url, {"apiKey": key}, timeout=timeout, attempts=attempts,
+        transport=transport or requests.get, sleep=sleep,
+    )
+    if not fetched.get("ok"):
+        return {
+            "ok": False, "reason": fetched.get("reason"), "sport_key": sport_key,
+            "events": None, "called": True,
+        }
+    response = fetched["response"]
+    payload, error = _read_json(response)
+    if error:
+        return {
+            "ok": False, "reason": error, "sport_key": sport_key,
+            "events": None, "called": True, **_quota(response),
+        }
+    if not isinstance(payload, list):
+        return {
+            "ok": False, "reason": "invalid events response shape",
+            "sport_key": sport_key, "events": None, "called": True,
+            **_quota(response),
+        }
+    events = [
+        event for event in payload
+        if isinstance(event, dict) and event.get("id")
+    ]
+    return {
+        "ok": True, "sport_key": sport_key, "events": events,
+        "event_count": len(events), "called": True, **_quota(response),
+    }
+
+
 def fetch_event_player_props(
     sport_key: str,
     event_id: str,
