@@ -284,6 +284,17 @@ def apply_assessment(
                 book_row["status"] = "NOT_EVALUABLE"
                 book_row["status_reasons"] = [book_row.get("reason") or "price not available from this input"]
                 continue
+            if prop.get("projection_conflict") is True:
+                for field in (
+                    "model_prob", "model_probability", "win_probability", "loss_probability",
+                    "push_probability", "conditional_win_probability", "edge",
+                    "edge_vs_raw_implied", "settlement_edge_vs_raw_implied",
+                    "edge_vs_fair_market", "threshold_edge", "expected_value_per_unit",
+                ):
+                    book_row[field] = None
+                book_row["positive_edge"] = False
+                book_row["threshold_cleared"] = False
+                book_row["projection_conflict"] = True
             book_prop = dict(prop)
             for field in ("line", "odds", "source", "retrieved_at", "opposite"):
                 if book_row.get(field) is not None:
