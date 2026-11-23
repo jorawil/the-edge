@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/DailyForecast.yml"
       - "scripts/generate_pregame_forecasts.py"
+      - "scripts/backfill_espn.py"
       - "scripts/grade_forecast_archive.py"
       - "betting_model/forecast_archive.py"
       - "betting_model/features.py"
