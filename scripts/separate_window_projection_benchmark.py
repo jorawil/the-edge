@@ -289,10 +289,16 @@ def benchmark(
             best["efficiency_window_games"], best["shrinkage_strength"],
         )
         baseline_key = ("test", market, best["efficiency_window_games"])
-        paired_test = _paired_event_bootstrap(
-            candidate_store[candidate_key], baseline_store[baseline_key],
-            seed=20261123 + sum(ord(char) for char in market),
-        )
+        if test is None or baseline_test is None:
+            paired_test = {
+                "available": False,
+                "reason": "selected candidate or rolling-mean baseline has no held-out test metrics",
+            }
+        else:
+            paired_test = _paired_event_bootstrap(
+                candidate_store[candidate_key], baseline_store[baseline_key],
+                seed=20261123 + sum(ord(char) for char in market),
+            )
         selections.append({
             "market": market,
             "selected": {
