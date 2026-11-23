@@ -32,3 +32,5 @@ These are candidate point-forecast configurations, not calibrated probability mo
 - Historical game stats are updated from ESPN; the pipeline records the data-store update timestamp as input provenance and never backdates a forecast.
 
 Reports and the immutable SQLite forecast archive are committed to the historical-data branch. The grading report leaves missing players/stats unresolved rather than treating them as zero; listed DNPs are voided.
+
+The scheduled forecast report also records the archive storage format. The daily workflow stores the durable database as gzip-compressed SQLite on the historical-data branch and restores it to SQLite for runtime use. Historical baseline benchmarks are triggered only by projection/backtest-relevant code changes, not by archive/report/workflow maintenance.
