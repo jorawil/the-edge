@@ -130,27 +130,31 @@ def chronological_split(
     train_fraction: float = 0.6,
     validation_fraction: float = 0.2,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Split by event time. Later games are never placed in an earlier slice."""
+    """Split by unique event-start instant, keeping every same-time forecast together."""
     if train_fraction <= 0 or validation_fraction < 0 or train_fraction + validation_fraction >= 1:
         raise ValueError("fractions must leave a non-empty test slice at the end")
 
-    def sort_key(row: dict[str, Any]) -> tuple:
-        raw = row.get("event_start") or row.get("generated_at")
-        parsed = parse_aware_datetime(raw)
+    # A forecast archive normally has many player/market rows per game. Splitting
+    # those rows individually can put players from one game in train and others
+    # in validation/test. Group by the UTC event instant before calculating split
+    # boundaries; simultaneous events are kept together as an additional guard.
+    groups: dict[Any, list[dict[str, Any]]] = {}
+    for row in rows:
+        parsed = parse_aware_datetime(row.get("event_start"))
         if parsed is None:
-            # Unreadable times sort after real instants and are not ordered as text.
-            return (1, "")
-        return (0, parsed.astimezone(timezone.utc))
+            raise ValueError("every calibration row must have a timezone-aware event_start")
+        instant = parsed.astimezone(timezone.utc)
+        groups.setdefault(instant, []).append(row)
 
-    ordered = sorted(rows, key=sort_key)
-    count = len(ordered)
+    ordered_times = sorted(groups)
+    count = len(ordered_times)
     train_end = int(count * train_fraction)
     valid_end = train_end + int(count * validation_fraction)
-    return {
-        "train": ordered[:train_end],
-        "validation": ordered[train_end:valid_end],
-        "test": ordered[valid_end:],
-    }
+    result = {"train": [], "validation": [], "test": []}
+    for index, instant in enumerate(ordered_times):
+        split = "train" if index < train_end else "validation" if index < valid_end else "test"
+        result[split].extend(groups[instant])
+    return result
 
 
 def _mean(values: list[float]) -> float | None:
