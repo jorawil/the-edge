@@ -45,14 +45,15 @@ def test_complete_fresh_prop_can_qualify_and_says_sigma_is_not_calibrated():
     assert row["fair_market_probability"] is None
 
 
-def test_qualified_requires_a_calibrated_sigma_and_distribution():
+def test_qualified_is_blocked_until_calibration_evidence_is_integrated():
     prop = _priced()
     row = evaluate_prop(prop, as_of=AS_OF)
     row["sigma_calibrated"] = True
     row["distribution_calibrated"] = True
     graded = assess(prop, row, as_of=AS_OF)
-    assert graded["status"] == "QUALIFIED"
-    assert graded["qualified"] is True
+    assert graded["status"] == "SCREEN_PASS_UNCALIBRATED"
+    assert graded["qualified"] is False
+    assert "promotion gate is disabled" in " ".join(graded["status_reasons"])
 
 
 def test_missing_timestamp_is_not_qualified_even_when_the_old_flag_is_true():
