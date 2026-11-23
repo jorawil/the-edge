@@ -256,3 +256,28 @@ def test_backfill_expected_not_final_event_is_not_fatal():
     report = {"missing": [{"reason": "not final (Scheduled)"}]}
     assert module._has_fatal_missing([report]) is False
 
+
+
+def test_atomic_backfill_write_preserves_existing_file_if_replace_fails(tmp_path, monkeypatch):
+    module = _load()
+    path = tmp_path / "games.json"
+    path.write_text("old-complete-content", encoding="utf-8")
+
+    def fail_replace(_source, _destination):
+        raise OSError("simulated replace failure")
+
+    monkeypatch.setattr(module.os, "replace", fail_replace)
+    import pytest
+    with pytest.raises(OSError, match="simulated replace failure"):
+        module._atomic_write_text(path, "new-content")
+    assert path.read_text(encoding="utf-8") == "old-complete-content"
+    assert list(tmp_path.glob(".games.json.*.tmp")) == []
+
+
+def test_atomic_backfill_write_replaces_file_with_complete_content(tmp_path):
+    module = _load()
+    path = tmp_path / "nba" / "games.json"
+    module._atomic_write_text(path, '{"games": {"1": {}}}')
+    assert json.loads(path.read_text(encoding="utf-8")) == {"games": {"1": {}}}
+    assert list(path.parent.glob(".games.json.*.tmp")) == []
+
