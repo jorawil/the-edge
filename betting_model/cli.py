@@ -135,6 +135,49 @@ def _deduplicate_props(props: list[Any]) -> tuple[list[Any], int]:
     return unique, duplicates
 
 
+
+def _flag_projection_conflicts(props: list[Any]) -> tuple[list[Any], int]:
+    """Mark different projection values for the same event/player/market."""
+    groups: dict[tuple[str, str, str, str], list[int]] = {}
+    values_by_group: dict[tuple[str, str, str, str], set[float]] = {}
+    for index, prop in enumerate(props):
+        if not isinstance(prop, dict) or prop.get("projected") is None:
+            continue
+        event = prop.get("event_id") or prop.get("game_id") or prop.get("event_start")
+        player = prop.get("player_id") or prop.get("player") or prop.get("player_name")
+        if not event or not player:
+            continue
+        try:
+            value = parse_finite_number(prop.get("projected"), "projected")
+        except ValueError:
+            continue
+        key = (
+            str(event).strip(),
+            str(prop.get("sport") or "").strip().casefold(),
+            str(player).strip().casefold(),
+            str(prop.get("market") or "").strip().casefold().replace(" ", "_"),
+        )
+        groups.setdefault(key, []).append(index)
+        values_by_group.setdefault(key, set()).add(round(value, 4))
+
+    conflicts = 0
+    output = [dict(prop) if isinstance(prop, dict) else prop for prop in props]
+    for key, indexes in groups.items():
+        values = sorted(values_by_group[key])
+        if len(values) <= 1:
+            continue
+        conflicts += 1
+        sources = sorted({
+            str(output[index].get("projection_source") or output[index].get("source") or "source not recorded")
+            for index in indexes
+        })
+        for index in indexes:
+            output[index]["projection_conflict"] = True
+            output[index]["projection_conflict_values"] = values
+            output[index]["projection_conflict_sources"] = sources
+    return output, conflicts
+
+
 def evaluate_props_file(
     props_path: Path,
     out_dir: Path,
@@ -154,6 +197,7 @@ def evaluate_props_file(
 
     submitted_total = len(props)
     props, duplicates_excluded = _deduplicate_props(props)
+    props, projection_conflicts = _flag_projection_conflicts(props)
     props = attach_opposites(props)
     results = [
         evaluate_prop(p, n=n, file_meta=meta, threshold=threshold) for p in props
@@ -175,6 +219,7 @@ def evaluate_props_file(
             "total": len(ranked),
             "submitted_total": submitted_total,
             "duplicates_excluded": duplicates_excluded,
+            "projection_conflicts": projection_conflicts,
             "evaluated": len(evaluated),
             "skipped": len(skipped),
             "qualified": len(groups["QUALIFIED"]),
