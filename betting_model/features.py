@@ -224,3 +224,107 @@ def build_league_efficiency_prior(
         "n_players": len(players),
         "as_of": cutoff.isoformat(),
     }
+
+
+
+def build_history_index(
+    games: dict[str, Any],
+    *,
+    sport: str,
+    markets: list[str] | tuple[str, ...],
+    before_event_time: str | datetime,
+    data_updated_at: str | None = None,
+    data_updated_source: str | None = None,
+) -> dict[str, Any]:
+    """Index all prior player-market histories in one pass for daily forecast generation."""
+    allowed = NBA_MARKETS if sport == "nba" else NFL_MARKETS if sport == "nfl" else set()
+    requested = tuple(dict.fromkeys(markets))
+    unsupported = [market for market in requested if market not in allowed]
+    if unsupported:
+        raise ValueError(f"unsupported {sport} markets: {', '.join(unsupported)}")
+    cutoff = _event_time(before_event_time) if isinstance(before_event_time, str) else before_event_time
+    if cutoff is None or cutoff.tzinfo is None:
+        raise ValueError("before_event_time must be timezone-aware")
+    cutoff = cutoff.astimezone(timezone.utc)
+    input_time, input_text = (None, None)
+    if data_updated_at:
+        input_time, input_text = _event_time(data_updated_at), str(data_updated_at).strip()
+        if input_time is None:
+            raise ValueError("data_updated_at must be timezone-aware")
+        if input_time > cutoff:
+            raise ValueError("data_updated_at is after the target event time")
+
+    eligible = []
+    for event_id, game in games.items():
+        if not isinstance(game, dict) or game.get("season_type_id") != 2:
+            continue
+        when = _event_time(game.get("date_utc"))
+        if when is not None and when < cutoff:
+            eligible.append((when, str(event_id), game))
+    eligible.sort(key=lambda item: (item[0], item[1]))
+
+    histories: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    totals = {market: [0.0, 0.0, set(), set()] for market in requested}
+    exclusions = {market: {"missing_actual": 0, "missing_opportunity": 0,
+                           "invalid_zero_opportunity": 0} for market in requested}
+    for when, event_id, game in eligible:
+        grouped: dict[str, list[dict[str, Any]]] = {}
+        for player in game.get("players") or []:
+            if not isinstance(player, dict) or player.get("dnp") or player.get("athlete_id") is None:
+                continue
+            grouped.setdefault(str(player["athlete_id"]), []).append(player)
+        for player_id, player_rows in grouped.items():
+            team = next((row.get("team") for row in player_rows if row.get("team")), None)
+            for market in requested:
+                actual, opportunity = _market_values(sport, market, player_rows)
+                if actual is None:
+                    exclusions[market]["missing_actual"] += 1
+                    continue
+                if opportunity is None:
+                    exclusions[market]["missing_opportunity"] += 1
+                    continue
+                if opportunity == 0 and actual > 0:
+                    exclusions[market]["invalid_zero_opportunity"] += 1
+                    continue
+                histories.setdefault((player_id, market), []).append({
+                    "event_id": event_id,
+                    "event_time": when.isoformat(),
+                    "actual": actual,
+                    "opportunity": opportunity,
+                    "team": team,
+                })
+                totals[market][0] += actual
+                totals[market][1] += opportunity
+                totals[market][2].add(event_id)
+                totals[market][3].add(player_id)
+
+    league_priors = {}
+    for market in requested:
+        actual, opportunity, event_ids, players = totals[market]
+        league_priors[market] = {
+            "ok": opportunity > 0,
+            "sport": sport,
+            "market": market,
+            "prior_efficiency": actual / opportunity if opportunity > 0 else None,
+            "total_actual": actual,
+            "total_opportunity": opportunity,
+            "n_events": len(event_ids),
+            "n_players": len(players),
+            "as_of": cutoff.isoformat(),
+        }
+
+    return {
+        "ok": True,
+        "sport": sport,
+        "as_of": cutoff.isoformat(),
+        "projection_input_at": input_text,
+        "projection_input_source": data_updated_source if input_text else None,
+        "histories": histories,
+        "league_priors": league_priors,
+        "eligible_events": len(eligible),
+        "player_market_histories": len(histories),
+        "exclusions": exclusions,
+        "warnings": ([] if input_text else [
+            "source ingestion timestamp is not recorded; projection_input_at remains unknown"
+        ]),
+    }
