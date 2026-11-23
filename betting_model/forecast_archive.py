@@ -17,7 +17,7 @@ from typing import Any
 
 from .timeutil import parse_aware_datetime
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 MAX_PROJECTION_AGE = timedelta(hours=6)
 CLOCK_SKEW = timedelta(minutes=2)
 
@@ -125,6 +125,20 @@ def migrate(conn: sqlite3.Connection) -> int:
         SELECT RAISE(ABORT, 'forecast results are immutable');
     END;
     """)
+    existing = {
+        row["name"] for row in conn.execute("PRAGMA table_info(forecast_snapshots)").fetchall()
+    }
+    additive_columns = {
+        "n_history": "INTEGER NOT NULL DEFAULT 0",
+        "n_opportunity": "INTEGER NOT NULL DEFAULT 0",
+        "effective_opportunity": "REAL",
+        "sigma": "REAL",
+        "distribution": "TEXT",
+        "calibrated": "INTEGER NOT NULL DEFAULT 0",
+    }
+    for name, definition in additive_columns.items():
+        if name not in existing:
+            conn.execute(f"ALTER TABLE forecast_snapshots ADD COLUMN {name} {definition}")
     conn.execute(
         "INSERT INTO forecast_meta(key,value) VALUES('schema_version',?) "
         "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
