@@ -129,11 +129,19 @@ def assess(
     if moment.tzinfo is None:
         raise ValueError("as_of must include a timezone")
     projection = describe_projection(prop, row, file_meta)
+    if prop.get("projection_conflict") is True:
+        projection["provenance_complete"] = False
+        projection["evaluable_as_forecast"] = False
+        projection["warnings"].append("Conflicting projection values exist for this event/player/market; no source was selected.")
+        projection["explanation"] = " ".join(projection["warnings"])
     fresh = _freshness(prop, row, moment)
     reasons: list[str] = []
     kind = projection["kind"]
 
-    if not row.get("evaluated"):
+    if prop.get("projection_conflict") is True:
+        status = "NOT_EVALUABLE"
+        reasons.append("conflicting vendor projection values were found for this event, player, and market; no projection was selected")
+    elif not row.get("evaluated"):
         status = "NOT_EVALUABLE"
         reasons.append(row.get("skip_reason") or "this prop could not be priced")
     elif kind == "recent_average":
@@ -222,7 +230,8 @@ def assess(
     explanation = " ".join(
         [
             projection["explanation"],
-            _edge_sentence(row),
+            ("No probability or expected value is usable because the projection sources conflict."
+             if prop.get("projection_conflict") is True else _edge_sentence(row)),
             sigma_note,
             "Status: " + status.replace("_", " ") + ".",
             " ".join(reasons),
@@ -241,6 +250,9 @@ def assess(
         "freshness_detail": fresh["detail"],
         "explanation": " ".join(explanation.split()),
         "qualified": status == "QUALIFIED",
+        "projection_conflict": prop.get("projection_conflict") is True,
+        "projection_conflict_values": prop.get("projection_conflict_values") or [],
+        "projection_conflict_sources": prop.get("projection_conflict_sources") or [],
         "model_version": projection["model_version"],
     }
 
@@ -252,6 +264,16 @@ def apply_assessment(
     file_meta: dict[str, Any] | None = None,
     as_of: datetime | None = None,
 ) -> dict[str, Any]:
+    if prop.get("projection_conflict") is True:
+        for field in (
+            "model_prob", "model_probability", "win_probability", "loss_probability",
+            "push_probability", "conditional_win_probability", "edge",
+            "edge_vs_raw_implied", "settlement_edge_vs_raw_implied",
+            "edge_vs_fair_market", "threshold_edge", "expected_value_per_unit",
+        ):
+            row[field] = None
+        row["positive_edge"] = False
+        row["threshold_cleared"] = False
     row.update(assess(prop, row, file_meta=file_meta, as_of=as_of))
     books = row.get("books")
     if isinstance(books, dict):
