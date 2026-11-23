@@ -50,7 +50,6 @@ A manual GitHub Actions workflow can compare the latest fresh archived point for
 
 From the repository's **Actions** tab, choose **Manual Event Player Prop Scan** and enter:
 - Sport and the ESPN event ID shown in the daily forecast report.
-- The separate Odds API event ID for the same matchup. Provider event IDs are not ESPN event IDs; copy the matching ID from the Odds API events list and confirm the teams and start time.
 - Odds API market keys for the requested props.
 - Bookmaker keys (default: `fanduel,draftkings`).
 
@@ -58,6 +57,6 @@ NBA keys supported by the scan: `player_points`, `player_rebounds`, `player_assi
 
 NFL keys supported by the scan: `player_pass_yds`, `player_rush_yds`, `player_reception_yds`, `player_receptions`. The forecast engine's `REC` market is catches and is mapped to `RECEPTIONS` for matching; it is not treated as receiving yards.
 
-The workflow requires both IDs because the ESPN and Odds API use different event identifiers. The daily forecast archive includes the full ESPN home/away team names. Before any price is archived, the scan requires an exact normalized home/away matchup match against the provider response; the existing collector also checks the sportsbook commence time against the archived forecast start. A mismatched event is rejected. The report records the actual quota headers returned by the provider, prices that were stored or rejected, and missing books. The number of credits used can depend on the requested markets; check the returned `requests_last` and `requests_remaining` values. This workflow is manual only—there is no daily automatic Odds API polling.
+The workflow only requires the ESPN event ID. It first calls the provider's events metadata endpoint to resolve the corresponding Odds API event ID by exact home/away team names and kickoff time. If there is no unique match, no player-prop market request is made. It then verifies the matchup again against the player-props response before archiving; the existing collector also checks the sportsbook commence time against the archived forecast start. A mismatched event is rejected. The report separates the metadata lookup request from the billable player-prop call and preserves quota headers. The report records the actual quota headers returned by the provider, prices that were stored or rejected, and missing books. The number of credits used can depend on the requested markets; check the returned `requests_last` and `requests_remaining` values. This workflow is manual only—there is no daily automatic Odds API polling.
 
 The FanDuel feed is the generic US feed, not verified as FanDuel Indiana. Prices are archived as FanDuel, never relabeled as Indiana. Forecasts are still uncalibrated point estimates; a screen pass is not a qualified bet. The workflow does not build or place tickets.
