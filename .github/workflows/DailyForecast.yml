@@ -1,6 +1,15 @@
 name: Daily Pregame Forecast Archive
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/DailyForecast.yml"
+      - "scripts/generate_pregame_forecasts.py"
+      - "scripts/grade_forecast_archive.py"
+      - "betting_model/forecast_archive.py"
+      - "betting_model/features.py"
+      - "betting_model/projection_engine.py"
   schedule:
     - cron: "0 10 * * *"
   workflow_dispatch:
