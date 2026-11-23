@@ -226,8 +226,8 @@ def test_point_projection_line_comparisons_are_descriptive_and_side_aware():
 
 def test_point_projection_line_comparisons_refuse_ambiguous_player_names():
     projections = [
-        {"player": "J Smith", "player_id": "1", "market": "PASS_YDS", "projected": 200},
-        {"player": "John Smith", "player_id": "2", "market": "PASS_YDS", "projected": 210},
+        {"player": "John Smith", "player_id": "1", "market": "PASS_YDS", "projected": 200},
+        {"player": "James Smith", "player_id": "2", "market": "PASS_YDS", "projected": 210},
     ]
     prices = [{
         "player": "J Smith", "market": "player_pass_yds", "side": "Over",
