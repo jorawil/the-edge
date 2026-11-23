@@ -326,6 +326,7 @@ def generate(
         "forecasts_by_market": dict(sorted(by_market.items())),
         "errors": errors,
         "archive_path": str(archive_path),
+        "archive_storage_format": "gzip-compressed on historical-data branch; SQLite at runtime",
         "archive_summary": archive_summary,
         "model_selection_version": SELECTION_VERSION,
         "history_index": {
