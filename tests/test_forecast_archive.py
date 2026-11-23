@@ -222,3 +222,30 @@ def test_forecast_metrics_use_latest_snapshot_per_player_event_market(tmp_path, 
     assert report["groups"][0]["n_forecasts"] == 1
     assert report["groups"][0]["n_events"] == 1
     assert report["groups"][0]["mean_signed_error"] == 3.5
+
+
+
+def test_pending_forecasts_exposes_forward_compatible_payload_fields(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    snapshot = _snapshot(now)
+    snapshot.update({
+        "home_team_name": "Indianapolis Colts",
+        "away_team_name": "Houston Texans",
+        "opportunity_window_games": 5,
+        "efficiency_window_games": 20,
+        "n_efficiency_history": 20,
+    })
+    path = tmp_path / "payload-fields.sqlite"
+    saved = archive.archive_forecast(snapshot, path)
+    assert saved["ok"] is True
+
+    pending = archive.pending_forecasts(path)
+    assert len(pending) == 1
+    row = pending[0]
+    assert row["home_team_name"] == "Indianapolis Colts"
+    assert row["away_team_name"] == "Houston Texans"
+    assert row["opportunity_window_games"] == 5
+    assert row["efficiency_window_games"] == 20
+    assert row["n_efficiency_history"] == 20
+    assert row["payload"]["home_team_name"] == "Indianapolis Colts"
