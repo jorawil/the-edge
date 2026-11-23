@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "ok": true,
+      "sport": "nba",
+      "days_ahead": 7,
+      "events_found": 48,
+      "players_in_rosters": 528,
+      "forecasts_archived": 8035,
+      "duplicates": 0,
+      "skipped": {
+        "insufficient_history": 405
+      },
+      "forecasts_by_market": {
+        "3PM": 1607,
+        "AST": 1607,
+        "PRA": 1607,
+        "PTS": 1607,
+        "REB": 1607
+      },
+      "errors": [],
+      "archive_path": "historical-data/forecasts/forecast_archive.sqlite",
+      "model_selection_version": "walk-forward-selection-2026-11-22",
+      "odds_api_calls": 0,
+      "calibration_claimed": false
+    },
+    {
+      "ok": true,
+      "sport": "nfl",
+      "days_ahead": 7,
+      "events_found": 16,
+      "players_in_rosters": 2413,
+      "forecasts_archived": 1454,
+      "duplicates": 0,
+      "skipped": {
+        "insufficient_history": 8822
+      },
+      "forecasts_by_market": {
+        "PASS_YDS": 89,
+        "REC": 515,
+        "REC_YDS": 513,
+        "RUSH_YDS": 337
+      },
+      "errors": [],
+      "archive_path": "historical-data/forecasts/forecast_archive.sqlite",
+      "model_selection_version": "walk-forward-selection-2026-11-22",
+      "odds_api_calls": 0,
+      "calibration_claimed": false
+    }
+  ]
+}

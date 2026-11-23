@@ -1,0 +1,36 @@
+[
+ {
+  "sport": "nfl",
+  "events_in_window": 12,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 8,
+  "already_covered": 0,
+  "added": 8,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401873075",
+    "name": "Las Vegas Raiders at Denver Broncos",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873069",
+    "name": "Jacksonville Jaguars at New York Giants",
+    "reason": "not final (In Progress)"
+   },
+   {
+    "id": "401873077",
+    "name": "Minnesota Vikings at San Francisco 49ers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873078",
+    "name": "Cincinnati Bengals at Washington Commanders",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]
