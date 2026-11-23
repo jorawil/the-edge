@@ -82,6 +82,12 @@ def migrate(conn: sqlite3.Connection) -> int:
         projected_value REAL NOT NULL,
         projected_opportunity REAL,
         projected_efficiency REAL,
+        n_history INTEGER NOT NULL,
+        n_opportunity INTEGER NOT NULL,
+        effective_opportunity REAL,
+        sigma REAL,
+        distribution TEXT,
+        calibrated INTEGER NOT NULL,
         model_version TEXT NOT NULL,
         projection_at TEXT NOT NULL,
         projection_input_at TEXT,
@@ -133,6 +139,8 @@ def _snapshot_key(row: dict[str, Any]) -> str:
         "sport": row["sport"], "event_id": row["event_id"],
         "player_id": row["player_id"], "market": row["market"],
         "projected_value": round(row["projected_value"], 6),
+        "n_history": row["n_history"],
+        "n_opportunity": row["n_opportunity"],
         "model_version": row["model_version"],
         "projection_at": row["projection_at"],
         "projection_input_at": row.get("projection_input_at"),
@@ -149,7 +157,8 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
         return {"ok": False, "reason": "postgame fields are not allowed", "fields": leaked}
 
     required = ("sport", "event_id", "event_start", "player_id", "market",
-                "projected_value", "model_version", "projection_at", "source")
+                "projected_value", "model_version", "projection_at", "source",
+                "n_history", "n_opportunity")
     missing = [key for key in required if snapshot.get(key) in (None, "")]
     if missing:
         return {"ok": False, "reason": "missing required fields", "fields": missing}
@@ -164,6 +173,16 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
         efficiency = None if snapshot.get("projected_efficiency") is None else _number(
             snapshot["projected_efficiency"], "projected_efficiency"
         )
+        n_history = int(snapshot["n_history"])
+        n_opportunity = int(snapshot["n_opportunity"])
+        if n_history < 0 or n_opportunity < 0 or n_opportunity > n_history:
+            raise ValueError("n_history and n_opportunity must be non-negative counts with n_opportunity <= n_history")
+        effective_opportunity = None if snapshot.get("effective_opportunity_after_shrinkage") is None else _number(
+            snapshot["effective_opportunity_after_shrinkage"], "effective_opportunity_after_shrinkage"
+        )
+        sigma = None if snapshot.get("sigma") is None else _number(snapshot["sigma"], "sigma")
+        distribution = snapshot.get("distribution")
+        calibrated = snapshot.get("calibrated") is True
         input_at, input_text = (None, None)
         if snapshot.get("projection_input_at") not in (None, ""):
             input_at, input_text = _parsed(snapshot["projection_input_at"], "projection_input_at")
@@ -192,6 +211,12 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
         "projected_value": projected,
         "projected_opportunity": opportunity,
         "projected_efficiency": efficiency,
+        "n_history": n_history,
+        "n_opportunity": n_opportunity,
+        "effective_opportunity": effective_opportunity,
+        "sigma": sigma,
+        "distribution": distribution,
+        "calibrated": 1 if calibrated else 0,
         "model_version": str(snapshot["model_version"]).strip(),
         "projection_at": projection_text,
         "projection_input_at": input_text,
@@ -211,14 +236,17 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
             """INSERT INTO forecast_snapshots(
                 snapshot_id,observation_key,archived_at,sport,event_id,event_start,
                 player_id,player_name,team,opponent,market,projected_value,
-                projected_opportunity,projected_efficiency,model_version,
+                projected_opportunity,projected_efficiency,n_history,n_opportunity,
+                effective_opportunity,sigma,distribution,calibrated,model_version,
                 projection_at,projection_input_at,projection_input_source,
                 source,warnings_json,payload_json
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (snapshot_id, key, _utc_text(now), row["sport"], row["event_id"],
              row["event_start"], row["player_id"], row["player_name"], row["team"],
              row["opponent"], row["market"], row["projected_value"],
              row["projected_opportunity"], row["projected_efficiency"],
+             row["n_history"], row["n_opportunity"], row["effective_opportunity"],
+             row["sigma"], row["distribution"], row["calibrated"],
              row["model_version"], row["projection_at"], row["projection_input_at"],
              row["projection_input_source"], row["source"], row["warnings_json"],
              row["payload_json"]),
