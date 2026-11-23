@@ -50,6 +50,12 @@ def fetch_json(url: str, *, attempts: int = 3) -> dict[str, Any]:
             if not isinstance(payload, dict):
                 raise ValueError("ESPN response is not a JSON object")
             return payload
+        except urllib.error.HTTPError as exc:
+            if 400 <= exc.code < 500 and exc.code != 429:
+                raise RuntimeError(f"ESPN returned non-retryable HTTP {exc.code}: {exc.reason}") from exc
+            last_error = f"HTTP {exc.code}: {exc.reason}"
+            if attempt + 1 < attempts:
+                time.sleep(attempt + 1)
         except (OSError, urllib.error.URLError, json.JSONDecodeError, ValueError) as exc:
             last_error = str(exc)
             if attempt + 1 < attempts:
