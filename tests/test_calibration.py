@@ -162,3 +162,37 @@ def test_backtest_counts_props_the_screen_would_have_rejected():
     assert report["props_not_clearing_threshold"] == 1
     assert report["hit_rate_interval_all_decided"] is not None
     assert report["sigma_defaults_changed"] is False
+
+
+
+def test_chronological_split_keeps_all_player_market_rows_for_an_event_together():
+    event_three_first = _snap(3)
+    event_three_first["snapshot_id"] = "event-3-player-a"
+    event_three_second = _snap(3, projected=24, market="REB")
+    event_three_second["snapshot_id"] = "event-3-player-b"
+    event_three_second["player_id"] = "fix-2"
+    rows = [
+        _snap(1), _snap(2), event_three_first, event_three_second,
+        _snap(4), _snap(5),
+    ]
+    parts = chronological_split(rows)
+    locations = {
+        row["snapshot_id"]: split
+        for split, group in parts.items()
+        for row in group
+    }
+    assert locations["event-3-player-a"] == "train"
+    assert locations["event-3-player-b"] == "train"
+    assert locations["snap-4"] == "validation"
+    assert locations["snap-5"] == "test"
+
+
+def test_chronological_split_rejects_missing_or_naive_event_time():
+    missing = _snap(1)
+    missing["event_start"] = None
+    try:
+        chronological_split([missing])
+    except ValueError as exc:
+        assert "timezone-aware event_start" in str(exc)
+    else:
+        raise AssertionError("missing event time must not be silently sorted")
