@@ -269,17 +269,23 @@ def fetch_sport_events(
             "events": None, "called": True,
         }
     response = fetched["response"]
+    quota = _quota(response)
+    if response.status_code != 200:
+        return {
+            "ok": False, "reason": f"http_{response.status_code}",
+            "body": redact(getattr(response, "text", "") or "")[:500],
+            "sport_key": sport_key, "events": None, "called": True, **quota,
+        }
     payload, error = _read_json(response)
     if error:
         return {
             "ok": False, "reason": error, "sport_key": sport_key,
-            "events": None, "called": True, **_quota(response),
+            "events": None, "called": True, **quota,
         }
     if not isinstance(payload, list):
         return {
             "ok": False, "reason": "invalid events response shape",
-            "sport_key": sport_key, "events": None, "called": True,
-            **_quota(response),
+            "sport_key": sport_key, "events": None, "called": True, **quota,
         }
     events = [
         event for event in payload
