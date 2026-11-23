@@ -82,7 +82,7 @@ def test_missing_nba_projection_does_not_use_recent_average_fallback(monkeypatch
     def forbidden(*args, **kwargs):
         raise AssertionError("recent-average provider must not be called by desk evaluation")
 
-    monkeypatch.setattr("betting_model.sports.get_nba_player_recent_avg", forbidden)
+    monkeypatch.setattr("betting_model.sports.get_nba_player_recent_avg", forbidden, raising=False)
     row = evaluate_prop(
         {
             "player": "Example Player",
