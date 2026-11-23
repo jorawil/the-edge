@@ -32,6 +32,13 @@ What it does not do
 - It never falls back to a recent average, a manual number, or a name
   match. Identity is by stable ``player_id`` / ``event_id`` / canonical
   market only.
+- Candidate timestamps are normalized to UTC before any ordering or
+  comparison. The archive stores the projection timestamp exactly as
+  supplied, and equivalent instants may be written with different UTC
+  offsets, so lexicographic ordering of the stored text is never used
+  to decide which snapshot is newest — two snapshots at the same UTC
+  instant with different projected values are ambiguous, even when
+  their stored texts differ.
 
 Rejection reasons (stable strings, safe to branch on):
 
@@ -155,7 +162,12 @@ def get_latest_forecast(
     if sport is not None:
         sql += " AND sport=?"
         params.append(str(sport).strip().lower())
-    sql += " ORDER BY projection_at DESC, archived_at DESC, snapshot_id ASC"
+    # NOTE: no ORDER BY on projection_at. Stored projection timestamps
+    # keep their original UTC offset, so their text order is not their
+    # chronological order. Ordering happens below, on UTC-normalized
+    # datetimes. archived_at is always stored in UTC ("...Z"), so its
+    # text order is chronological and is a safe deterministic tiebreak.
+    sql += " ORDER BY archived_at DESC, snapshot_id ASC"
 
     try:
         with _read_only_connection(path) as conn:
@@ -166,14 +178,35 @@ def get_latest_forecast(
     if not rows:
         return {"ok": False, "forecast": None, "reason": "not_found"}
 
-    # Evaluate candidates newest-first. The first reason encountered on the
-    # newest candidate is the reported reason when nothing is usable.
-    first_reason: str | None = None
-    valid: list[dict[str, Any]] = []
+    # Normalize every candidate's timestamps to UTC, then order newest
+    # first. Unparseable timestamps sort last: they cannot be placed
+    # chronologically, and a usable snapshot must win over one that
+    # cannot even be dated.
+    entries: list[tuple[dict[str, Any], datetime | None, datetime | None]] = []
     for row in rows:
         item = _forecast_dict(row)
-        event_start = parse_aware_datetime(item.get("event_start"))
-        projection_at = parse_aware_datetime(item.get("projection_at"))
+        projection_utc = parse_aware_datetime(item.get("projection_at"))
+        if projection_utc is not None:
+            projection_utc = projection_utc.astimezone(timezone.utc)
+        event_utc = parse_aware_datetime(item.get("event_start"))
+        if event_utc is not None:
+            event_utc = event_utc.astimezone(timezone.utc)
+        entries.append((item, projection_utc, event_utc))
+    entries.sort(key=lambda entry: entry[0].get("snapshot_id") or "")
+    entries.sort(key=lambda entry: entry[0].get("archived_at") or "", reverse=True)
+    entries.sort(
+        key=lambda entry: (
+            entry[1] is not None,
+            entry[1] or datetime.min.replace(tzinfo=timezone.utc),
+        ),
+        reverse=True,
+    )
+
+    # Evaluate candidates newest-first. The first reason encountered on
+    # the newest candidate is the reported reason when nothing is usable.
+    first_reason: str | None = None
+    valid: list[tuple[dict[str, Any], datetime]] = []
+    for item, projection_at, event_start in entries:
         if event_start is None:
             reason = "invalid_event_start"
         elif projection_at is None:
@@ -192,14 +225,17 @@ def get_latest_forecast(
             reason = None
         if first_reason is None:
             first_reason = reason
-        if reason is None:
-            valid.append(item)
+        if reason is None and projection_at is not None:
+            valid.append((item, projection_at))
 
     if not valid:
         return {"ok": False, "forecast": None, "reason": first_reason or "not_found"}
 
-    newest_projection_at = valid[0]["projection_at"]
-    newest = [item for item in valid if item["projection_at"] == newest_projection_at]
+    # Ambiguity is judged on the normalized UTC instant, not the stored
+    # text: the same instant written with a different offset is the
+    # same instant.
+    newest_projection_at = valid[0][1]
+    newest = [item for item, instant in valid if instant == newest_projection_at]
     distinct_values = {round(float(item["projected_value"]), 6) for item in newest}
     if len(distinct_values) > 1:
         return {"ok": False, "forecast": None, "reason": "ambiguous_snapshots"}

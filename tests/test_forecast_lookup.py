@@ -230,3 +230,99 @@ def test_lookup_reports_invalid_archive_instead_of_crashing(tmp_path):
         as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
     )
     assert result == {"ok": False, "forecast": None, "reason": "archive_invalid"}
+
+
+def test_lookup_orders_by_utc_instant_not_stored_text(tmp_path, monkeypatch):
+    """Lexical order of the stored text disagrees with chronological order.
+
+    Snapshot A is written "12:00:00+05:00" (07:00 UTC) and snapshot B
+    "09:00:00Z" (09:00 UTC). As text, "12:00..." sorts after "09:00...",
+    so a text ORDER BY would wrongly pick A as newest. Chronologically
+    B (09:00 UTC) is the newest snapshot.
+    """
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T12:00:00+05:00",
+        projection_input_at="2026-11-22T11:55:00+05:00",
+    )
+    _archive(
+        path, now, projected_value=26.5,
+        projection_at="2026-11-22T09:00:00Z",
+        projection_input_at="2026-11-22T08:55:00Z",
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is True
+    assert result["forecast"]["projected_value"] == 26.5
+    assert result["forecast"]["projection_at"] == "2026-11-22T09:00:00Z"
+
+
+def test_lookup_treats_same_instant_in_different_offsets_as_ambiguous(tmp_path, monkeypatch):
+    """12:00Z and 07:00-05:00 are the same instant; two different values
+    at that instant are ambiguous, even though the stored texts differ."""
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T12:00:00Z",
+        projection_input_at="2026-11-22T11:55:00Z",
+    )
+    _archive(
+        path, now, projected_value=27.5,
+        projection_at="2026-11-22T07:00:00-05:00",
+        projection_input_at="2026-11-22T06:55:00-05:00",
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {"ok": False, "forecast": None, "reason": "ambiguous_snapshots"}
+
+
+def test_lookup_same_instant_same_value_in_different_offsets_is_not_ambiguous(tmp_path, monkeypatch):
+    """The same instant and the same value, written with different
+    offsets, is one forecast restated — not a conflict."""
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T12:00:00Z",
+        projection_input_at="2026-11-22T11:55:00Z",
+    )
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T07:00:00-05:00",
+        projection_input_at="2026-11-22T06:55:00-05:00",
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is True
+    assert result["forecast"]["projected_value"] == 24.5
+
+
+def test_lookup_freshness_uses_utc_age_for_offset_timestamps(tmp_path, monkeypatch):
+    """A projection written "13:00+02:00" is 11:00 UTC — one hour old at
+    a 12:00 UTC lookup, not thirteen hours old and not in the future."""
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T13:00:00+02:00",
+        projection_input_at="2026-11-22T12:55:00+02:00",
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is True
+    assert result["forecast"]["projected_value"] == 24.5
