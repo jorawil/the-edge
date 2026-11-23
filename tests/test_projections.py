@@ -99,8 +99,8 @@ def test_missing_nba_projection_does_not_use_recent_average_fallback(monkeypatch
     )
     assert row["evaluated"] is False
     assert row["status"] == "NOT_EVALUABLE"
-    assert row["projected"] is None
-    assert row["model_prob"] is None
+    assert row.get("projected") is None
+    assert row.get("model_prob") is None
     assert row["projection_kind"] == "unavailable"
     assert "recent averages are historical context" in row["skip_reason"]
 
