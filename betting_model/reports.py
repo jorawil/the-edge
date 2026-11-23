@@ -99,9 +99,6 @@ def plain_header(payload: dict[str, Any]) -> str:
         f"Not evaluable: {summary.get('not_evaluable', 0)}.",
         "Reasons are on each row in the JSON (`status_reasons` and `explanation`).",
         "",
-        "The tables below use the original formula: normal-model probability minus the "
-        "vig-inclusive implied probability, flagged at more than 3 points. "
-        "Read the grade above before treating any of those rows as a candidate.",
         "",
     ]
     return "\n".join(lines)
