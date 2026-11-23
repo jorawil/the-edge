@@ -438,7 +438,15 @@ def pending_forecasts(path: Path) -> list[dict[str, Any]]:
     for row in rows:
         item = dict(row)
         try:
-            item["payload"] = json.loads(item.pop("payload_json"))
+            payload = json.loads(item.pop("payload_json"))
+            if not isinstance(payload, dict):
+                payload = {}
+            # Keep schema columns authoritative, while exposing forward-compatible
+            # snapshot metadata (for example full matchup names and model windows)
+            # to consumers that need it for safe joins.
+            for key, value in payload.items():
+                item.setdefault(key, value)
+            item["payload"] = payload
             item["warnings"] = json.loads(item.pop("warnings_json"))
         except (TypeError, json.JSONDecodeError):
             item["payload"] = {}
