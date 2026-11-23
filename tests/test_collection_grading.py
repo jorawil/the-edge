@@ -1086,3 +1086,36 @@ def test_collect_cli_returns_nonzero_when_every_prop_is_rejected(tmp_path: Path)
         "--journal", str(tmp_path / "journal.sqlite"),
     ])
     assert code == 2
+
+
+def test_grading_with_unresolved_rows_is_partial_not_success(tmp_path: Path, clock):
+    database, journal = _paths(tmp_path)
+    collect_pregame(database, [_prop()], journal_path=journal)
+    clock["moment"] = LATER
+
+    class MissingPlayer:
+        def fetch_event(self, _snapshot):
+            return {
+                "ok": True, "status": "final", "event_id": "game-1",
+                "source": FIXTURE, "matched_by": "event_id",
+                "players": [],
+            }
+
+    result = grade_archive(database, MissingPlayer(), journal_path=journal)
+    assert result["ok"] is False
+    assert result["unresolved"] == 1
+    assert Journal(journal).runs("grade")[0]["status"] == "failed"
+
+
+def test_missing_archive_is_recorded_as_failed_grade_run(tmp_path: Path):
+    database = tmp_path / "missing.sqlite"
+    journal = tmp_path / "journal.sqlite"
+
+    class Noop:
+        def fetch_event(self, _snapshot):
+            raise AssertionError("source must not be called without an archive")
+
+    result = grade_archive(database, Noop(), journal_path=journal)
+    assert result["ok"] is False
+    assert Journal(journal).runs("grade")[0]["status"] == "failed"
+
