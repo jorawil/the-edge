@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from betting_model.features import _market_values
+from betting_model.timeutil import parse_aware_datetime
 from betting_model.forecast_archive import (
     attach_forecast_result,
     archive_stats,
@@ -31,7 +32,16 @@ def _load_games(sport: str, root: Path) -> dict[str, Any]:
 
 
 def grade(archive_path: Path, data_root: Path) -> dict[str, Any]:
-    pending = pending_forecasts(archive_path)
+    all_pending = pending_forecasts(archive_path)
+    now = datetime.now(timezone.utc)
+    pending = []
+    future_pending = 0
+    for snapshot in all_pending:
+        event_start = parse_aware_datetime(snapshot.get("event_start"))
+        if event_start is not None and event_start > now:
+            future_pending += 1
+        else:
+            pending.append(snapshot)
     games_by_sport: dict[str, dict[str, Any]] = {}
     counts = Counter()
     errors = []
@@ -91,6 +101,8 @@ def grade(archive_path: Path, data_root: Path) -> dict[str, Any]:
     return {
         "ok": True,
         "checked_pending": len(pending),
+        "future_pending_not_checked": future_pending,
+        "total_pending": len(all_pending),
         "graded": counts["graded"],
         "void_dnp": counts["void_dnp"],
         "unresolved": {key: value for key, value in counts.items()
