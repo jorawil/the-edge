@@ -15,6 +15,7 @@ from typing import Any
 from betting_model.features import _market_values
 from betting_model.forecast_archive import (
     attach_forecast_result,
+    archive_stats,
     forecast_metrics,
     pending_forecasts,
 )
@@ -97,6 +98,7 @@ def grade(archive_path: Path, data_root: Path) -> dict[str, Any]:
         "result_rejected": counts["result_rejected"],
         "errors": errors,
         "metrics": metrics,
+        "archive_summary": archive_stats(archive_path),
         "graded_at": datetime.now(timezone.utc).isoformat(),
     }
 
