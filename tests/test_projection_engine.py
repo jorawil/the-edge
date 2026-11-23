@@ -178,3 +178,39 @@ def test_build_history_index_matches_player_history_and_excludes_same_time_games
     assert index["league_priors"]["PTS"]["prior_efficiency"] == pytest.approx(1.0)
     assert index["projection_input_at"] == "2026-01-04T19:00:00Z"
     assert index["eligible_events"] == 3
+
+
+
+def test_nba_projection_uses_independent_opportunity_and_efficiency_windows():
+    efficiency_history = [
+        {"actual": 10 + index, "opportunity": 20 + index}
+        for index in range(20)
+    ]
+    opportunity_history = [
+        {"actual": 0, "opportunity": value}
+        for value in (10, 20, 30, 40, 50)
+    ]
+    result = project_nba(
+        "PTS", efficiency_history, {"prior_efficiency": 0.5},
+        shrinkage_strength=5, opportunity_history=opportunity_history,
+    )
+    expected_efficiency = (sum(row["actual"] for row in efficiency_history) + 5 * 0.5) / (
+        sum(row["opportunity"] for row in efficiency_history) + 5
+    )
+    assert result["ok"] is True
+    assert result["projected_opportunity"] == pytest.approx(30)
+    assert result["projected_efficiency"] == pytest.approx(expected_efficiency)
+    assert result["projected_value"] == pytest.approx(30 * expected_efficiency)
+    assert result["n_history"] == 20
+    assert result["n_efficiency_history"] == 20
+    assert result["n_opportunity"] == 5
+
+
+def test_separate_opportunity_history_requires_three_valid_games():
+    result = project_nfl(
+        "REC", [{"actual": 4, "opportunity": 5}] * 5,
+        {"prior_efficiency": 0.6}, shrinkage_strength=5,
+        opportunity_history=[{"actual": 4, "opportunity": 5}] * 2,
+    )
+    assert result["ok"] is False
+    assert result["reason"] == "insufficient_history"
