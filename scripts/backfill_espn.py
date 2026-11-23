@@ -6,11 +6,34 @@ import sys
 import time
 import datetime as dt
 import os
+import tempfile
 import urllib.request
 from pathlib import Path
 DATA = Path(os.environ.get("EDGE_DATA_DIR", Path(__file__).resolve().parents[1] / "data"))
 SPORTS = {"nba": "basketball/nba", "nhl": "hockey/nhl", "nfl": "football/nfl", "cfb": "football/college-football"}
 BASE = "https://site.api.espn.com/apis/site/v2/sports/"
+
+
+def _atomic_write_text(path, content):
+    """Replace a file only after its complete contents are safely written."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=str(path.parent)
+    )
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    except Exception:
+        try:
+            os.unlink(temporary)
+        except FileNotFoundError:
+            pass
+        raise
+
 
 def get(url, tries=3):
     for i in range(tries):
@@ -142,7 +165,7 @@ def run(sport, start, end, fetcher=None, season_types=(2,)):
         else:
             added.append(gid)
     store["updated"] = dt.datetime.now(dt.timezone.utc).isoformat()
-    path.write_text(json.dumps(store, indent=1))
+    _atomic_write_text(path, json.dumps(store, indent=1))
     rep = {"sport": sport, "events_in_window": len(seen), "selected_season_types": sorted(allowed_season_types), "skipped_season_type": skipped_season,
            "final": len(seen) - len(skipped_season) - sum(1 for m in missing if m["reason"].startswith("not final")),
            "already_covered": len([g for g, event in seen.items() if _season_metadata(event)["season_type_id"] in allowed_season_types and g in pre and record_is_complete(store["games"].get(g, {}))]),
@@ -184,9 +207,9 @@ def main(argv=None):
     reps = [run(sport, start, end, season_types=season_types) for sport in chosen]
     dated = DATA / f"backfill_report_{start.isoformat()}_{end.isoformat()}.json"
     dated.parent.mkdir(parents=True, exist_ok=True)
-    dated.write_text(json.dumps(reps, indent=1))
+    _atomic_write_text(dated, json.dumps(reps, indent=1))
     if (start, end) == (dt.date(2026, 10, 24), dt.date(2026, 10, 31)):
-        (DATA / "backfill_report_oct24_31.json").write_text(json.dumps(reps, indent=1))
+        _atomic_write_text(DATA / "backfill_report_oct24_31.json", json.dumps(reps, indent=1))
     return reps
 
 
