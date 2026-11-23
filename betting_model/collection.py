@@ -367,9 +367,10 @@ def _collect(
             continue
         reason = _precheck(prop)
         if reason:
-            _record(journal, run_id, "rejected", prop, reason=reason)
-            items.append({"action": "rejected", "reason": reason, "player": _player(prop)})
-            logger.warning("collection rejected %s: %s", _player(prop), reason)
+            action = "skipped" if "already started" in reason else "rejected"
+            _record(journal, run_id, action, prop, reason=reason)
+            items.append({"action": action, "reason": reason, "player": _player(prop)})
+            logger.warning("collection %s %s: %s", action, _player(prop), reason)
             continue
         cleaned, note = prepare_sportsbook(prop)
         raw = prop.get("_collection_raw") or prop
@@ -415,12 +416,14 @@ def _collect(
     stored = sum(1 for item in items if item["action"] == "stored")
     duplicates = sum(1 for item in items if item["action"] == "duplicate")
     rejected = sum(1 for item in items if item["action"] == "rejected")
+    skipped = sum(1 for item in items if item["action"] == "skipped")
     conflicts = sum(1 for item in items if item["action"] == "conflict")
     return {
         "ok": rejected == 0 and conflicts == 0,
         "stored": stored,
         "duplicates": duplicates,
         "rejected": rejected,
+        "skipped": skipped,
         "conflicts": conflicts,
         "provider_failures": 0,
         "items": items,
