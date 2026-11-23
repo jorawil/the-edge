@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import math
 import sqlite3
+from datetime import datetime, timezone
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -67,7 +68,7 @@ def load_active_residual_rows(path: Path) -> list[dict[str, Any]]:
 
 def _event_split(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     """Split chronologically by unique kickoff instant, never separating simultaneous events."""
-    event_times: dict[str, Any] = {}
+    event_times: dict[str, datetime] = {}
     for row in rows:
         event_id = str(row["event_id"])
         parsed = parse_aware_datetime(row["event_start"])
@@ -75,14 +76,13 @@ def _event_split(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
             raise ValueError("all event_start values must be timezone-aware timestamps")
         instant = parsed
         # Compare true instants, not timezone-formatted strings.
-        from datetime import timezone
         instant = instant.astimezone(timezone.utc)
         previous = event_times.get(event_id)
         if previous is not None and previous != instant:
             raise ValueError(f"event {event_id} has inconsistent event_start values")
         event_times[event_id] = instant
 
-    events_by_instant: dict[Any, set[str]] = defaultdict(set)
+    events_by_instant: dict[datetime, set[str]] = defaultdict(set)
     for event_id, instant in event_times.items():
         events_by_instant[instant].add(event_id)
     ordered_instants = sorted(events_by_instant)
