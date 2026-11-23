@@ -323,7 +323,12 @@ def collect_pregame(
         summary["calibration_claimed"] = False
         summary["profit_reported"] = False
         summary["automatic_betting"] = False
-        journal.finish_run(run_id, "completed", {key: value for key, value in summary.items() if key != "items"})
+        run_status = (
+            "completed" if summary.get("ok") is True
+            else "partial" if summary.get("stored", 0) or summary.get("duplicates", 0)
+            else "failed"
+        )
+        journal.finish_run(run_id, run_status, {key: value for key, value in summary.items() if key != "items"})
         logger.info(
             "collection stored=%s duplicates=%s rejected=%s conflicts=%s",
             summary["stored"],
@@ -412,7 +417,7 @@ def _collect(
     rejected = sum(1 for item in items if item["action"] == "rejected")
     conflicts = sum(1 for item in items if item["action"] == "conflict")
     return {
-        "ok": True,
+        "ok": rejected == 0 and conflicts == 0,
         "stored": stored,
         "duplicates": duplicates,
         "rejected": rejected,
@@ -496,7 +501,7 @@ def collect_event_odds(
             "automatic_betting": False,
             "items": [],
         }
-        journal.finish_run(run_id, "completed", {key: value for key, value in summary.items() if key != "items"})
+        journal.finish_run(run_id, "failed", {key: value for key, value in summary.items() if key != "items"})
         return summary
     result = collect_joined(database, projections, fetched.get("records") or [], journal_path=journal_path)
     result["bookmaker_notes"] = fetched.get("bookmaker_notes")
