@@ -75,6 +75,7 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
     assert index_calls == ["nba"]
     assert report["odds_api_calls"] == 0
     assert report["calibration_claimed"] is False
+    assert report["archive_storage_format"].startswith("gzip-compressed")
     assert report["archive_summary"]["snapshots"] == 10
     assert report["archive_summary"]["results"] == 0
     assert report["archive_summary"]["size_bytes"] > 0
