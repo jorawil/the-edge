@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from betting_model.features import build_league_efficiency_prior, build_player_history
-from betting_model.forecast_archive import archive_forecast
+from betting_model.forecast_archive import archive_forecasts
 from betting_model.projection_engine import project_nba, project_nfl, project_rolling_mean
 
 ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports"
@@ -201,6 +201,7 @@ def generate(
     history_cache: dict[tuple[str, str], dict[str, Any]] = {}
     counts = Counter()
     by_market = Counter()
+    snapshots_to_archive: list[dict[str, Any]] = []
     now_text = datetime.now(timezone.utc).isoformat()
     source = f"ESPN schedule/roster and historical box scores; {SELECTION_VERSION}"
 
@@ -296,15 +297,21 @@ def generate(
                         "source": source,
                         "warnings": warnings,
                     }
-                    saved = archive_forecast(snapshot, archive_path)
-                    if saved.get("ok"):
-                        counts["archived"] += 1
-                        by_market[market] += 1
-                    elif saved.get("reason") == "duplicate forecast snapshot":
-                        counts["duplicates"] += 1
-                    else:
-                        counts["archive_rejected"] += 1
-                        errors.append(f'{event["event_id"]}/{player["player_id"]}/{market}: {saved.get("reason")}')
+                    snapshots_to_archive.append(snapshot)
+
+    batch = archive_forecasts(snapshots_to_archive, archive_path)
+    for snapshot, saved in zip(snapshots_to_archive, batch["results"]):
+        if saved.get("ok"):
+            counts["archived"] += 1
+            by_market[snapshot["market"]] += 1
+        elif saved.get("reason") == "duplicate forecast snapshot":
+            counts["duplicates"] += 1
+        else:
+            counts["archive_rejected"] += 1
+            errors.append(
+                f'{snapshot["event_id"]}/{snapshot["player_id"]}/{snapshot["market"]}: '
+                f'{saved.get("reason")}'
+            )
 
     return {
         "ok": True,
