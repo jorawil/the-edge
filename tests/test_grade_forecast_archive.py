@@ -68,6 +68,8 @@ def test_grade_archive_attaches_final_actual_and_dnp_void(tmp_path, monkeypatch)
     assert report["void_dnp"] == 1
     assert report["metrics"]["groups"][0]["n_forecasts"] == 1
     assert report["metrics"]["groups"][0]["mean_signed_error"] == 3.5
+    assert report["archive_summary"]["snapshots"] == 2
+    assert report["archive_summary"]["results"] == 2
 
 
 def test_grade_archive_does_not_turn_missing_stat_into_zero(tmp_path, monkeypatch):
@@ -89,3 +91,5 @@ def test_grade_archive_does_not_turn_missing_stat_into_zero(tmp_path, monkeypatc
     assert report["graded"] == 0
     assert report["unresolved"]["missing_actual_stat"] == 1
     assert len(archive.pending_forecasts(archive_path)) == 1
+    assert report["archive_summary"]["snapshots"] == 1
+    assert report["archive_summary"]["results"] == 0
