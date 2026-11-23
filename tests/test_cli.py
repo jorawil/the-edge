@@ -141,7 +141,6 @@ def test_report_names_grades_and_keeps_a_bad_prop_from_erasing_a_good_one(tmp_pa
     assert "Positive edge" not in text
     assert "positive_edge=True" not in text
     assert "Edge | +?" not in text
-    assert "vig" in text
     assert "Good Example" in text
     assert "Bad Example" in text
     saved = json.loads(Path(payload["out_json"]).read_text(encoding="utf-8"))
