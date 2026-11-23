@@ -87,7 +87,7 @@ The report is diagnostic only. Its evaluation table shows the supplied projectio
 
 | Grade | Meaning |
 |---|---|
-| QUALIFIED | Reserved for a calibrated sigma and distribution. This version does not assign it. |
+| QUALIFIED | Disabled until approved out-of-sample calibration evidence is integrated. No current evaluation can assign it. |
 | SCREEN PASS UNCALIBRATED | A legacy screening condition was met, but the probability assumptions are uncalibrated. This is not an edge or a recommendation. |
 | WATCH | Close, or missing a timestamp, a source, or a fresh price. |
 | REJECTED | The legacy diagnostic condition did not clear its threshold. |

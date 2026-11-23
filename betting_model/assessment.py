@@ -17,6 +17,9 @@ from .timeutil import parse_aware_datetime, utc_now
 
 # One percentage point under the threshold is "near", not a pass.
 WATCH_BAND = 0.01
+# No approved out-of-sample probability calibration registry exists yet.
+# Keep QUALIFIED impossible until such evidence is explicitly integrated.
+QUALIFICATION_ENABLED = False
 DEFAULT_MAX_PRICE_AGE_SECONDS = 30 * 60
 KNOWN_SPORTS = {
     "nba",
@@ -185,7 +188,8 @@ def assess(
                 status = "WATCH" if cleared or near else "REJECTED"
             elif cleared:
                 calibrated = (
-                    row.get("sigma_calibrated") is True
+                    QUALIFICATION_ENABLED is True
+                    and row.get("sigma_calibrated") is True
                     and row.get("distribution_calibrated") is True
                 )
                 if calibrated:
@@ -196,8 +200,8 @@ def assess(
                 else:
                     status = "SCREEN_PASS_UNCALIBRATED"
                     reasons.append(
-                        "the edge cleared the threshold, but the sigma and the normal "
-                        "distribution are not calibrated, so this is not QUALIFIED"
+                        "the calibration promotion gate is disabled until approved "
+                        "out-of-sample calibration evidence is integrated; this is not QUALIFIED"
                     )
             elif near:
                 status = "WATCH"
