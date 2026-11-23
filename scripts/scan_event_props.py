@@ -237,7 +237,8 @@ def scan_event(
             "bookmakers_requested": book_list.split(","),
             "forecast_selection": counts, "projections_supplied_to_matcher": len(projections),
             "event_lookup": event_lookup, "odds_api_event_lookup_requests": 1 if event_lookup.get("called") else 0,
-            "billable_player_prop_calls": 0, "odds_api_calls": 0,
+            "billable_player_prop_calls": 0,
+            "odds_api_calls": 1 if event_lookup.get("called") else 0,
             "calibration_claimed": False, "automatic_betting": False,
         }
     resolution = resolve_odds_event_id(event_lookup.get("events") or [], projections)
@@ -249,8 +250,10 @@ def scan_event(
             "forecast_selection": counts, "projections_supplied_to_matcher": len(projections),
             "event_lookup": {"ok": True, "event_count": event_lookup.get("event_count")},
             "event_resolution": resolution,
-            "odds_api_event_lookup_requests": 1, "billable_player_prop_calls": 0,
-            "odds_api_calls": 0, "calibration_claimed": False, "automatic_betting": False,
+            "odds_api_event_lookup_requests": 1 if event_lookup.get("called") else 0,
+            "billable_player_prop_calls": 0,
+            "odds_api_calls": 1 if event_lookup.get("called") else 0,
+            "calibration_claimed": False, "automatic_betting": False,
         }
     odds_event_id = resolution["odds_event_id"]
     fetched = fetch_event_player_props(
@@ -291,9 +294,9 @@ def scan_event(
             "provider_failures": 0,
         }
     else:
-        # Odds API event IDs differ from ESPN event IDs. The user supplies
-        # both IDs; archive matching uses the ESPN ID, while the provider ID
-        # remains in the raw price record for audit.
+        # Odds API event IDs differ from ESPN event IDs. The metadata lookup
+        # resolved the provider ID; archive matching uses the ESPN ID while
+        # retaining the provider ID in the raw price record for audit.
         prices = remap_price_event_ids(fetched.get("records") or [], event_id)
         result = collect_joined(
             odds_archive, projections, prices, journal_path=journal_path,
