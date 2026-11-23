@@ -186,3 +186,39 @@ def test_archive_stats_reports_durable_snapshot_and_result_counts(tmp_path, monk
     assert stats["snapshots"] == 1
     assert stats["results"] == 0
     assert stats["size_bytes"] > 0
+
+
+
+def test_forecast_metrics_use_latest_snapshot_per_player_event_market(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    clock = {"now": now}
+    monkeypatch.setattr(archive, "_now", lambda: clock["now"])
+    path = tmp_path / "latest-only.sqlite"
+
+    first_snapshot = _snapshot(now)
+    first_snapshot["event_start"] = (now + timedelta(hours=3)).isoformat()
+    first = archive.archive_forecast(first_snapshot, path)
+    assert first["ok"]
+
+    clock["now"] = now + timedelta(minutes=30)
+    latest_snapshot = _snapshot(clock["now"])
+    latest_snapshot["event_start"] = (now + timedelta(hours=3)).isoformat()
+    latest_snapshot["projected_value"] = 26.5
+    latest_snapshot["projection_input_at"] = (clock["now"] - timedelta(minutes=5)).isoformat()
+    latest = archive.archive_forecast(latest_snapshot, path)
+    assert latest["ok"]
+
+    clock["now"] = now + timedelta(hours=4)
+    retrieved_at = clock["now"].isoformat()
+    for saved in (first, latest):
+        result = archive.attach_forecast_result(
+            saved["snapshot_id"], actual_stat=30, game_status="final",
+            result_source="ESPN", retrieved_at=retrieved_at, path=path,
+        )
+        assert result["ok"]
+
+    report = archive.forecast_metrics(path)
+    assert report["forecast_rows"] == 1
+    assert report["groups"][0]["n_forecasts"] == 1
+    assert report["groups"][0]["n_events"] == 1
+    assert report["groups"][0]["mean_signed_error"] == 3.5
