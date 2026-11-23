@@ -457,6 +457,11 @@ def collect_event_odds(
         sleep=sleep or (lambda _seconds: None),
         as_of=as_of,
     )
+    quota = {
+        "requests_remaining": fetched.get("requests_remaining"),
+        "requests_used": fetched.get("requests_used"),
+        "requests_last": fetched.get("requests_last"),
+    }
     if not fetched.get("ok"):
         journal = Journal(journal_path)
         run_id = journal.start_run("collect")
@@ -482,6 +487,7 @@ def collect_event_odds(
             "provider_failures": 1,
             "reason": reason,
             "bookmaker_notes": fetched.get("bookmaker_notes"),
+            "quota": quota,
             "called": fetched.get("called"),
             "run_id": run_id,
             "model_version": MODEL_VERSION,
@@ -495,6 +501,7 @@ def collect_event_odds(
     result = collect_joined(database, projections, fetched.get("records") or [], journal_path=journal_path)
     result["bookmaker_notes"] = fetched.get("bookmaker_notes")
     result["books_not_returned"] = fetched.get("books_not_returned")
+    result["quota"] = quota
     result["called"] = True
     return result
 
