@@ -141,3 +141,40 @@ def test_league_efficiency_prior_excludes_same_time_future_and_non_regular_games
     assert result["prior_efficiency"] == pytest.approx(1.0)
     assert result["n_events"] == 1
     assert result["n_players"] == 1
+
+
+
+def test_build_history_index_matches_player_history_and_excludes_same_time_games():
+    from betting_model.features import build_history_index
+
+    games = {}
+    for day, points in ((1, 20), (2, 30), (3, 40), (4, 99), (5, 100)):
+        games[f"g{day}"] = {
+            "date_utc": f"2026-01-{day:02d}T20:00:00Z",
+            "season_type_id": 2,
+            "players": [{
+                "athlete_id": "7", "category": "", "dnp": False,
+                "stats": {
+                    "points": str(points), "rebounds": "5", "assists": "4",
+                    "minutes": "30:00",
+                    "threePointFieldGoalsMade-threePointFieldGoalsAttempted": "2-5",
+                },
+            }],
+        }
+    index = build_history_index(
+        games, sport="nba", markets=("PTS", "REB", "AST", "3PM", "PRA"),
+        before_event_time="2026-01-04T20:00:00Z",
+        data_updated_at="2026-01-04T19:00:00Z",
+        data_updated_source="games.json",
+    )
+    player = build_player_history(
+        games, sport="nba", player_id="7", market="PTS",
+        before_event_time="2026-01-04T20:00:00Z",
+        data_updated_at="2026-01-04T19:00:00Z",
+    )
+    indexed = index["histories"][("7", "PTS")]
+    assert indexed == player["history"]
+    assert len(indexed) == 3
+    assert index["league_priors"]["PTS"]["prior_efficiency"] == pytest.approx(1.0)
+    assert index["projection_input_at"] == "2026-01-04T19:00:00Z"
+    assert index["eligible_events"] == 3
