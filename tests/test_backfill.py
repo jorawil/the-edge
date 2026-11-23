@@ -227,3 +227,32 @@ def test_record_with_malformed_score_is_not_considered_complete():
     assert not module.record_is_complete(record)
     record["scores"]["AWY"] = "0"
     assert module.record_is_complete(record)
+
+
+def test_backfill_does_not_store_empty_record_when_box_has_no_players(tmp_path, monkeypatch):
+    module = _load()
+    monkeypatch.setattr(module, "DATA", tmp_path)
+
+    def fake_fetch(url):
+        if "scoreboard" in url:
+            return {"events": [_event("empty-box", "A", "B")]}
+        return {"boxscore": {"players": [], "teams": []}}
+
+    report = module.run(
+        "nba",
+        module.dt.date(2026, 1, 2),
+        module.dt.date(2026, 1, 2),
+        fetcher=fake_fetch,
+    )
+    stored = json.loads((tmp_path / "nba" / "games.json").read_text(encoding="utf-8"))
+    assert "empty-box" not in stored["games"]
+    assert report["added"] == 0
+    assert any(item["reason"] == "no player box in source" for item in report["missing"])
+    assert module._has_fatal_missing([report]) is True
+
+
+def test_backfill_expected_not_final_event_is_not_fatal():
+    module = _load()
+    report = {"missing": [{"reason": "not final (Scheduled)"}]}
+    assert module._has_fatal_missing([report]) is False
+

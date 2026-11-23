@@ -122,7 +122,9 @@ def run(sport, start, end, fetcher=None, season_types=(2,)):
             players, teams = parse_box(fetch(summ_url))
         except Exception as ex:
             players, teams = [], []; missing.append({"id": gid, "name": e["name"], "reason": f"box fetch failed {ex}"})
-        if not players: missing.append({"id": gid, "name": e["name"], "reason": "no player box in source"})
+        if not players:
+            missing.append({"id": gid, "name": e["name"], "reason": "no player box in source"})
+            continue
         record = {"id": gid, "date_utc": e.get("date"), "name": e.get("name"), "status": st.get("description"), "season_year": season_meta["season_year"],
             "season_type_id": season_meta["season_type_id"], "season_type_name": season_meta["season_type_name"],
             "scores": {c["team"]["abbreviation"]: _score(c.get("score")) for c in comp["competitors"]},
@@ -188,5 +190,21 @@ def main(argv=None):
     return reps
 
 
+def _has_fatal_missing(reports):
+    """Provider/shape failures should be visible to shell and workflow callers."""
+    fatal_prefixes = (
+        "box fetch failed",
+        "no player box in source",
+        "record failed shape check",
+        "final score missing",
+    )
+    return any(
+        str(item.get("reason") or "").startswith(fatal_prefixes)
+        for report in reports
+        for item in report.get("missing", [])
+    )
+
+
 if __name__ == "__main__":
-    main()
+    reports = main()
+    sys.exit(2 if _has_fatal_missing(reports) else 0)
