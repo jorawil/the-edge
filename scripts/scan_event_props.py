@@ -13,8 +13,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from betting_model.collection import collect_event_odds
+from betting_model.collection import collect_joined
 from betting_model.forecast_archive import pending_forecasts
+from betting_model.odds import fetch_event_player_props
 from betting_model.timeutil import parse_aware_datetime
 
 SPORT_KEYS = {"nba": "basketball_nba", "nfl": "americanfootball_nfl"}
@@ -133,6 +134,7 @@ def scan_event(
     *,
     sport: str,
     event_id: str,
+    odds_event_id: str,
     markets: str,
     bookmakers: str,
     forecast_archive: Path,
@@ -147,20 +149,51 @@ def scan_event(
     projections, counts = build_projection_rows(
         forecasts, sport=sport, event_id=event_id, markets=market_list,
     )
-    result = collect_event_odds(
-        odds_archive,
-        projections,
-        sport_key=SPORT_KEYS[sport],
-        event_id=event_id,
-        markets=",".join(market_list),
+    fetched = fetch_event_player_props(
+        SPORT_KEYS[sport],
+        odds_event_id,
+        ",".join(market_list),
         bookmakers=book_list,
-        journal_path=journal_path,
     )
+    quota = {
+        "requests_remaining": fetched.get("requests_remaining"),
+        "requests_used": fetched.get("requests_used"),
+        "requests_last": fetched.get("requests_last"),
+    }
+    if not fetched.get("ok"):
+        result = {
+            "ok": False,
+            "reason": fetched.get("reason") or "Odds API did not return event props",
+            "called": fetched.get("called"),
+            "bookmaker_notes": fetched.get("bookmaker_notes"),
+            "quota": quota,
+            "stored": 0,
+            "duplicates": 0,
+            "rejected": 0,
+            "conflicts": 0,
+            "provider_failures": 1,
+        }
+    else:
+        prices = fetched.get("records") or []
+        # Odds API event IDs differ from ESPN event IDs. The user supplies
+        # both IDs; archive matching is done against the ESPN ID, while the
+        # original provider ID is retained in the collection's raw record.
+        for price in prices:
+            price["provider_event_id"] = price.get("event_id")
+            price["event_id"] = str(event_id)
+        result = collect_joined(
+            odds_archive, projections, prices, journal_path=journal_path,
+        )
+        result["bookmaker_notes"] = fetched.get("bookmaker_notes")
+        result["books_not_returned"] = fetched.get("books_not_returned")
+        result["called"] = True
+        result["quota"] = quota
     return {
         "ok": bool(result.get("ok")),
         "sport": sport,
         "sport_key": SPORT_KEYS[sport],
         "event_id": str(event_id),
+        "odds_event_id": str(odds_event_id),
         "markets_requested": market_list,
         "bookmakers_requested": book_list.split(","),
         "forecast_selection": counts,
@@ -181,7 +214,8 @@ def scan_event(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sport", choices=("nba", "nfl"), required=True)
-    parser.add_argument("--event-id", required=True)
+    parser.add_argument("--event-id", required=True, help="ESPN event ID from the forecast report.")
+    parser.add_argument("--odds-event-id", required=True, help="The Odds API event ID for the same matchup.")
     parser.add_argument("--markets", required=True, help="Comma-separated Odds API player market keys.")
     parser.add_argument("--bookmakers", default="fanduel,draftkings")
     parser.add_argument("--forecast-archive", type=Path, required=True)
@@ -193,6 +227,7 @@ def main(argv: list[str] | None = None) -> int:
         report = scan_event(
             sport=args.sport,
             event_id=args.event_id,
+            odds_event_id=args.odds_event_id,
             markets=args.markets,
             bookmakers=args.bookmakers,
             forecast_archive=args.forecast_archive,
