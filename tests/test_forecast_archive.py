@@ -16,6 +16,8 @@ def _snapshot(now):
         "projected_value": 24.5,
         "projected_opportunity": 34.0,
         "projected_efficiency": 0.72,
+        "n_history": 3,
+        "n_opportunity": 3,
         "model_version": "opportunity-rate-v1",
         "projection_at": now.isoformat(),
         "projection_input_at": (now - timedelta(minutes=5)).isoformat(),
