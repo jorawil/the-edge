@@ -178,6 +178,28 @@ def _flag_projection_conflicts(props: list[Any]) -> tuple[list[Any], int]:
     return output, conflicts
 
 
+
+def _suppress_uncalibrated_probability_fields(row: dict[str, Any]) -> None:
+    """Keep uncalibrated probability/EV outputs out of the desk JSON surface."""
+    row["legacy_positive_edge"] = bool(row.get("positive_edge"))
+    row["positive_edge"] = False
+    row["threshold_cleared"] = False
+    row["qualified"] = False
+    for field in (
+        "model_prob", "model_probability", "win_probability", "loss_probability",
+        "push_probability", "conditional_win_probability", "edge",
+        "edge_vs_raw_implied", "settlement_edge_vs_raw_implied",
+        "edge_vs_fair_market", "threshold_edge", "expected_value_per_unit",
+    ):
+        row[field] = None
+    row["probability_output_status"] = "SUPPRESSED_UNCALIBRATED"
+    books = row.get("books")
+    if isinstance(books, dict):
+        for book_row in books.values():
+            if isinstance(book_row, dict):
+                _suppress_uncalibrated_probability_fields(book_row)
+
+
 def evaluate_props_file(
     props_path: Path,
     out_dir: Path,
@@ -202,6 +224,8 @@ def evaluate_props_file(
     results = [
         evaluate_prop(p, n=n, file_meta=meta, threshold=threshold) for p in props
     ]
+    for row in results:
+        _suppress_uncalibrated_probability_fields(row)
     # Legacy probability flags are not a validated ranking signal.
     ranked = results
     evaluated = [r for r in ranked if r.get("evaluated")]
