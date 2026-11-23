@@ -190,3 +190,39 @@ def test_report_never_presents_legacy_positive_edge_as_an_opportunity(tmp_path: 
     assert "Positive edge" not in rendered
     assert "positive_edge=True" not in rendered
     assert "Projection − line (stat units)" in rendered
+
+
+def test_evaluation_deduplicates_exact_offers_but_keeps_distinct_book_quotes(tmp_path: Path):
+    common = {
+        "player": "Example Player", "player_id": "player-1", "event_id": "game-1",
+        "sport": "nfl", "market": "rushing_yards", "line": 40.5, "odds": -110,
+        "is_over": True, "projected": 55.0, "projection_source": "vendor-a",
+        "projection_at": "2026-01-01T18:00:00+00:00",
+        "retrieved_at": "2026-01-01T18:01:00+00:00", "book": "draftkings",
+    }
+    duplicate = dict(common)
+    different_book = {**common, "book": "fanduel"}
+    different_price = {**common, "odds": -115}
+    path = tmp_path / "props.json"
+    path.write_text(json.dumps([common, duplicate, different_book, different_price]), encoding="utf-8")
+    payload = evaluate_props_file(path, tmp_path / "out")
+    assert payload["summary"]["submitted_total"] == 4
+    assert payload["summary"]["duplicates_excluded"] == 1
+    assert payload["summary"]["total"] == 3
+    assert len(payload["all"]) == 3
+
+
+def test_different_vendor_projection_is_not_silently_deduplicated(tmp_path: Path):
+    base = {
+        "player": "Example Player", "event_id": "game-1", "sport": "nfl",
+        "market": "rushing_yards", "line": 40.5, "odds": -110,
+        "is_over": True, "projected": 55.0, "projection_source": "vendor-a",
+        "projection_at": "2026-01-01T18:00:00+00:00",
+        "retrieved_at": "2026-01-01T18:01:00+00:00", "book": "draftkings",
+    }
+    other = {**base, "projected": 63.0, "projection_source": "vendor-b"}
+    path = tmp_path / "props.json"
+    path.write_text(json.dumps([base, other]), encoding="utf-8")
+    payload = evaluate_props_file(path, tmp_path / "out")
+    assert payload["summary"]["duplicates_excluded"] == 0
+    assert payload["summary"]["total"] == 2
