@@ -170,3 +170,19 @@ def test_archive_forecasts_batches_in_one_archive_and_detects_in_batch_duplicate
     assert batch["duplicates"] == 1
     assert batch["rejected"] == 0
     assert len(archive.pending_forecasts(tmp_path / "batch.sqlite")) == 2
+
+
+
+def test_archive_stats_reports_durable_snapshot_and_result_counts(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "stats.sqlite"
+    missing = archive.archive_stats(path)
+    assert missing["exists"] is False
+    saved = archive.archive_forecast(_snapshot(now), path)
+    assert saved["ok"]
+    stats = archive.archive_stats(path)
+    assert stats["exists"] is True
+    assert stats["snapshots"] == 1
+    assert stats["results"] == 0
+    assert stats["size_bytes"] > 0
