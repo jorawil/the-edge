@@ -79,26 +79,27 @@ The example numbers above are a shape, not a real price and not a real projectio
 
 `"is_over": "false"` is the Under. The word false is not treated as true.
 
-If `projected` is missing on an NBA row, the program can pull a recent average from `nba_api`. That average is shown and then marked **not evaluable**. It is not a forecast.
+The desk evaluator requires an explicit projection for NBA props. It does not fetch a recent average and use it as a fallback. Historical averages remain available as research context, but they are not forecasts.
 
 ## How to read the report
 
-The top of the report is the grade. The tables further down are the older screen and can disagree with the grade.
+The report is diagnostic only. Its evaluation table shows the supplied projection, available price, projection-to-line gap in stat units, and row status. It does not publish a betting-edge shortlist or rank props by legacy probability fields.
 
 | Grade | Meaning |
 |---|---|
 | QUALIFIED | Reserved for a calibrated sigma and distribution. This version does not assign it. |
-| SCREEN PASS UNCALIBRATED | The projection and a fresh price cleared the threshold. The sigma and the normal curve are still uncalibrated, so this is not Qualified. |
+| SCREEN PASS UNCALIBRATED | A legacy screening condition was met, but the probability assumptions are uncalibrated. This is not an edge or a recommendation. |
 | WATCH | Close, or missing a timestamp, a source, or a fresh price. |
-| REJECTED | The edge does not clear the threshold. |
-| NOT EVALUABLE | Something required is missing, the market's pushes are not defined, or the only number is a recent average. |
+| REJECTED | The legacy diagnostic condition did not clear its threshold. |
+| NOT EVALUABLE | A required input is missing, a market settlement rule is unsupported, or vendor projections conflict. |
 
-Two different "edge" ideas:
+Probability and EV fields are diagnostic only. The current distribution and sigma assumptions are not calibrated, so no probability, edge, or EV output is a betting signal. The legacy \`positive_edge\` flag remains in raw JSON for compatibility only; ignore it. User-facing reports do not show it.
 
-- **Raw implied probability** is what the American odds say by themselves. The sportsbook's vig is still in that number. On a whole-number line that can push, that price is the chance of winning given that the bet does not push, so the pass/fail edge uses win / (win + loss). Expected value still uses the raw win, loss, and push chances. The old field `edge` is the original model probability minus the raw price, and it ignores pushes. `positive_edge` uses that old difference.
-- **Fair probability** divides the two sides so the vig is taken out. It is filled in only when the file has both the Over and the Under for the same player, market, line, and book, with timestamps a few minutes apart. If either side is missing, the fair number is left blank.
+- **Raw implied probability** is what American odds say before removing the sportsbook's vig.
+- **Fair probability** removes the vig only when both sides are present for the same player, market, line, book, and sufficiently close timestamps.
+- **Push handling** separates win, loss, and push outcomes. Expected value is profit per 1 unit staked using that split, but remains an uncalibrated diagnostic—not a recommendation.
 
-Expected value is profit per 1 unit staked, using the win/loss/push split. It is omitted when that split is not defined. It is not a guaranteed profit.
+Conflicting projection values for the same event, player, and market make every affected row NOT EVALUABLE. The system does not average vendors or silently choose one. Exact duplicate observations are removed, while distinct books and prices remain separate.
 
 Sigma values are the old defaults (points 6, rebounds and assists 3, rush or receiving yards 25, passing yards 40, and so on). They are **not** measured from forecast misses. The program will not replace them until pregame projections have been saved and checked. See the calibration section below.
 
@@ -108,7 +109,7 @@ Graded when you supply a projection:
 
 | Sport | In the evaluator |
 |---|---|
-| NBA | yes, and a recent average can be fetched and is then marked not a forecast |
+| NBA | explicit projection required; no recent-average fallback |
 | WNBA | yes, projection required |
 | NFL | yes, projection required |
 | MLB | yes, projection required |

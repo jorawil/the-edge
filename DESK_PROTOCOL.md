@@ -25,7 +25,7 @@ python -m betting_model.cli parlay --ticket ticket.json
 | `status` is `WATCH` | Something is missing, stale, or close. Do not treat it as a green light. |
 | `status` is `REJECTED` | The edge missed the threshold, or a data problem ruled it out. |
 | `status` is `NOT EVALUABLE` | A required piece is missing, or the only number is a recent average. A recent average is not a prediction. |
-| `positive_edge` is true | Retained only in raw diagnostic rows for compatibility. Ignore it; it is not a betting signal. |
+| `positive_edge` is true | Retained only in raw diagnostic JSON for compatibility. User-facing reports suppress it; ignore it. |
 | No qualified rows | That is an acceptable result. Do not force a ticket. |
 
 ## Ownership
@@ -59,3 +59,10 @@ Without that, the report uses the raw price and says the vig is still in it.
 `export ODDS_API_KEY=...` for live odds. A missing key is a soft failure. No prices are invented.
 
 See `docs/ODDS_PROVIDER.md` before expecting FanDuel Indiana, bet365, Fanatics, or player props from that key.
+
+
+## Vendor disagreement and duplicate observations
+
+Exact repeated observations are removed before evaluation. Different books, prices, and vendor projections remain distinct. If one event/player/market has different projection values, every affected row is marked NOT EVALUABLE and its model probability, edge, and EV fields are suppressed. No vendor is selected and no average is invented.
+
+The NBA desk evaluator requires an explicit projection. It does not fetch a recent average and use it as a forecast fallback. A post-kickoff collection attempt is a skip, not a new pregame snapshot.
