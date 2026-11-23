@@ -328,6 +328,12 @@ def generate(
         "archive_path": str(archive_path),
         "archive_summary": archive_summary,
         "model_selection_version": SELECTION_VERSION,
+        "history_index": {
+            "eligible_events": history_index["eligible_events"],
+            "player_market_histories": history_index["player_market_histories"],
+            "markets": list(MARKET_SELECTIONS[sport]),
+            "projection_input_at": history_index["projection_input_at"],
+        },
         "odds_api_calls": 0,
         "calibration_claimed": False,
     }
