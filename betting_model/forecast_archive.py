@@ -7,6 +7,7 @@ it never places bets or assigns QUALIFIED status.
 from __future__ import annotations
 
 import hashlib
+from contextlib import nullcontext
 import json
 import math
 import sqlite3
@@ -163,7 +164,9 @@ def _snapshot_key(row: dict[str, Any]) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
-def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
+def archive_forecast(
+    snapshot: dict[str, Any], path: Path, *, _connection: sqlite3.Connection | None = None,
+) -> dict[str, Any]:
     """Append a forecast made before its event; the archive clock is not caller-controlled."""
     forbidden = {"actual", "actual_stat", "result", "final_stat", "settlement", "game_result"}
     leaked = sorted(key for key in forbidden if snapshot.get(key) not in (None, ""))
@@ -243,7 +246,8 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
         return {"ok": False, "reason": "required text fields must not be blank"}
     key = _snapshot_key(row)
     snapshot_id = str(uuid.uuid4())
-    with connect(path) as conn:
+    connection_context = connect(path) if _connection is None else nullcontext(_connection)
+    with connection_context as conn:
         if conn.execute("SELECT 1 FROM forecast_snapshots WHERE observation_key=?", (key,)).fetchone():
             return {"ok": False, "reason": "duplicate forecast snapshot"}
         conn.execute(
@@ -265,8 +269,31 @@ def archive_forecast(snapshot: dict[str, Any], path: Path) -> dict[str, Any]:
              row["projection_input_source"], row["source"], row["warnings_json"],
              row["payload_json"]),
         )
-        count = conn.execute("SELECT COUNT(*) FROM forecast_snapshots").fetchone()[0]
+        count = conn.execute("SELECT COUNT(*) FROM forecast_snapshots").fetchone()[0] if _connection is None else None
     return {"ok": True, "snapshot_id": snapshot_id, "count": count, "path": str(path)}
+
+
+
+def archive_forecasts(snapshots: list[dict[str, Any]], path: Path) -> dict[str, Any]:
+    """Archive a batch in one SQLite connection/transaction."""
+    conn = connect(path)
+    results = []
+    try:
+        for snapshot in snapshots:
+            results.append(archive_forecast(snapshot, path, _connection=conn))
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+    return {
+        "ok": True,
+        "archived": sum(1 for result in results if result.get("ok")),
+        "duplicates": sum(1 for result in results if result.get("reason") == "duplicate forecast snapshot"),
+        "rejected": sum(1 for result in results if not result.get("ok") and result.get("reason") != "duplicate forecast snapshot"),
+        "results": results,
+    }
 
 
 def attach_forecast_result(
