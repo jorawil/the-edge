@@ -78,6 +78,9 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
     assert report["archive_summary"]["snapshots"] == 10
     assert report["archive_summary"]["results"] == 0
     assert report["archive_summary"]["size_bytes"] > 0
+    assert report["history_index"]["eligible_events"] == 3
+    assert report["history_index"]["player_market_histories"] == 5
+    assert report["history_index"]["projection_input_at"] == (now - timedelta(minutes=5)).isoformat()
     saved = pending_forecasts(archive_path)
     assert len(saved) == 10
     assert {row["market"] for row in saved} == {"PTS", "REB", "AST", "3PM", "PRA"}
