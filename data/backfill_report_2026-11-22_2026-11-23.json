@@ -7,14 +7,14 @@
   ],
   "skipped_season_type": [],
   "final": 10,
-  "already_covered": 9,
-  "added": 1,
+  "already_covered": 10,
+  "added": 0,
   "repaired": 0,
   "missing": [
    {
     "id": "401873077",
     "name": "Minnesota Vikings at San Francisco 49ers",
-    "reason": "not final (Scheduled)"
+    "reason": "not final (In Progress)"
    },
    {
     "id": "401873078",
