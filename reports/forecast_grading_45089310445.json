@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "checked_pending": 30231,
+  "graded": 0,
+  "void_dnp": 0,
+  "unresolved": {
+    "event_not_backfilled": 30231
+  },
+  "result_rejected": 0,
+  "errors": [],
+  "metrics": {
+    "ok": true,
+    "groups": [],
+    "forecast_rows": 0
+  },
+  "archive_summary": {
+    "ok": true,
+    "exists": true,
+    "snapshots": 30231,
+    "results": 0,
+    "size_bytes": 66080768
+  },
+  "graded_at": "2026-11-23T00:32:12.221537+00:00"
+}
