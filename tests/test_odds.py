@@ -30,6 +30,10 @@ def test_missing_key_does_not_call_the_network(monkeypatch):
     assert result["ok"] is False
     assert result["reason"] == "no ODDS_API_KEY"
     assert result["called"] is False
+    events = fetch_sport_events("americanfootball_nfl", transport=boom)
+    assert events["ok"] is False
+    assert events["reason"] == "no ODDS_API_KEY"
+    assert events["called"] is False
 
 
 def test_default_request_skips_bet365_and_player_props(monkeypatch):
@@ -180,3 +184,19 @@ def test_fetch_sport_events_uses_metadata_endpoint_and_returns_quota(monkeypatch
     assert result["requests_last"] == "0"
     assert seen["url"].endswith("/sports/americanfootball_nfl/events")
     assert seen["params"] == {"apiKey": "test-key"}
+
+
+
+def test_fetch_sport_events_handles_http_errors_without_echoing_key(monkeypatch):
+    monkeypatch.setenv("ODDS_API_KEY", "secret-key")
+
+    def transport(url, params=None, timeout=None):
+        return _Response(401, {"message": "unauthorized"}, text="apiKey=secret-key")
+
+    result = fetch_sport_events(
+        "basketball_nba", transport=transport, attempts=1, sleep=lambda _seconds: None,
+    )
+    assert result["ok"] is False
+    assert result["reason"] == "http_401"
+    assert "secret-key" not in result.get("body", "")
+    assert result["called"] is True
