@@ -93,3 +93,18 @@ def test_grade_archive_does_not_turn_missing_stat_into_zero(tmp_path, monkeypatc
     assert len(archive.pending_forecasts(archive_path)) == 1
     assert report["archive_summary"]["snapshots"] == 1
     assert report["archive_summary"]["results"] == 0
+
+
+def test_grade_archive_skips_forecasts_for_future_events(tmp_path, monkeypatch):
+    now = datetime.now(timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    archive_path = tmp_path / "forecast.sqlite"
+    saved = archive.archive_forecast(_snapshot(now), archive_path)
+    assert saved["ok"]
+
+    report = _MODULE.grade(archive_path, tmp_path)
+    assert report["checked_pending"] == 0
+    assert report["future_pending_not_checked"] == 1
+    assert report["total_pending"] == 1
+    assert report["unresolved"] == {}
+    assert report["archive_summary"]["results"] == 0
