@@ -33,11 +33,11 @@ python scripts/validate_projection_engine.py --sport nba --data-root data
 python scripts/validate_projection_engine.py --sport nfl --data-root data
 ```
 
-The output is JSON and can be saved with --out reports/projection_nba.json. The script does not place bets, fetch prices, calculate EV, or create probability distributions.
+The output is JSON and can be saved with --out reports/projection_nba.json. The separate opportunity/rate benchmark also reports expected-opportunity MAE, RMSE, signed bias, and validation-selected lookback windows for minutes, attempts, and targets. This matters because an accurate efficiency estimate cannot rescue a poor minutes/attempts forecast. The held-out test result is reported only after the lookback is selected on validation. The script does not place bets, fetch prices, calculate EV, or create probability distributions.
 
 ## Deliberate limitations
 
-- The opportunity forecast is a prior-game average. It is a forecast of expected minutes/attempts/targets, not the target game's realized opportunity.
+- The opportunity forecast is currently a prior-game average. Expected-opportunity diagnostics are reported separately so NBA minutes and NFL attempts/targets can be assessed independently of efficiency. The diagnostic does not itself change the live forecast method.
 - No opponent, home/away, rest, pace, game-script, injury, lineup, teammate-out, starter/bench, or role-change adjustment is applied yet.
 - The league efficiency prior is not position-specific.
 - ESPN's historical game timestamps are present, but ingestion timestamps are not. The feature builder therefore leaves projection_input_at unknown instead of inventing it.
