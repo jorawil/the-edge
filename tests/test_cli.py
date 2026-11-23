@@ -137,7 +137,10 @@ def test_report_names_grades_and_keeps_a_bad_prop_from_erasing_a_good_one(tmp_pa
     text = Path(payload["out_md"]).read_text(encoding="utf-8")
     assert "not a lock" in text
     assert "recent average" in text
-    assert "vig" in text
+    assert "uncalibrated" in text
+    assert "Positive edge" not in text
+    assert "positive_edge=True" not in text
+    assert "Edge | +?" not in text
     assert "Good Example" in text
     assert "Bad Example" in text
     saved = json.loads(Path(payload["out_json"]).read_text(encoding="utf-8"))
@@ -170,3 +173,20 @@ def test_cli_writes_named_copy(tmp_path: Path, monkeypatch):
     assert (out / "slate.md").exists()
     monkeypatch.chdir(tmp_path)
     assert main(["evaluate", "--props", str(props), "--save-as", "../nope"]) == 2
+
+
+def test_report_never_presents_legacy_positive_edge_as_an_opportunity(tmp_path: Path):
+    props = tmp_path / "props.json"
+    props.write_text(json.dumps([{
+        "player": "Legacy Flag", "sport": "nfl", "market": "rushing_yards",
+        "line": 40.5, "odds": -110, "is_over": True, "projected": 80,
+        "projection_source": "manual", "projection_at": "2026-01-01T18:00:00+00:00",
+        "retrieved_at": "2026-01-01T18:00:00+00:00",
+    }]), encoding="utf-8")
+    payload = evaluate_props_file(props, tmp_path / "out")
+    rendered = Path(payload["out_md"]).read_text(encoding="utf-8")
+    assert payload["all"][0]["positive_edge"] is True
+    assert payload["positive_edges"] == []
+    assert "Positive edge" not in rendered
+    assert "positive_edge=True" not in rendered
+    assert "Projection − line (stat units)" in rendered

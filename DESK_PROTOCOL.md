@@ -21,11 +21,11 @@ python -m betting_model.cli parlay --ticket ticket.json
 | Signal | What to do |
 |---|---|
 | `status` is `QUALIFIED` | Only when the sigma and distribution have been calibrated. This version does not assign it. |
-| `status` is `SCREEN_PASS_UNCALIBRATED` | The supplied projection and a fresh price cleared the 3-point threshold. The model is still uncalibrated. Not a bet by itself. |
+| `status` is `SCREEN_PASS_UNCALIBRATED` | Legacy diagnostic condition only. Probabilities are uncalibrated; this is not an edge or recommendation. |
 | `status` is `WATCH` | Something is missing, stale, or close. Do not treat it as a green light. |
 | `status` is `REJECTED` | The edge missed the threshold, or a data problem ruled it out. |
 | `status` is `NOT EVALUABLE` | A required piece is missing, or the only number is a recent average. A recent average is not a prediction. |
-| `positive_edge` is true | Older screen only: model probability minus the vig-inclusive price, above 3 points. It can be true on a row that is still Watch or Not evaluable. |
+| `positive_edge` is true | Retained only in raw diagnostic rows for compatibility. Ignore it; it is not a betting signal. |
 | No qualified rows | That is an acceptable result. Do not force a ticket. |
 
 ## Ownership
@@ -39,7 +39,7 @@ python -m betting_model.cli parlay --ticket ticket.json
 
 Required to be graded at all: player, sport, market, line, American odds, Over/Under, and a projection if you want a number.
 
-Required before a row can clear the screen (it will still be `SCREEN_PASS_UNCALIBRATED`, not Qualified, until sigma is calibrated):
+Required to preserve projection and price provenance (these fields do not qualify a bet):
 
 - `projection_source` — where the projection came from
 - `projection_at` — when it was made, with a timezone (`2026-01-01T18:00:00-05:00`)
