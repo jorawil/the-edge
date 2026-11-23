@@ -5,9 +5,15 @@ on:
   push:
     branches: [main]
     paths:
-      - ".github/workflows/Benchmark.yml"
-      - "scripts/**"
-      - "betting_model/**"
+      - "scripts/backfill_espn.py"
+      - "scripts/walk_forward_backtest.py"
+      - "scripts/compare_projection_methods.py"
+      - "scripts/opportunity_projection_benchmark.py"
+      - "scripts/validate_projection_engine.py"
+      - "scripts/audit_projection_features.py"
+      - "betting_model/features.py"
+      - "betting_model/projection_engine.py"
+      - "betting_model/data_store.py"
   schedule:
     - cron: "0 9 * * 0"
   workflow_dispatch:
