@@ -104,6 +104,8 @@ def build_player_history(
     player_id: str,
     market: str,
     before_event_time: str | datetime,
+    data_updated_at: str | None = None,
+    data_updated_source: str | None = None,
 ) -> dict[str, Any]:
     """Build prior actual/opportunity pairs for one ESPN athlete ID and market."""
     allowed = NBA_MARKETS if sport == "nba" else NFL_MARKETS if sport == "nfl" else set()
@@ -113,6 +115,13 @@ def build_player_history(
     if cutoff is None or cutoff.tzinfo is None:
         raise ValueError("before_event_time must be timezone-aware")
     cutoff = cutoff.astimezone(timezone.utc)
+    input_time, input_text = (None, None)
+    if data_updated_at:
+        input_time, input_text = _event_time(data_updated_at), str(data_updated_at).strip()
+        if input_time is None:
+            raise ValueError("data_updated_at must be timezone-aware")
+        if input_time > cutoff:
+            raise ValueError("data_updated_at is after the target event time")
 
     grouped: list[tuple[datetime, str, list[dict[str, Any]]]] = []
     for event_id, game in games.items():
@@ -156,9 +165,8 @@ def build_player_history(
         "history": history,
         "n_history": len(history),
         "latest_observation_at": history[-1]["event_time"] if history else None,
-        # ESPN backfill stores game times, not the time the source data became
-        # available. Do not fabricate an ingestion timestamp for archive use.
-        "projection_input_at": None,
-        "warnings": ["source ingestion timestamp is not recorded; projection_input_at remains unknown"],
+        "projection_input_at": input_text,
+        "projection_input_source": data_updated_source if input_text else None,
+        "warnings": ([] if input_text else ["source ingestion timestamp is not recorded; projection_input_at remains unknown"]),
         "exclusions": exclusions,
     }

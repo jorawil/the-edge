@@ -229,7 +229,7 @@ def validate(
             "League efficiency priors use only earlier event-time observations and are not position-specific.",
             "Opponent, rest, home/away, injuries, lineups, role changes, pace, and game script are not adjusted.",
             "No calibrated probability distribution, sportsbook price, edge, EV, ROI, or bet qualification is produced.",
-            "PRA is not included; its joint uncertainty requires residual covariance validation.",
+            "PRA point estimates are included as PTS + REB + AST; joint residual covariance and PRA uncertainty are not modelled.",
             "ESPN game timestamps are available, but source ingestion timestamps are not recorded.",
         ],
     }
