@@ -10,7 +10,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-MODEL_VERSION = "opportunity-rate-v1"
+MODEL_VERSION = "opportunity-rate-v2"
 NBA_MARKETS = {"PTS", "REB", "AST", "3PM", "PRA"}
 NFL_MARKETS = {"PASS_YDS", "RUSH_YDS", "REC_YDS", "REC"}
 
@@ -47,6 +47,7 @@ def _project(
     *,
     allowed: set[str],
     shrinkage_strength: float,
+    opportunity_history: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     if market not in allowed:
         raise ValueError(f"unsupported market: {market}")
@@ -57,13 +58,15 @@ def _project(
     if not math.isfinite(strength) or strength < 0:
         raise ValueError("shrinkage_strength must be a finite non-negative number")
     rows = _clean_history(history)
+    opportunity_rows = _clean_history(opportunity_history) if opportunity_history is not None else rows
     context = context or {}
     warnings: list[str] = []
-    if len(rows) < 3:
+    if len(rows) < 3 or len(opportunity_rows) < 3:
         return {
             "ok": False, "reason": "insufficient_history", "market": market,
-            "n_history": len(rows), "model_version": MODEL_VERSION,
-            "calibrated": False,
+            "n_history": max(len(rows), len(opportunity_rows)),
+            "n_efficiency_history": len(rows), "n_opportunity": len(opportunity_rows),
+            "model_version": MODEL_VERSION, "calibrated": False,
         }
 
     opportunities = [opportunity for _, opportunity in rows]
@@ -85,10 +88,15 @@ def _project(
         efficiency = (total_actual + strength * prior_rate) / (total_opportunity + strength)
         effective_opportunity = total_opportunity + strength
 
-    projected_opportunity = sum(opportunities) / len(opportunities)
+    opportunity_values = [opportunity for _, opportunity in opportunity_rows]
+    projected_opportunity = sum(opportunity_values) / len(opportunity_values)
     projected_value = projected_opportunity * efficiency
     if len(rows) < 10:
-        warnings.append(f"only {len(rows)} prior player-games")
+        warnings.append(f"only {len(rows)} prior efficiency player-games")
+    if len(opportunity_rows) != len(rows):
+        warnings.append(
+            f"opportunity uses {len(opportunity_rows)} prior games; efficiency uses {len(rows)}"
+        )
     if market == "PRA":
         warnings.append("PRA joint residual covariance is not modelled; uncertainty is unavailable")
     if context.get("role_change") is True:
@@ -108,8 +116,9 @@ def _project(
         "projected_opportunity": projected_opportunity,
         "projected_efficiency": efficiency,
         "efficiency_unit": "per opportunity",
-        "n_history": len(rows),
-        "n_opportunity": len(rows),
+        "n_history": max(len(rows), len(opportunity_rows)),
+        "n_efficiency_history": len(rows),
+        "n_opportunity": len(opportunity_rows),
         "total_historical_opportunity": total_opportunity,
         "effective_opportunity_after_shrinkage": effective_opportunity,
         "shrinkage_strength": strength if prior_rate is not None else None,
@@ -133,11 +142,17 @@ def project_nba(
     context: dict[str, Any] | None = None,
     *,
     shrinkage_strength: float = 0.0,
+    opportunity_history: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Project PTS/REB/AST per minute or 3PM per 3PA."""
+    """Project PTS/REB/AST per minute or 3PM per 3PA.
+
+    history estimates efficiency; opportunity_history independently estimates
+    expected minutes or attempts. If omitted, both use the same observations.
+    """
     return _project(
         market, history, context, allowed=NBA_MARKETS,
         shrinkage_strength=shrinkage_strength,
+        opportunity_history=opportunity_history,
     )
 
 
@@ -147,11 +162,17 @@ def project_nfl(
     context: dict[str, Any] | None = None,
     *,
     shrinkage_strength: float = 0.0,
+    opportunity_history: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Project passing/rushing yards per attempt, receiving per target, or catches per target."""
+    """Project passing/rushing yards per attempt, receiving per target, or catches per target.
+
+    history estimates efficiency; opportunity_history independently estimates
+    expected attempts or targets. If omitted, both use the same observations.
+    """
     return _project(
         market, history, context, allowed=NFL_MARKETS,
         shrinkage_strength=shrinkage_strength,
+        opportunity_history=opportunity_history,
     )
 
 
