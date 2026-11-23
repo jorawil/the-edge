@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "checked_pending": 0,
+  "graded": 0,
+  "void_dnp": 0,
+  "unresolved": {},
+  "result_rejected": 0,
+  "errors": [],
+  "metrics": {
+    "ok": true,
+    "groups": [],
+    "reason": "archive_not_created"
+  },
+  "graded_at": "2026-11-23T00:22:28.023805+00:00"
+}
