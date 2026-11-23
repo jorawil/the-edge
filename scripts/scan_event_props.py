@@ -130,6 +130,19 @@ def build_projection_rows(
     return projections, counts
 
 
+def remap_price_event_ids(prices: list[dict[str, Any]], espn_event_id: str) -> list[dict[str, Any]]:
+    """Keep provider IDs for audit while matching archive rows on ESPN IDs."""
+    remapped = []
+    for source in prices:
+        if not isinstance(source, dict):
+            continue
+        row = dict(source)
+        row["provider_event_id"] = row.get("event_id")
+        row["event_id"] = str(espn_event_id)
+        remapped.append(row)
+    return remapped
+
+
 def scan_event(
     *,
     sport: str,
@@ -174,13 +187,10 @@ def scan_event(
             "provider_failures": 1,
         }
     else:
-        prices = fetched.get("records") or []
         # Odds API event IDs differ from ESPN event IDs. The user supplies
-        # both IDs; archive matching is done against the ESPN ID, while the
-        # original provider ID is retained in the collection's raw record.
-        for price in prices:
-            price["provider_event_id"] = price.get("event_id")
-            price["event_id"] = str(event_id)
+        # both IDs; archive matching uses the ESPN ID, while the provider ID
+        # remains in the raw price record for audit.
+        prices = remap_price_event_ids(fetched.get("records") or [], event_id)
         result = collect_joined(
             odds_archive, projections, prices, journal_path=journal_path,
         )
