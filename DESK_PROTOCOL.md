@@ -25,7 +25,7 @@ python -m betting_model.cli parlay --ticket ticket.json
 | `status` is `WATCH` | Something is missing, stale, or close. Do not treat it as a green light. |
 | `status` is `REJECTED` | The edge missed the threshold, or a data problem ruled it out. |
 | `status` is `NOT EVALUABLE` | A required piece is missing, or the only number is a recent average. A recent average is not a prediction. |
-| `positive_edge` is true | Retained only in raw diagnostic JSON for compatibility. User-facing reports suppress it; ignore it. |
+| `positive_edge` is true | The desk JSON sets this field to false. Its former value is retained as `legacy_positive_edge` for diagnostics only; ignore it. Uncalibrated probability and EV fields are suppressed from desk JSON. |
 | No qualified rows | That is an acceptable result. Do not force a ticket. |
 
 ## Ownership
