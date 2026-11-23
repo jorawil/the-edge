@@ -50,6 +50,7 @@ A manual GitHub Actions workflow can compare the latest fresh archived point for
 
 From the repository's **Actions** tab, choose **Manual Event Player Prop Scan** and enter:
 - Sport and the ESPN event ID shown in the daily forecast report.
+- The separate Odds API event ID for the same matchup. Provider event IDs are not ESPN event IDs; copy the matching ID from the Odds API events list and confirm the teams and start time.
 - Odds API market keys for the requested props.
 - Bookmaker keys (default: `fanduel,draftkings`).
 
@@ -57,6 +58,6 @@ NBA keys supported by the scan: `player_points`, `player_rebounds`, `player_assi
 
 NFL keys supported by the scan: `player_pass_yds`, `player_rush_yds`, `player_reception_yds`, `player_receptions`. The forecast engine's `REC` market is catches and is mapped to `RECEPTIONS` for matching; it is not treated as receiving yards.
 
-The report records the actual quota headers returned by the provider, prices that were stored or rejected, and missing books. The number of credits used can depend on the requested markets; check the returned `requests_last` and `requests_remaining` values. This workflow is manual only—there is no daily automatic Odds API polling.
+The workflow requires both IDs because the ESPN and Odds API use different event identifiers. It remaps provider prices to the ESPN event only after the user supplies both IDs; the existing collector still checks the sportsbook commence time against the archived forecast start before storing a price. The report records the actual quota headers returned by the provider, prices that were stored or rejected, and missing books. The number of credits used can depend on the requested markets; check the returned `requests_last` and `requests_remaining` values. This workflow is manual only—there is no daily automatic Odds API polling.
 
 The FanDuel feed is the generic US feed, not verified as FanDuel Indiana. Prices are archived as FanDuel, never relabeled as Indiana. Forecasts are still uncalibrated point estimates; a screen pass is not a qualified bet. The workflow does not build or place tickets.
