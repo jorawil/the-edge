@@ -256,3 +256,40 @@ def test_point_projection_line_comparisons_skip_duplicate_book_offers():
     assert result["comparisons"] == []
     assert result["counts"]["duplicate_prices_skipped"] == 1
     assert result["counts"]["matched"] == 0
+
+
+def test_scan_cli_returns_nonzero_and_writes_report_when_scan_is_refused(monkeypatch, tmp_path):
+    monkeypatch.setattr(_MODULE, "scan_event", lambda **kwargs: {
+        "ok": False, "reason": "no fresh forecasts", "odds_api_calls": 0,
+    })
+    out = tmp_path / "refused.json"
+    code = _MODULE.main([
+        "--sport", "nfl",
+        "--event-id", "event-1",
+        "--markets", "player_pass_yds",
+        "--forecast-archive", str(tmp_path / "forecast.db"),
+        "--odds-archive", str(tmp_path / "odds.db"),
+        "--journal", str(tmp_path / "journal.db"),
+        "--out", str(out),
+    ])
+    assert code == 2
+    assert out.exists()
+    import json
+    report = json.loads(out.read_text(encoding="utf-8"))
+    assert report["ok"] is False
+    assert report["odds_api_calls"] == 0
+
+
+def test_scan_cli_returns_zero_when_scan_succeeds(monkeypatch, tmp_path):
+    monkeypatch.setattr(_MODULE, "scan_event", lambda **kwargs: {
+        "ok": True, "comparisons": [], "odds_api_calls": 1,
+    })
+    code = _MODULE.main([
+        "--sport", "nfl",
+        "--event-id", "event-1",
+        "--markets", "player_pass_yds",
+        "--forecast-archive", str(tmp_path / "forecast.db"),
+        "--odds-archive", str(tmp_path / "odds.db"),
+        "--journal", str(tmp_path / "journal.db"),
+    ])
+    assert code == 0
