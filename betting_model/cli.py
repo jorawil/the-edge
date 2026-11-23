@@ -581,7 +581,7 @@ def main(argv: list[str] | None = None) -> int:
         print(
             f"Summary: evaluated={payload['summary']['evaluated']} "
             f"skipped={payload['summary']['skipped']} "
-            f"positive_edge={payload['summary']['positive_edge']}"
+            f"qualified={payload['summary']['qualified']}"
         )
         return 0
     return 1
