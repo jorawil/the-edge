@@ -1,0 +1,383 @@
+{
+  "ok": true,
+  "sport": "nfl",
+  "regular_season_games": 1246,
+  "played_player_rows": 99326,
+  "dnp_player_rows_excluded": 0,
+  "categories": {
+    "defensive": {
+      "played_player_rows": 50076,
+      "fields": [
+        {
+          "field": "QBHits",
+          "rows_present": 50076,
+          "coverage_pct": 100.0,
+          "numeric_rows": 50076
+        },
+        {
+          "field": "defensiveTouchdowns",
+          "rows_present": 50076,
+          "coverage_pct": 100.0,
+          "numeric_rows": 50076
+        },
+        {
+          "field": "passesDefended",
+          "rows_present": 50076,
+          "coverage_pct": 100.0,
+          "numeric_rows": 50076
+        },
+        {
+          "field": "sacks",
+          "rows_present": 50076,
+          "coverage_pct": 100.0,
+          "numeric_rows": 50076
+        },
+        {
+          "field": "soloTackles",
+          "rows_present": 50076,
+          "coverage_pct": 100.0,
+          "numeric_rows": 50076
+        },
+        {
+          "field": "tacklesForLoss",
+          "rows_present": 50076,
+          "coverage_pct": 100.0,
+          "numeric_rows": 50076
+        },
+        {
+          "field": "totalTackles",
+          "rows_present": 50076,
+          "coverage_pct": 100.0,
+          "numeric_rows": 50076
+        }
+      ]
+    },
+    "fumbles": {
+      "played_player_rows": 4405,
+      "fields": [
+        {
+          "field": "fumbles",
+          "rows_present": 4405,
+          "coverage_pct": 100.0,
+          "numeric_rows": 4405
+        },
+        {
+          "field": "fumblesLost",
+          "rows_present": 4405,
+          "coverage_pct": 100.0,
+          "numeric_rows": 4405
+        },
+        {
+          "field": "fumblesRecovered",
+          "rows_present": 4405,
+          "coverage_pct": 100.0,
+          "numeric_rows": 4405
+        }
+      ]
+    },
+    "interceptions": {
+      "played_player_rows": 1751,
+      "fields": [
+        {
+          "field": "interceptionTouchdowns",
+          "rows_present": 1751,
+          "coverage_pct": 100.0,
+          "numeric_rows": 1751
+        },
+        {
+          "field": "interceptionYards",
+          "rows_present": 1751,
+          "coverage_pct": 100.0,
+          "numeric_rows": 1733
+        },
+        {
+          "field": "interceptions",
+          "rows_present": 1751,
+          "coverage_pct": 100.0,
+          "numeric_rows": 1751
+        }
+      ]
+    },
+    "kickReturns": {
+      "played_player_rows": 2779,
+      "fields": [
+        {
+          "field": "kickReturnTouchdowns",
+          "rows_present": 2779,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2779
+        },
+        {
+          "field": "kickReturnYards",
+          "rows_present": 2779,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2778
+        },
+        {
+          "field": "kickReturns",
+          "rows_present": 2779,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2779
+        },
+        {
+          "field": "longKickReturn",
+          "rows_present": 2779,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2778
+        },
+        {
+          "field": "yardsPerKickReturn",
+          "rows_present": 2779,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2778
+        }
+      ]
+    },
+    "kicking": {
+      "played_player_rows": 2473,
+      "fields": [
+        {
+          "field": "extraPointsMade/extraPointAttempts",
+          "rows_present": 2473,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2473
+        },
+        {
+          "field": "fieldGoalPct",
+          "rows_present": 2473,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2473
+        },
+        {
+          "field": "fieldGoalsMade/fieldGoalAttempts",
+          "rows_present": 2473,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2473
+        },
+        {
+          "field": "longFieldGoalMade",
+          "rows_present": 2473,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2473
+        },
+        {
+          "field": "totalKickingPoints",
+          "rows_present": 2473,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2473
+        }
+      ]
+    },
+    "passing": {
+      "played_player_rows": 3054,
+      "fields": [
+        {
+          "field": "QBRating",
+          "rows_present": 3054,
+          "coverage_pct": 100.0,
+          "numeric_rows": 3054
+        },
+        {
+          "field": "adjQBR",
+          "rows_present": 3054,
+          "coverage_pct": 100.0,
+          "numeric_rows": 3020
+        },
+        {
+          "field": "completions/passingAttempts",
+          "rows_present": 3054,
+          "coverage_pct": 100.0,
+          "numeric_rows": 3054
+        },
+        {
+          "field": "interceptions",
+          "rows_present": 3054,
+          "coverage_pct": 100.0,
+          "numeric_rows": 3054
+        },
+        {
+          "field": "passingTouchdowns",
+          "rows_present": 3054,
+          "coverage_pct": 100.0,
+          "numeric_rows": 3054
+        },
+        {
+          "field": "passingYards",
+          "rows_present": 3054,
+          "coverage_pct": 100.0,
+          "numeric_rows": 3043
+        },
+        {
+          "field": "sacks-sackYardsLost",
+          "rows_present": 3054,
+          "coverage_pct": 100.0,
+          "numeric_rows": 3054
+        },
+        {
+          "field": "yardsPerPassAttempt",
+          "rows_present": 3054,
+          "coverage_pct": 100.0,
+          "numeric_rows": 3043
+        }
+      ]
+    },
+    "puntReturns": {
+      "played_player_rows": 2120,
+      "fields": [
+        {
+          "field": "longPuntReturn",
+          "rows_present": 2120,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2098
+        },
+        {
+          "field": "puntReturnTouchdowns",
+          "rows_present": 2120,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2120
+        },
+        {
+          "field": "puntReturnYards",
+          "rows_present": 2120,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2086
+        },
+        {
+          "field": "puntReturns",
+          "rows_present": 2120,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2120
+        },
+        {
+          "field": "yardsPerPuntReturn",
+          "rows_present": 2120,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2086
+        }
+      ]
+    },
+    "punting": {
+      "played_player_rows": 2451,
+      "fields": [
+        {
+          "field": "grossAvgPuntYards",
+          "rows_present": 2451,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2451
+        },
+        {
+          "field": "longPunt",
+          "rows_present": 2451,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2451
+        },
+        {
+          "field": "puntYards",
+          "rows_present": 2451,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2451
+        },
+        {
+          "field": "punts",
+          "rows_present": 2451,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2451
+        },
+        {
+          "field": "puntsInside20",
+          "rows_present": 2451,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2451
+        },
+        {
+          "field": "touchbacks",
+          "rows_present": 2451,
+          "coverage_pct": 100.0,
+          "numeric_rows": 2451
+        }
+      ]
+    },
+    "receiving": {
+      "played_player_rows": 19867,
+      "fields": [
+        {
+          "field": "longReception",
+          "rows_present": 19867,
+          "coverage_pct": 100.0,
+          "numeric_rows": 19611
+        },
+        {
+          "field": "receivingTargets",
+          "rows_present": 19867,
+          "coverage_pct": 100.0,
+          "numeric_rows": 19867
+        },
+        {
+          "field": "receivingTouchdowns",
+          "rows_present": 19867,
+          "coverage_pct": 100.0,
+          "numeric_rows": 19867
+        },
+        {
+          "field": "receivingYards",
+          "rows_present": 19867,
+          "coverage_pct": 100.0,
+          "numeric_rows": 19559
+        },
+        {
+          "field": "receptions",
+          "rows_present": 19867,
+          "coverage_pct": 100.0,
+          "numeric_rows": 19867
+        },
+        {
+          "field": "yardsPerReception",
+          "rows_present": 19867,
+          "coverage_pct": 100.0,
+          "numeric_rows": 19566
+        }
+      ]
+    },
+    "rushing": {
+      "played_player_rows": 10350,
+      "fields": [
+        {
+          "field": "longRushing",
+          "rows_present": 10350,
+          "coverage_pct": 100.0,
+          "numeric_rows": 9836
+        },
+        {
+          "field": "rushingAttempts",
+          "rows_present": 10350,
+          "coverage_pct": 100.0,
+          "numeric_rows": 10350
+        },
+        {
+          "field": "rushingTouchdowns",
+          "rows_present": 10350,
+          "coverage_pct": 100.0,
+          "numeric_rows": 10350
+        },
+        {
+          "field": "rushingYards",
+          "rows_present": 10350,
+          "coverage_pct": 100.0,
+          "numeric_rows": 9655
+        },
+        {
+          "field": "yardsPerRushAttempt",
+          "rows_present": 10350,
+          "coverage_pct": 100.0,
+          "numeric_rows": 9654
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Field availability is not forecast skill or feature importance.",
+    "Presence does not establish accuracy, pregame availability, or predictive value.",
+    "Only records with season_type_id=2 are counted.",
+    "Player names and athlete IDs are not included."
+  ]
+}
