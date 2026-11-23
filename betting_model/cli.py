@@ -257,7 +257,7 @@ def _to_markdown(payload: dict[str, Any]) -> str:
         "",
         f"- Generated: **{payload['generated_at']}** ({payload['timezone']})",
         f"- Props: {payload['props_path']}",
-        f"- Evaluated: {s['evaluated']} / {s['total']} | Skipped: {s['skipped']} | Exact duplicates excluded: {s.get('duplicates_excluded', 0)}",
+        f"- Evaluated: {s['evaluated']} / {s['total']} | Skipped: {s['skipped']} | Exact duplicates excluded: {s.get('duplicates_excluded', 0)} | Projection conflicts: {s.get('projection_conflicts', 0)}",
         "",
         "> No betting edges or recommendations are produced. Probability calculations remain uncalibrated diagnostics.",
         "",
