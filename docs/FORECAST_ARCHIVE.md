@@ -25,3 +25,5 @@ The archive refuses a projection made after kickoff, a stale projection, an inpu
 `forecast_metrics` reports forecast-error sample counts, MAE, RMSE, and signed bias by sport, market, and model version. It does not claim calibrated probabilities, evaluate sportsbook odds, calculate ROI, or assign `QUALIFIED`. A residual distribution must be fit and evaluated chronologically in the separate calibration gate.
 
 For error metrics, multiple daily snapshots for the same player, event, market, and model version are not counted as independent observations. The metrics select the latest available pregame snapshot for that event/player/market/model. All immutable snapshots remain stored for audit and comparison.
+
+The scheduled workflow stores the SQLite archive as `forecasts/forecast_archive.sqlite.gz` on the historical-data branch to reduce repository size. It decompresses the file before grading/generation, then recompresses it before committing. The runtime archive path remains `forecasts/forecast_archive.sqlite`.
