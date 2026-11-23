@@ -23,3 +23,5 @@ report = forecast_metrics(Path("data/forecasts.sqlite"))
 The archive refuses a projection made after kickoff, a stale projection, an input-data timestamp after the projection, and postgame fields in the original snapshot. It does not allow callers to backdate the archive clock or attach a result with a future retrieval timestamp. A missing input-data timestamp remains missing; it is never inferred from the game date.
 
 `forecast_metrics` reports forecast-error sample counts, MAE, RMSE, and signed bias by sport, market, and model version. It does not claim calibrated probabilities, evaluate sportsbook odds, calculate ROI, or assign `QUALIFIED`. A residual distribution must be fit and evaluated chronologically in the separate calibration gate.
+
+For error metrics, multiple daily snapshots for the same player, event, market, and model version are not counted as independent observations. The metrics select the latest available pregame snapshot for that event/player/market/model. All immutable snapshots remain stored for audit and comparison.

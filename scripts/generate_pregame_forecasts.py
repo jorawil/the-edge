@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from betting_model.features import build_league_efficiency_prior, build_player_history
-from betting_model.forecast_archive import archive_forecasts
+from betting_model.forecast_archive import archive_forecasts, archive_stats
 from betting_model.projection_engine import project_nba, project_nfl, project_rolling_mean
 
 ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports"
@@ -313,6 +313,7 @@ def generate(
                 f'{saved.get("reason")}'
             )
 
+    archive_summary = archive_stats(archive_path)
     return {
         "ok": True,
         "sport": sport,
@@ -326,6 +327,7 @@ def generate(
         "forecasts_by_market": dict(sorted(by_market.items())),
         "errors": errors,
         "archive_path": str(archive_path),
+        "archive_summary": archive_summary,
         "model_selection_version": SELECTION_VERSION,
         "odds_api_calls": 0,
         "calibration_claimed": False,
