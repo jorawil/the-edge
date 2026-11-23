@@ -86,3 +86,39 @@ def test_empty_archive_returns_empty_non_promoting_report(tmp_path):
     assert report["ok"] is True
     assert report["groups"] == []
     assert report["qualified_promotions"] == 0
+
+
+def test_event_split_keeps_simultaneous_games_on_same_side_of_boundary():
+    rows = []
+    for day in range(10):
+        event_time = f"2026-01-{day+1:02d}T00:00:00Z"
+        rows.append({
+            "event_id": f"e{day}", "event_start": event_time,
+            "residual": float(day), "player_id": "p1",
+        })
+        if day == 5:
+            rows.append({
+                "event_id": "e5-simultaneous", "event_start": event_time,
+                "residual": 5.5, "player_id": "p2",
+            })
+    parts = _event_split(rows)
+    locations = {
+        row["event_id"]: split
+        for split, group in parts.items()
+        for row in group
+    }
+    assert locations["e5"] == "train"
+    assert locations["e5-simultaneous"] == "train"
+
+
+def test_event_split_rejects_inconsistent_start_for_same_event():
+    rows = [
+        {"event_id": "same", "event_start": "2026-01-01T00:00:00Z"},
+        {"event_id": "same", "event_start": "2026-01-01T00:01:00Z"},
+    ]
+    try:
+        _event_split(rows)
+    except ValueError as exc:
+        assert "inconsistent event_start" in str(exc)
+    else:
+        raise AssertionError("inconsistent event start must not be split")
