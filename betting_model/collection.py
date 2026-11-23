@@ -323,7 +323,12 @@ def collect_pregame(
         summary["calibration_claimed"] = False
         summary["profit_reported"] = False
         summary["automatic_betting"] = False
-        journal.finish_run(run_id, "completed", {key: value for key, value in summary.items() if key != "items"})
+        run_status = (
+            "completed" if summary.get("ok") is True
+            else "partial" if summary.get("stored", 0) or summary.get("duplicates", 0)
+            else "failed"
+        )
+        journal.finish_run(run_id, run_status, {key: value for key, value in summary.items() if key != "items"})
         logger.info(
             "collection stored=%s duplicates=%s rejected=%s conflicts=%s",
             summary["stored"],
@@ -362,9 +367,10 @@ def _collect(
             continue
         reason = _precheck(prop)
         if reason:
-            _record(journal, run_id, "rejected", prop, reason=reason)
-            items.append({"action": "rejected", "reason": reason, "player": _player(prop)})
-            logger.warning("collection rejected %s: %s", _player(prop), reason)
+            action = "skipped" if "already started" in reason else "rejected"
+            _record(journal, run_id, action, prop, reason=reason)
+            items.append({"action": action, "reason": reason, "player": _player(prop)})
+            logger.warning("collection %s %s: %s", action, _player(prop), reason)
             continue
         cleaned, note = prepare_sportsbook(prop)
         raw = prop.get("_collection_raw") or prop
@@ -374,13 +380,15 @@ def _collect(
         ready_meta.append({"raw": raw, "note": note, "player": _player(prop)})
     archived = archive_mod.archive_many(Path(database), ready) if ready else []
     for meta, result in zip(ready_meta, archived):
+        reason = result.get("reason")
         if result.get("stored"):
             action = "stored"
         elif result.get("duplicate"):
             action = "duplicate"
+        elif reason and "already started" in str(reason):
+            action = "skipped"
         else:
             action = "rejected"
-        reason = result.get("reason")
         if meta["note"] and action == "stored":
             reason = meta["note"]
         index = result.get("index")
@@ -410,12 +418,14 @@ def _collect(
     stored = sum(1 for item in items if item["action"] == "stored")
     duplicates = sum(1 for item in items if item["action"] == "duplicate")
     rejected = sum(1 for item in items if item["action"] == "rejected")
+    skipped = sum(1 for item in items if item["action"] == "skipped")
     conflicts = sum(1 for item in items if item["action"] == "conflict")
     return {
-        "ok": True,
+        "ok": rejected == 0 and conflicts == 0,
         "stored": stored,
         "duplicates": duplicates,
         "rejected": rejected,
+        "skipped": skipped,
         "conflicts": conflicts,
         "provider_failures": 0,
         "items": items,
@@ -496,7 +506,7 @@ def collect_event_odds(
             "automatic_betting": False,
             "items": [],
         }
-        journal.finish_run(run_id, "completed", {key: value for key, value in summary.items() if key != "items"})
+        journal.finish_run(run_id, "failed", {key: value for key, value in summary.items() if key != "items"})
         return summary
     result = collect_joined(database, projections, fetched.get("records") or [], journal_path=journal_path)
     result["bookmaker_notes"] = fetched.get("bookmaker_notes")

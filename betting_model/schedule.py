@@ -113,6 +113,9 @@ def run_once(
                 database=database,
                 journal_path=journal_path,
             )
+            items = outcome["collect"].get("items") or []
+            if items and all(item.get("action") == "skipped" for item in items):
+                outcome["collect"]["skipped"] = True
         else:
             outcome["collect"] = {"skipped": True, "reason": "last successful collection is inside the wait"}
     if config.get("grade", True):
