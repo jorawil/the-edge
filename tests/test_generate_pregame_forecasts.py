@@ -78,6 +78,12 @@ def test_generate_creates_future_forecasts_from_roster_and_prior_games(tmp_path,
     assert {row["market"] for row in report["forecasts"]} == {"PTS", "REB", "AST", "3PM", "PRA"}
     assert all(row["calibrated"] is False for row in report["forecasts"])
     assert all(row["projected_value"] is not None for row in report["forecasts"])
+    pts = next(row for row in report["forecasts"] if row["market"] == "PTS")
+    assert pts["opportunity_window_games"] == 5
+    assert pts["efficiency_window_games"] == 20
+    assert pts["n_efficiency_history"] == 3
+    assert pts["n_opportunity"] == 3
+    assert ":o5:e20:k5:" in pts["model_version"]
     assert all(row["home_team_name"] == "Home City Team" for row in report["forecasts"])
     assert all(row["away_team_name"] == "Away City Team" for row in report["forecasts"])
     assert all(row["warnings"] for row in report["forecasts"])

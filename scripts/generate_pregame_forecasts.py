@@ -22,20 +22,22 @@ from betting_model.projection_engine import project_nba, project_nfl, project_ro
 
 ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports"
 SPORT_PATHS = {"nba": "basketball/nba", "nfl": "football/nfl"}
-SELECTION_VERSION = "walk-forward-selection-2026-11-22"
+SELECTION_VERSION = "walk-forward-separate-window-selection-2026-11-23"
+# (method, opportunity lookback, efficiency lookback, shrinkage strength)
+# Selected on validation; held-out event-cluster bootstrap compared with rolling mean.
 MARKET_SELECTIONS = {
     "nba": {
-        "PTS": ("opportunity_rate", 10, 20.0),
-        "REB": ("opportunity_rate", 20, 20.0),
-        "AST": ("rolling_mean", 20, 0.0),
-        "3PM": ("rolling_mean", 20, 0.0),
-        "PRA": ("opportunity_rate", 10, 10.0),
+        "PTS": ("opportunity_rate", 5, 20, 5.0),
+        "REB": ("opportunity_rate", 5, 20, 20.0),
+        "AST": ("opportunity_rate", 5, 20, 0.0),
+        "3PM": ("rolling_mean", 20, 20, 0.0),
+        "PRA": ("opportunity_rate", 5, 20, 5.0),
     },
     "nfl": {
-        "PASS_YDS": ("opportunity_rate", 20, 20.0),
-        "REC": ("opportunity_rate", 20, 20.0),
-        "REC_YDS": ("opportunity_rate", 20, 20.0),
-        "RUSH_YDS": ("opportunity_rate", 5, 20.0),
+        "PASS_YDS": ("opportunity_rate", 20, 20, 20.0),
+        "REC": ("opportunity_rate", 20, 20, 20.0),
+        "REC_YDS": ("opportunity_rate", 20, 20, 20.0),
+        "RUSH_YDS": ("opportunity_rate", 5, 5, 20.0),
     },
 }
 
@@ -234,12 +236,13 @@ def generate(
                     roster_cache[team_id] = []
                     errors.append(f"roster {sport} team {team_id}: {exc}")
             for player in roster_cache[team_id]:
-                for market, (method, window, shrinkage) in MARKET_SELECTIONS[sport].items():
+                for market, (method, opportunity_window, efficiency_window, shrinkage) in MARKET_SELECTIONS[sport].items():
                     history_all = history_index["histories"].get(
                         (player["player_id"], market), []
                     )
-                    history = history_all[-window:]
-                    if len(history) < 3:
+                    efficiency_history = history_all[-efficiency_window:]
+                    opportunity_history = history_all[-opportunity_window:]
+                    if len(efficiency_history) < 3 or len(opportunity_history) < 3:
                         counts["insufficient_history"] += 1
                         continue
                     history_result = {
@@ -257,19 +260,22 @@ def generate(
                         ],
                     }
                     if method == "rolling_mean":
-                        result = project_rolling_mean(market, history, context)
-                        model_version = f"rolling-mean-v1:{sport}:{market}:w{window}:{SELECTION_VERSION}"
+                        result = project_rolling_mean(market, efficiency_history, context)
+                        model_version = (
+                            f"rolling-mean-v1:{sport}:{market}:w{efficiency_window}:{SELECTION_VERSION}"
+                        )
                     else:
                         prior = history_index["league_priors"][market].get("prior_efficiency")
                         result_context = {**context, "prior_efficiency": prior}
                         engine = project_nba if sport == "nba" else project_nfl
                         result = engine(
-                            market, history, result_context,
+                            market, efficiency_history, result_context,
                             shrinkage_strength=shrinkage,
+                            opportunity_history=opportunity_history,
                         )
                         model_version = (
-                            f"opportunity-rate-v1:{sport}:{market}:w{window}:k{shrinkage:g}:"
-                            f"{SELECTION_VERSION}"
+                            f"opportunity-rate-v2:{sport}:{market}:o{opportunity_window}:"
+                            f"e{efficiency_window}:k{shrinkage:g}:{SELECTION_VERSION}"
                         )
                     if not result.get("ok"):
                         counts[result.get("reason") or "projection_failed"] += 1
@@ -303,7 +309,10 @@ def generate(
                         "projected_opportunity": result.get("projected_opportunity"),
                         "projected_efficiency": result.get("projected_efficiency"),
                         "n_history": result["n_history"],
+                        "n_efficiency_history": result.get("n_efficiency_history", result["n_history"]),
                         "n_opportunity": result["n_opportunity"],
+                        "opportunity_window_games": opportunity_window,
+                        "efficiency_window_games": efficiency_window,
                         "effective_opportunity_after_shrinkage": result.get("effective_opportunity_after_shrinkage"),
                         "sigma": result.get("sigma"),
                         "distribution": result.get("distribution"),
@@ -352,7 +361,10 @@ def generate(
             "projected_opportunity": snapshot.get("projected_opportunity"),
             "projected_efficiency": snapshot.get("projected_efficiency"),
             "n_history": snapshot["n_history"],
+            "n_efficiency_history": snapshot.get("n_efficiency_history", snapshot["n_history"]),
             "n_opportunity": snapshot["n_opportunity"],
+            "opportunity_window_games": snapshot.get("opportunity_window_games"),
+            "efficiency_window_games": snapshot.get("efficiency_window_games"),
             "model_version": snapshot["model_version"],
             "projection_at": snapshot["projection_at"],
             "projection_input_at": snapshot.get("projection_input_at"),
