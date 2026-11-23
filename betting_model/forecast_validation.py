@@ -69,7 +69,7 @@ def _event_split(rows: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     event_times = {str(row["event_id"]): parse_aware_datetime(row["event_start"]) for row in rows}
     if any(value is None for value in event_times.values()):
         raise ValueError("all event_start values must be timezone-aware timestamps")
-    events = sorted(event_times, key=lambda event: (event_times[event].astimezone().timestamp(), event))
+    events = sorted(event_times, key=lambda event: (event_times[event].timestamp(), event))
     train_end = int(len(events) * 0.6)
     valid_end = train_end + int(len(events) * 0.2)
     buckets = {
