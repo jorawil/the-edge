@@ -16,7 +16,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from betting_model.features import build_league_efficiency_prior, build_player_history
+from betting_model.features import build_history_index
 from betting_model.forecast_archive import archive_forecasts, archive_stats
 from betting_model.projection_engine import project_nba, project_nfl, project_rolling_mean
 
@@ -197,13 +197,16 @@ def generate(
     first_day = start_day or datetime.now(timezone.utc).date()
     events, errors = upcoming_events(sport, start_day=first_day, days=days)
     roster_cache: dict[str, list[dict[str, Any]]] = {}
-    league_cache: dict[str, dict[str, Any]] = {}
-    history_cache: dict[tuple[str, str], dict[str, Any]] = {}
     counts = Counter()
     by_market = Counter()
     snapshots_to_archive: list[dict[str, Any]] = []
     now_text = datetime.now(timezone.utc).isoformat()
     source = f"ESPN schedule/roster and historical box scores; {SELECTION_VERSION}"
+    history_index = build_history_index(
+        games, sport=sport, markets=tuple(MARKET_SELECTIONS[sport]),
+        before_event_time=now_text, data_updated_at=data_updated,
+        data_updated_source=f"historical-data/data/{sport}/games.json updated",
+    )
 
     for event in events:
         event_start = event["event_start"]
@@ -224,19 +227,19 @@ def generate(
                     errors.append(f"roster {sport} team {team_id}: {exc}")
             for player in roster_cache[team_id]:
                 for market, (method, window, shrinkage) in MARKET_SELECTIONS[sport].items():
-                    history_key = (player["player_id"], market)
-                    if history_key not in history_cache:
-                        history_cache[history_key] = build_player_history(
-                            games, sport=sport, player_id=player["player_id"],
-                            market=market, before_event_time=now_text,
-                            data_updated_at=data_updated,
-                            data_updated_source=f"historical-data/data/{sport}/games.json updated",
-                        )
-                    history_result = history_cache[history_key]
-                    history = history_result["history"][-window:]
+                    history_all = history_index["histories"].get(
+                        (player["player_id"], market), []
+                    )
+                    history = history_all[-window:]
                     if len(history) < 3:
                         counts["insufficient_history"] += 1
                         continue
+                    history_result = {
+                        "history": history_all,
+                        "n_history": len(history_all),
+                        "projection_input_at": history_index["projection_input_at"],
+                        "projection_input_source": history_index["projection_input_source"],
+                    }
                     context = {
                         "projection_at": now_text,
                         "projection_input_at": history_result["projection_input_at"],
@@ -249,11 +252,7 @@ def generate(
                         result = project_rolling_mean(market, history, context)
                         model_version = f"rolling-mean-v1:{sport}:{market}:w{window}:{SELECTION_VERSION}"
                     else:
-                        if market not in league_cache:
-                            league_cache[market] = build_league_efficiency_prior(
-                                games, sport=sport, market=market, before_event_time=now_text
-                            )
-                        prior = league_cache[market].get("prior_efficiency")
+                        prior = history_index["league_priors"][market].get("prior_efficiency")
                         result_context = {**context, "prior_efficiency": prior}
                         engine = project_nba if sport == "nba" else project_nfl
                         result = engine(
