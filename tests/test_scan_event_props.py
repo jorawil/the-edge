@@ -191,3 +191,49 @@ def test_resolve_odds_event_id_refuses_ambiguous_or_missing_events():
     assert ambiguous["ok"] is False
     missing = _MODULE.resolve_odds_event_id([], projections)
     assert missing["ok"] is False
+
+
+
+def test_point_projection_line_comparisons_are_descriptive_and_side_aware():
+    projections = [
+        {"player": "Example Player", "player_id": "123", "market": "RECEPTIONS",
+         "projected": 3.0, "projection_at": "2026-11-23T11:55:00Z",
+         "projection_source": "model-v2"},
+    ]
+    prices = [
+        {"player": "Example Player", "market": "player_receptions", "side": "Over",
+         "line": 2.5, "american_odds": -110, "bookmaker_key": "fanduel",
+         "freshness": "fresh", "retrieved_at": "2026-11-23T12:00:00Z",
+         "provider_last_update": "2026-11-23T11:59:00Z"},
+        {"player": "Example Player", "market": "player_receptions", "side": "Under",
+         "line": 2.5, "american_odds": -110, "bookmaker_key": "fanduel",
+         "freshness": "fresh", "retrieved_at": "2026-11-23T12:00:00Z",
+         "provider_last_update": "2026-11-23T11:59:00Z"},
+        {"player": "Example Player", "market": "player_receptions", "side": "Over",
+         "line": 2.5, "american_odds": 100, "bookmaker_key": "draftkings",
+         "freshness": "stale", "retrieved_at": "2026-11-23T12:00:00Z"},
+    ]
+    result = _MODULE.build_point_projection_line_comparisons("nfl", projections, prices)
+    assert result["counts"]["matched"] == 2
+    assert result["counts"]["not_fresh_or_unsupported"] == 1
+    over = next(row for row in result["comparisons"] if row["side"] == "Over")
+    under = next(row for row in result["comparisons"] if row["side"] == "Under")
+    assert over["projection_minus_line"] == pytest.approx(0.5)
+    assert over["side_directional_gap"] == pytest.approx(0.5)
+    assert under["side_directional_gap"] == pytest.approx(-0.5)
+    assert "does not represent a probability" in result["interpretation"]
+
+
+def test_point_projection_line_comparisons_refuse_ambiguous_player_names():
+    projections = [
+        {"player": "J Smith", "player_id": "1", "market": "PASS_YDS", "projected": 200},
+        {"player": "John Smith", "player_id": "2", "market": "PASS_YDS", "projected": 210},
+    ]
+    prices = [{
+        "player": "J Smith", "market": "player_pass_yds", "side": "Over",
+        "line": 199.5, "american_odds": -110, "bookmaker_key": "fanduel",
+        "freshness": "fresh",
+    }]
+    result = _MODULE.build_point_projection_line_comparisons("nfl", projections, prices)
+    assert result["comparisons"] == []
+    assert result["counts"]["unmatched_player_or_market"] == 1
