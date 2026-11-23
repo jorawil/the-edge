@@ -106,3 +106,38 @@ def test_feature_builder_rejects_data_update_after_target_event():
         build_player_history({}, sport="nba", player_id="1", market="PTS",
                              before_event_time="2026-01-01T20:00:00Z",
                              data_updated_at="2026-01-02T20:00:00Z")
+
+
+
+def test_league_efficiency_prior_excludes_same_time_future_and_non_regular_games():
+    from betting_model.features import build_league_efficiency_prior
+
+    games = {
+        "prior": {
+            "date_utc": "2026-01-01T20:00:00Z", "season_type_id": 2,
+            "players": [{"athlete_id": "1", "category": "", "dnp": False,
+                         "stats": {"points": "20", "minutes": "20:00"}}],
+        },
+        "same_time": {
+            "date_utc": "2026-01-02T20:00:00Z", "season_type_id": 2,
+            "players": [{"athlete_id": "2", "category": "", "dnp": False,
+                         "stats": {"points": "100", "minutes": "20:00"}}],
+        },
+        "future": {
+            "date_utc": "2026-01-03T20:00:00Z", "season_type_id": 2,
+            "players": [{"athlete_id": "3", "category": "", "dnp": False,
+                         "stats": {"points": "100", "minutes": "20:00"}}],
+        },
+        "postseason": {
+            "date_utc": "2025-12-31T20:00:00Z", "season_type_id": 3,
+            "players": [{"athlete_id": "4", "category": "", "dnp": False,
+                         "stats": {"points": "100", "minutes": "20:00"}}],
+        },
+    }
+    result = build_league_efficiency_prior(
+        games, sport="nba", market="PTS",
+        before_event_time="2026-01-02T20:00:00Z",
+    )
+    assert result["prior_efficiency"] == pytest.approx(1.0)
+    assert result["n_events"] == 1
+    assert result["n_players"] == 1
