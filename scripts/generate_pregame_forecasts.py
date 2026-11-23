@@ -327,6 +327,36 @@ def generate(
                 f'{saved.get("reason")}'
             )
 
+    # Export only snapshots that were successfully archived in this run.
+    # Keep the immutable archive as the source of truth; this is a convenient
+    # report view, not a second source of record.
+    forecast_rows = []
+    for snapshot, saved in zip(snapshots_to_archive, batch["results"]):
+        if not saved.get("ok"):
+            continue
+        forecast_rows.append({
+            "event_id": snapshot["event_id"],
+            "event_start": snapshot["event_start"],
+            "player_id": snapshot["player_id"],
+            "player_name": snapshot["player_name"],
+            "team": snapshot["team"],
+            "opponent": snapshot["opponent"],
+            "market": snapshot["market"],
+            "projected_value": snapshot["projected_value"],
+            "projected_opportunity": snapshot.get("projected_opportunity"),
+            "projected_efficiency": snapshot.get("projected_efficiency"),
+            "n_history": snapshot["n_history"],
+            "n_opportunity": snapshot["n_opportunity"],
+            "model_version": snapshot["model_version"],
+            "projection_at": snapshot["projection_at"],
+            "projection_input_at": snapshot.get("projection_input_at"),
+            "calibrated": snapshot["calibrated"],
+            "warnings": snapshot["warnings"],
+        })
+    forecast_rows.sort(key=lambda row: (
+        row["event_start"], row["team"], row["player_name"], row["market"]
+    ))
+
     archive_summary = archive_stats(archive_path)
     return {
         "ok": True,
@@ -335,6 +365,8 @@ def generate(
         "events_found": len(events),
         "players_in_rosters": sum(len(rows) for rows in roster_cache.values()),
         "forecasts_archived": counts["archived"],
+        "forecast_rows": len(forecast_rows),
+        "forecasts": forecast_rows,
         "duplicates": counts["duplicates"],
         "skipped": {key: value for key, value in counts.items()
                     if key not in {"archived", "duplicates"}},
