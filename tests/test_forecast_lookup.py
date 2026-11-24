@@ -326,3 +326,100 @@ def test_lookup_freshness_uses_utc_age_for_offset_timestamps(tmp_path, monkeypat
     )
     assert result["ok"] is True
     assert result["forecast"]["projected_value"] == 24.5
+
+
+
+def test_lookup_detects_sub_micro_projected_value_conflict(tmp_path, monkeypatch):
+    """Distinct values at one instant remain ambiguous below six decimals."""
+    import sqlite3
+
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now, projected_value=24.5)
+
+    # The archive's own observation-key deduplication rounds to six decimals.
+    # Insert a legacy/imported row directly to verify lookup itself does not
+    # introduce an additional, undocumented rounding tolerance.
+    conn = sqlite3.connect(path)
+    row = conn.execute("SELECT * FROM forecast_snapshots LIMIT 1").fetchone()
+    columns = [item[0] for item in conn.execute(
+        "SELECT * FROM forecast_snapshots LIMIT 0"
+    ).description]
+    values = dict(zip(columns, row))
+    values["snapshot_id"] = "sub-micro-snapshot"
+    values["observation_key"] = "sub-micro-observation"
+    values["projected_value"] = 24.5000001
+    placeholders = ", ".join("?" for _ in columns)
+    conn.execute(
+        f"INSERT INTO forecast_snapshots ({', '.join(columns)}) VALUES ({placeholders})",
+        [values[column] for column in columns],
+    )
+    conn.commit()
+    conn.close()
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "ambiguous_snapshots",
+    }
+
+
+@pytest.mark.parametrize("error_code,error_name", [
+    (sqlite3.SQLITE_READONLY_RECOVERY, "SQLITE_READONLY_RECOVERY"),
+    (sqlite3.SQLITE_READONLY_ROLLBACK, "SQLITE_READONLY_ROLLBACK"),
+])
+def test_lookup_reports_readonly_recovery_without_touching_archive_or_journal(
+    tmp_path, monkeypatch, error_code, error_name,
+):
+    import sqlite3
+
+    path = tmp_path / "forecast.sqlite"
+    journal = tmp_path / "forecast.sqlite-journal"
+    path.write_bytes(b"database sentinel")
+    journal.write_bytes(b"journal sentinel")
+    before_database = path.read_bytes()
+    before_journal = journal.read_bytes()
+
+    def raise_recovery(_path):
+        exc = sqlite3.OperationalError("attempt to write a readonly database")
+        exc.sqlite_errorcode = error_code
+        exc.sqlite_errorname = error_name
+        raise exc
+
+    monkeypatch.setattr("betting_model.forecast_lookup._read_only_connection", raise_recovery)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {
+        "ok": False,
+        "forecast": None,
+        "reason": "archive_needs_recovery",
+        "journal_present": True,
+    }
+    assert path.read_bytes() == before_database
+    assert journal.read_bytes() == before_journal
+
+
+def test_lookup_keeps_unrelated_sqlite_errors_as_archive_invalid(tmp_path, monkeypatch):
+    import sqlite3
+
+    path = tmp_path / "not-a-database.sqlite"
+    path.write_text("not sqlite", encoding="utf-8")
+
+    def raise_corrupt(_path):
+        exc = sqlite3.DatabaseError("file is not a database")
+        exc.sqlite_errorcode = sqlite3.SQLITE_NOTADB
+        exc.sqlite_errorname = "SQLITE_NOTADB"
+        raise exc
+
+    monkeypatch.setattr("betting_model.forecast_lookup._read_only_connection", raise_corrupt)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "archive_invalid",
+    }
