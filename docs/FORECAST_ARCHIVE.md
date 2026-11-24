@@ -48,7 +48,7 @@ the archive read-only (no migration, no writes, no creation), returns the
 newest fresh snapshot for one (event_id, player_id, market) triple, and
 refuses with a stable reason when no snapshot may be used. The full set
 of rejection reasons is: `missing_identifier`, `archive_not_found`,
-`archive_invalid`, `not_found`, `invalid_event_start`,
+`archive_invalid`, `archive_needs_recovery`, `not_found`, `invalid_event_start`,
 `invalid_projection_time`, `event_started`,
 `projection_not_before_event_start`, `projection_in_future`,
 `stale_projection`, and `ambiguous_snapshots`. Candidate timestamps are
