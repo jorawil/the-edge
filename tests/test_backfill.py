@@ -334,3 +334,191 @@ def test_oct24_31_alias_is_per_sport(tmp_path, monkeypatch):
     assert nba[0]["sport"] == "nba"
     assert nfl[0]["sport"] == "nfl"
     assert not (tmp_path / "backfill_report_oct24_31.json").exists()
+
+
+def _nba_box_summary():
+    return {
+        "boxscore": {
+            "players": [
+                {
+                    "team": {"abbreviation": "HOM"},
+                    "statistics": [
+                        {
+                            "name": "starters",
+                            "keys": ["points"],
+                            "athletes": [
+                                {
+                                    "athlete": {"displayName": "Starter", "id": "1"},
+                                    "stats": ["18"],
+                                    "didNotPlay": False,
+                                    "starter": True,
+                                    "reason": "COACH'S DECISION",
+                                },
+                                {
+                                    "athlete": {"displayName": "Bench", "id": "2"},
+                                    "stats": ["7"],
+                                    "didNotPlay": False,
+                                    "starter": False,
+                                    "reason": "COACH'S DECISION",
+                                },
+                                {
+                                    "athlete": {"displayName": "Hurt", "id": "3"},
+                                    "stats": [],
+                                    "didNotPlay": True,
+                                    "starter": False,
+                                    "reason": "LEFT HAMSTRING STRAIN",
+                                },
+                            ],
+                        }
+                    ],
+                }
+            ],
+            "teams": [],
+        }
+    }
+
+
+def test_parse_box_stores_starter_and_reason():
+    module = _load()
+    players, _teams = module.parse_box(_nba_box_summary())
+    by_name = {row["player"]: row for row in players}
+    assert set(by_name) == {"Starter", "Bench", "Hurt"}
+    assert by_name["Starter"]["starter"] is True
+    assert by_name["Bench"]["starter"] is False
+    assert by_name["Starter"]["stats"] == {"points": "18"}
+    # A DNP athlete used to be dropped here because its stats list is empty.
+    assert by_name["Hurt"]["dnp"] is True
+    assert by_name["Hurt"]["stats"] == {}
+    assert by_name["Hurt"]["starter"] is False
+    assert by_name["Hurt"]["reason"] == "LEFT HAMSTRING STRAIN"
+    # reason is only meaningful for a DNP row: ESPN reports
+    # "COACH'S DECISION" for every played row.
+    assert by_name["Starter"]["reason"] == "COACH'S DECISION"
+
+
+def test_parse_box_nfl_shape_has_no_starter_or_reason():
+    module = _load()
+    players, _teams = module.parse_box(
+        {
+            "boxscore": {
+                "players": [
+                    {
+                        "team": {"abbreviation": "HOM"},
+                        "statistics": [
+                            {
+                                "name": "passing",
+                                "keys": ["passingYards"],
+                                "athletes": [
+                                    {
+                                        "athlete": {"displayName": "Passer", "id": "9"},
+                                        "stats": ["212"],
+                                    }
+                                ],
+                            }
+                        ],
+                    }
+                ],
+                "teams": [],
+            }
+        }
+    )
+    assert len(players) == 1
+    # NFL box scores carry neither field: store "source didn't say"
+    # (None), never a made-up False.
+    assert players[0]["starter"] is None
+    assert players[0]["reason"] is None
+    assert players[0]["dnp"] is False
+
+
+def test_run_persists_dnp_rows_and_starter(tmp_path, monkeypatch):
+    module = _load()
+    monkeypatch.setattr(module, "DATA", tmp_path)
+
+    def fake_fetch(url):
+        if "scoreboard" in url:
+            return {"events": [_event("401", "A", "B")]}
+        return _nba_box_summary()
+
+    report = module.run(
+        "nba",
+        module.dt.date(2026, 1, 2),
+        module.dt.date(2026, 1, 2),
+        fetcher=fake_fetch,
+    )
+    assert report["added"] == 1
+    stored = json.loads((tmp_path / "nba" / "games.json").read_text(encoding="utf-8"))
+    rows = stored["games"]["401"]["players"]
+    by_name = {row["player"]: row for row in rows}
+    assert by_name["Starter"]["starter"] is True
+    assert by_name["Hurt"]["dnp"] is True
+    assert by_name["Hurt"]["reason"] == "LEFT HAMSTRING STRAIN"
+    # A stored record with the new keys is still complete: the next run
+    # must not repair it again.
+    again = module.run(
+        "nba",
+        module.dt.date(2026, 1, 2),
+        module.dt.date(2026, 1, 2),
+        fetcher=fake_fetch,
+    )
+    assert again["added"] == 0
+    assert again["repaired"] == 0
+
+
+def test_record_with_only_dnp_rows_is_complete():
+    module = _load()
+    record = {
+        "date_utc": "2026-01-02T00:00:00Z",
+        "source": "ESPN",
+        "scores": {"AWY": "0", "HME": "1"},
+        "players": [
+            {"player": "Hurt", "dnp": True, "stats": {}, "starter": False,
+             "reason": "LEFT HAMSTRING STRAIN"}
+        ],
+    }
+    assert module.record_is_complete(record)
+
+
+def test_daily_forecast_readers_ignore_new_keys(tmp_path):
+    from betting_model import data_store
+    from betting_model.features import build_player_history
+
+    games = {
+        "401": {
+            "id": "401",
+            "date_utc": "2026-01-02T00:00:00Z",
+            "name": "A at B",
+            "status": "Final",
+            "season_year": 2026,
+            "season_type_id": 2,
+            "scores": {"A": 0, "B": 1},
+            "players": [
+                {"team": "B", "player": "Starter", "athlete_id": "1", "category": "",
+                 "stats": {"points": "18", "minutes": "32"}, "dnp": False,
+                 "starter": True, "reason": "COACH'S DECISION"},
+                {"team": "B", "player": "Hurt", "athlete_id": "3", "category": "",
+                 "stats": {}, "dnp": True,
+                 "starter": False, "reason": "LEFT HAMSTRING STRAIN"},
+            ],
+            "source": "ESPN",
+            "retrieved_at": "2026-01-02T00:00:00Z",
+        }
+    }
+    (tmp_path / "nba").mkdir(parents=True)
+    (tmp_path / "nba" / "games.json").write_text(
+        json.dumps({"games": games}), encoding="utf-8"
+    )
+    log = data_store.player_log("nba", "Starter", root=tmp_path)
+    assert len(log) == 1 and log[0]["PTS"] == 18.0
+    assert data_store.player_log("nba", "Hurt", root=tmp_path) == []
+    assert data_store.actual_stat(
+        "nba", event_id="401", market="PTS", player_id="1", root=tmp_path
+    ) == {"ok": True, "actual": 18.0, "event_id": "401",
+          "matched_on": "player_id", "source": "ESPN"}
+    assert data_store.actual_stat(
+        "nba", event_id="401", market="PTS", player_id="3", root=tmp_path
+    )["reason"] == "dnp"
+    history = build_player_history(
+        games, sport="nba", player_id="1", market="PTS",
+        before_event_time="2026-01-03T00:00:00+00:00",
+    )
+    assert [entry["actual"] for entry in history["history"]] == [18.0]
