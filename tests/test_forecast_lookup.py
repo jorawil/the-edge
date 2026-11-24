@@ -217,7 +217,7 @@ def test_lookup_requires_timezone_aware_as_of(tmp_path, monkeypatch):
 def test_lookup_reasons_are_the_documented_set():
     assert REASONS == {
         "missing_identifier", "archive_not_found", "archive_invalid",
-        "not_found", "invalid_event_start", "invalid_projection_time",
+        "archive_needs_recovery", "not_found", "invalid_event_start", "invalid_projection_time",
         "event_started", "projection_not_before_event_start",
         "projection_in_future", "stale_projection", "ambiguous_snapshots",
     }
