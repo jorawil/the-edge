@@ -1,0 +1,707 @@
+"""Regression tests for the read-only forecast lookup.
+
+The lookup is the first connection between the archived ``opportunity-rate-v2``
+forecasts and live evaluation. It must return the newest fresh snapshot for
+one (event_id, player_id, market) triple, or a stable rejection reason — and
+it must never write to the archive, never average projections, and never
+enable probability output.
+"""
+import hashlib
+import os
+import sqlite3
+import subprocess
+import sys
+from datetime import datetime, timedelta, timezone
+
+import pytest
+
+from betting_model import forecast_archive as archive
+from betting_model import forecast_lookup as lookup
+from betting_model.forecast_lookup import REASONS, get_latest_forecast
+
+
+def _snapshot(now, **overrides):
+    snapshot = {
+        "sport": "nba",
+        "event_id": "game-1",
+        "event_start": (now + timedelta(hours=2)).isoformat(),
+        "player_id": "123",
+        "player_name": "Example Player",
+        "market": "PTS",
+        "projected_value": 24.5,
+        "projected_opportunity": 34.0,
+        "projected_efficiency": 0.72,
+        "n_history": 10,
+        "n_opportunity": 10,
+        "model_version": "opportunity-rate-v2:nba:PTS:o5:e20:k5",
+        "projection_at": now.isoformat(),
+        "projection_input_at": (now - timedelta(minutes=5)).isoformat(),
+        "projection_input_source": "historical-data/games.json updated timestamp",
+        "source": "THE EDGE projection engine",
+        "warnings": ["uncalibrated"],
+        "opportunity_window_games": 5,
+        "efficiency_window_games": 20,
+        "n_efficiency_history": 20,
+    }
+    snapshot.update(overrides)
+    return snapshot
+
+
+def _archive(path, now, **overrides):
+    saved = archive.archive_forecast(_snapshot(now, **overrides), path)
+    assert saved["ok"] is True, saved
+    return saved
+
+
+def _hash(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_lookup_returns_newest_fresh_forecast_with_provenance(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now, projected_value=24.5)
+    monkeypatch.setattr(archive, "_now", lambda: now + timedelta(minutes=30))
+    _archive(
+        path, now + timedelta(minutes=30), projected_value=26.5,
+        event_start=(now + timedelta(hours=2)).isoformat(),
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="pts",
+        sport="nba", as_of=now + timedelta(minutes=45),
+    )
+    assert result["ok"] is True
+    assert result["reason"] is None
+    forecast = result["forecast"]
+    assert forecast["projected_value"] == 26.5
+    assert forecast["player_id"] == "123"
+    assert forecast["event_id"] == "game-1"
+    assert forecast["market"] == "PTS"
+    assert forecast["model_version"] == "opportunity-rate-v2:nba:PTS:o5:e20:k5"
+    assert forecast["snapshot_id"]
+    assert forecast["projection_at"] == (now + timedelta(minutes=30)).isoformat()
+    assert forecast["opportunity_window_games"] == 5
+    assert forecast["efficiency_window_games"] == 20
+    assert forecast["n_history"] == 10
+    assert forecast["probability_permitted"] is False
+    assert "uncalibrated" in forecast["probability_permitted_reason"]
+
+
+def test_lookup_does_not_create_or_modify_the_archive(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    missing = tmp_path / "missing.sqlite"
+    assert get_latest_forecast(
+        missing, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    ) == {"ok": False, "forecast": None, "reason": "archive_not_found"}
+    assert not missing.exists()
+
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now)
+    before = _hash(path)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is True
+    assert _hash(path) == before
+    assert archive.archive_stats(path)["snapshots"] == 1
+
+
+def test_lookup_rejects_missing_identifiers_and_unknown_triples(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now)
+
+    assert get_latest_forecast(
+        path, event_id="", player_id="123", market="PTS", as_of=now,
+    )["reason"] == "missing_identifier"
+    assert get_latest_forecast(
+        path, event_id="game-1", player_id=" ", market="PTS", as_of=now,
+    )["reason"] == "missing_identifier"
+    assert get_latest_forecast(
+        path, event_id="game-1", player_id="999", market="PTS", as_of=now,
+    ) == {"ok": False, "forecast": None, "reason": "not_found"}
+    assert get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="REB", as_of=now,
+    )["reason"] == "not_found"
+    assert get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        sport="nfl", as_of=now,
+    )["reason"] == "not_found"
+
+
+def test_lookup_refuses_started_events_and_stale_projections(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now)
+
+    # Event starts at now + 2h; looking up after it has started refuses.
+    assert get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=now + timedelta(hours=2),
+    ) == {"ok": False, "forecast": None, "reason": "event_started"}
+
+    # Same snapshot, looked up 7 hours later but before a far-future event,
+    # is stale rather than fresh. Archive it against a later event start.
+    far_path = tmp_path / "far.sqlite"
+    _archive(far_path, now, event_id="game-9",
+             event_start=(now + timedelta(hours=10)).isoformat())
+    assert get_latest_forecast(
+        far_path, event_id="game-9", player_id="123", market="PTS",
+        as_of=now + timedelta(hours=7),
+    ) == {"ok": False, "forecast": None, "reason": "stale_projection"}
+
+
+def test_lookup_skips_invalid_newest_snapshot_and_uses_older_fresh_one(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    # Archive a valid snapshot, then insert a second one whose projection
+    # timestamp is exactly the event start by writing through the archive
+    # at a later clock time is impossible, so use a direct row instead:
+    # the lookup must refuse it even though the archive accepted the first.
+    _archive(path, now)
+    import sqlite3
+
+    conn = sqlite3.connect(path)
+    row = conn.execute(
+        "SELECT * FROM forecast_snapshots WHERE event_id='game-1'"
+    ).fetchone()
+    columns = [d[0] for d in conn.execute(
+        "SELECT * FROM forecast_snapshots LIMIT 0").description]
+    values = dict(zip(columns, row))
+    values["snapshot_id"] = "late-snapshot"
+    values["observation_key"] = "late-key"
+    values["projection_at"] = (now + timedelta(hours=2)).isoformat()
+    values["projected_value"] = 30.0
+    placeholders = ", ".join("?" for _ in columns)
+    conn.execute(
+        f"INSERT INTO forecast_snapshots ({', '.join(columns)}) VALUES ({placeholders})",
+        [values[c] for c in columns],
+    )
+    conn.commit()
+    conn.close()
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=now + timedelta(minutes=30),
+    )
+    # The newest candidate is the at-kickoff projection, which is refused;
+    # the older fresh snapshot is still usable, so the lookup returns it.
+    assert result["ok"] is True
+    assert result["forecast"]["projected_value"] == 24.5
+
+
+def test_lookup_refuses_ambiguous_snapshots_at_the_newest_timestamp(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now, projected_value=24.5)
+    _archive(path, now, projected_value=27.5)
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {"ok": False, "forecast": None, "reason": "ambiguous_snapshots"}
+
+
+def test_lookup_requires_timezone_aware_as_of(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now)
+    with pytest.raises(ValueError, match="as_of must include a timezone"):
+        get_latest_forecast(
+            path, event_id="game-1", player_id="123", market="PTS",
+            as_of=datetime(2026, 11, 22, 12, 0),
+        )
+
+
+def test_lookup_reasons_are_the_documented_set():
+    assert REASONS == {
+        "missing_identifier", "archive_not_found", "archive_invalid",
+        "archive_needs_recovery", "not_found", "invalid_event_start", "invalid_projection_time",
+        "event_started", "projection_not_before_event_start",
+        "projection_in_future", "stale_projection", "ambiguous_snapshots",
+        "invalid_projected_value",
+    }
+
+
+def test_lookup_reports_invalid_archive_instead_of_crashing(tmp_path):
+    path = tmp_path / "not-a-database.sqlite"
+    path.write_text("this is not sqlite", encoding="utf-8")
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {"ok": False, "forecast": None, "reason": "archive_invalid"}
+
+
+def test_lookup_orders_by_utc_instant_not_stored_text(tmp_path, monkeypatch):
+    """Lexical order of the stored text disagrees with chronological order.
+
+    Snapshot A is written "12:00:00+05:00" (07:00 UTC) and snapshot B
+    "09:00:00Z" (09:00 UTC). As text, "12:00..." sorts after "09:00...",
+    so a text ORDER BY would wrongly pick A as newest. Chronologically
+    B (09:00 UTC) is the newest snapshot.
+    """
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T12:00:00+05:00",
+        projection_input_at="2026-11-22T11:55:00+05:00",
+    )
+    _archive(
+        path, now, projected_value=26.5,
+        projection_at="2026-11-22T09:00:00Z",
+        projection_input_at="2026-11-22T08:55:00Z",
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is True
+    assert result["forecast"]["projected_value"] == 26.5
+    assert result["forecast"]["projection_at"] == "2026-11-22T09:00:00Z"
+
+
+def test_lookup_treats_same_instant_in_different_offsets_as_ambiguous(tmp_path, monkeypatch):
+    """12:00Z and 07:00-05:00 are the same instant; two different values
+    at that instant are ambiguous, even though the stored texts differ."""
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T12:00:00Z",
+        projection_input_at="2026-11-22T11:55:00Z",
+    )
+    _archive(
+        path, now, projected_value=27.5,
+        projection_at="2026-11-22T07:00:00-05:00",
+        projection_input_at="2026-11-22T06:55:00-05:00",
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {"ok": False, "forecast": None, "reason": "ambiguous_snapshots"}
+
+
+def test_lookup_same_instant_same_value_in_different_offsets_is_not_ambiguous(tmp_path, monkeypatch):
+    """The same instant and the same value, written with different
+    offsets, is one forecast restated — not a conflict."""
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T12:00:00Z",
+        projection_input_at="2026-11-22T11:55:00Z",
+    )
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T07:00:00-05:00",
+        projection_input_at="2026-11-22T06:55:00-05:00",
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is True
+    assert result["forecast"]["projected_value"] == 24.5
+
+
+def test_lookup_freshness_uses_utc_age_for_offset_timestamps(tmp_path, monkeypatch):
+    """A projection written "13:00+02:00" is 11:00 UTC — one hour old at
+    a 12:00 UTC lookup, not thirteen hours old and not in the future."""
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(
+        path, now, projected_value=24.5,
+        projection_at="2026-11-22T13:00:00+02:00",
+        projection_input_at="2026-11-22T12:55:00+02:00",
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is True
+    assert result["forecast"]["projected_value"] == 24.5
+
+
+
+def test_lookup_detects_sub_micro_projected_value_conflict(tmp_path, monkeypatch):
+    """Distinct values at one instant remain ambiguous below six decimals."""
+    import sqlite3
+
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now, projected_value=24.5)
+
+    # The archive's own observation-key deduplication rounds to six decimals.
+    # Insert a legacy/imported row directly to verify lookup itself does not
+    # introduce an additional, undocumented rounding tolerance.
+    conn = sqlite3.connect(path)
+    row = conn.execute("SELECT * FROM forecast_snapshots LIMIT 1").fetchone()
+    columns = [item[0] for item in conn.execute(
+        "SELECT * FROM forecast_snapshots LIMIT 0"
+    ).description]
+    values = dict(zip(columns, row))
+    values["snapshot_id"] = "sub-micro-snapshot"
+    values["observation_key"] = "sub-micro-observation"
+    values["projected_value"] = 24.5000001
+    placeholders = ", ".join("?" for _ in columns)
+    conn.execute(
+        f"INSERT INTO forecast_snapshots ({', '.join(columns)}) VALUES ({placeholders})",
+        [values[column] for column in columns],
+    )
+    conn.commit()
+    conn.close()
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "ambiguous_snapshots",
+    }
+
+
+@pytest.mark.parametrize("error_code,error_name", [
+    (getattr(sqlite3, "SQLITE_READONLY_RECOVERY", 264), "SQLITE_READONLY_RECOVERY"),
+    (getattr(sqlite3, "SQLITE_READONLY_ROLLBACK", 776), "SQLITE_READONLY_ROLLBACK"),
+])
+def test_lookup_reports_readonly_recovery_without_touching_archive_or_journal(
+    tmp_path, monkeypatch, error_code, error_name,
+):
+    import sqlite3
+
+    path = tmp_path / "forecast.sqlite"
+    journal = tmp_path / "forecast.sqlite-journal"
+    path.write_bytes(b"database sentinel")
+    journal.write_bytes(b"journal sentinel")
+    before_database = path.read_bytes()
+    before_journal = journal.read_bytes()
+
+    def raise_recovery(_path):
+        exc = sqlite3.OperationalError("attempt to write a readonly database")
+        exc.sqlite_errorcode = error_code
+        exc.sqlite_errorname = error_name
+        raise exc
+
+    monkeypatch.setattr("betting_model.forecast_lookup._read_only_connection", raise_recovery)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {
+        "ok": False,
+        "forecast": None,
+        "reason": "archive_needs_recovery",
+        "journal_present": True,
+    }
+    assert path.read_bytes() == before_database
+    assert journal.read_bytes() == before_journal
+
+
+def test_lookup_keeps_unrelated_sqlite_errors_as_archive_invalid(tmp_path, monkeypatch):
+    import sqlite3
+
+    path = tmp_path / "not-a-database.sqlite"
+    path.write_text("not sqlite", encoding="utf-8")
+
+    def raise_corrupt(_path):
+        exc = sqlite3.DatabaseError("file is not a database")
+        exc.sqlite_errorcode = getattr(sqlite3, "SQLITE_NOTADB", 26)
+        exc.sqlite_errorname = "SQLITE_NOTADB"
+        raise exc
+
+    monkeypatch.setattr("betting_model.forecast_lookup._read_only_connection", raise_corrupt)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "archive_invalid",
+    }
+
+
+
+def test_lookup_uses_journal_evidence_when_python_lacks_sqlite_error_codes(tmp_path, monkeypatch):
+    """Python 3.10 has no sqlite_errorcode/name attributes."""
+    import sqlite3
+
+    path = tmp_path / "forecast.sqlite"
+    journal = tmp_path / "forecast.sqlite-journal"
+    path.write_bytes(b"database sentinel")
+    journal.write_bytes(b"journal sentinel")
+
+    def raise_legacy_readonly(_path):
+        raise sqlite3.OperationalError("attempt to write a readonly database")
+
+    monkeypatch.setattr("betting_model.forecast_lookup._read_only_connection", raise_legacy_readonly)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {
+        "ok": False,
+        "forecast": None,
+        "reason": "archive_needs_recovery",
+        "journal_present": True,
+    }
+
+
+def test_lookup_does_not_guess_recovery_without_journal_evidence(tmp_path, monkeypatch):
+    import sqlite3
+
+    path = tmp_path / "forecast.sqlite"
+    path.write_bytes(b"database sentinel")
+
+    def raise_legacy_readonly(_path):
+        raise sqlite3.OperationalError("attempt to write a readonly database")
+
+    monkeypatch.setattr("betting_model.forecast_lookup._read_only_connection", raise_legacy_readonly)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "archive_invalid",
+    }
+
+def test_lookup_refuses_real_crash_created_hot_journal_without_modifying_files(tmp_path, monkeypatch):
+    """A crashed writer leaves a hot rollback journal that read-only lookup must not recover."""
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now)
+
+    # Add enough committed pages that the child process must spill dirty pages
+    # from its small cache before it is terminated mid-transaction.
+    conn = sqlite3.connect(path)
+    conn.execute("CREATE TABLE crash_probe (id INTEGER PRIMARY KEY, payload TEXT NOT NULL)")
+    conn.executemany(
+        "INSERT INTO crash_probe(payload) VALUES (?)",
+        [("x" * 4000,) for _ in range(200)],
+    )
+    conn.commit()
+    conn.close()
+
+    child = r"""
+import os
+import sqlite3
+import sys
+
+connection = sqlite3.connect(sys.argv[1])
+connection.execute("PRAGMA cache_size=10")
+connection.execute("BEGIN EXCLUSIVE")
+for row_id in range(1, 201):
+    connection.execute(
+        "UPDATE crash_probe SET payload=? WHERE id=?",
+        ("y" * 4000, row_id),
+    )
+# Abrupt process termination deliberately bypasses rollback and connection close.
+os._exit(0)
+"""
+    completed = subprocess.run(
+        [sys.executable, "-c", child, str(path)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
+
+    journal = tmp_path / "forecast.sqlite-journal"
+    assert journal.is_file()
+    assert journal.stat().st_size > 0
+    database_before = _hash(path)
+    journal_before = _hash(journal)
+
+    result = get_latest_forecast(
+        path,
+        event_id="game-1",
+        player_id="123",
+        market="PTS",
+        as_of=now,
+    )
+    assert result == {
+        "ok": False,
+        "forecast": None,
+        "reason": "archive_needs_recovery",
+        "journal_present": True,
+    }
+    assert _hash(path) == database_before
+    assert _hash(journal) == journal_before
+
+
+
+def _duplicate_snapshot(path, *, snapshot_id, **changes):
+    """Insert a copy of the existing snapshot with selected stored fields changed."""
+    conn = sqlite3.connect(path)
+    try:
+        cursor = conn.execute("SELECT * FROM forecast_snapshots LIMIT 1")
+        columns = [item[0] for item in cursor.description]
+        values = dict(zip(columns, cursor.fetchone()))
+        values.update(changes)
+        values["snapshot_id"] = snapshot_id
+        if "observation_key" in values:
+            values["observation_key"] = f"observation-{snapshot_id}"
+        placeholders = ", ".join("?" for _ in columns)
+        conn.execute(
+            f"INSERT INTO forecast_snapshots ({', '.join(columns)}) "
+            f"VALUES ({placeholders})",
+            [values[column] for column in columns],
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+@pytest.mark.parametrize(
+    "bad_value",
+    [float("nan"), float("inf"), -1.0, "not-a-number", True],
+    ids=["nan", "infinity", "negative", "non-numeric-string", "boolean"],
+)
+def test_lookup_rejects_invalid_projected_values_without_crashing(
+    tmp_path, monkeypatch, bad_value,
+):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "invalid-value.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    original = lookup._forecast_dict
+
+    def inject_invalid_value(row):
+        item = original(row)
+        item["projected_value"] = bad_value
+        return item
+
+    monkeypatch.setattr(lookup, "_forecast_dict", inject_invalid_value)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "invalid_projected_value",
+    }
+
+
+def test_lookup_does_not_fall_back_when_newer_candidate_event_already_started(
+    tmp_path, monkeypatch,
+):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "started-newer.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    _duplicate_snapshot(
+        path,
+        snapshot_id="newer-started-snapshot",
+        archived_at=(now + timedelta(minutes=1)).isoformat(),
+        projection_at=(now - timedelta(minutes=1)).isoformat(),
+        event_start=(now - timedelta(seconds=1)).isoformat(),
+        projected_value=28.0,
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "event_started",
+    }
+
+
+def test_lookup_refuses_candidates_with_disagreeing_event_starts(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "conflicting-starts.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    _duplicate_snapshot(
+        path,
+        snapshot_id="different-start-snapshot",
+        archived_at=(now + timedelta(minutes=1)).isoformat(),
+        event_start=(now + timedelta(hours=11)).isoformat(),
+        projection_at=now.isoformat(),
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "invalid_event_start",
+    }
+
+
+@pytest.mark.parametrize(
+    "field,value,expected_reason",
+    [
+        ("projection_at", "not-a-timestamp", "invalid_projection_time"),
+        ("event_start", "not-a-timestamp", "invalid_event_start"),
+        (
+            "projection_at",
+            "2026-11-22T12:03:00+00:00",
+            "projection_in_future",
+        ),
+    ],
+)
+def test_lookup_reports_timestamp_rejection_paths(
+    tmp_path, monkeypatch, field, value, expected_reason,
+):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "timestamp-rejection.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    original = lookup._forecast_dict
+
+    def inject_timestamp(row):
+        item = original(row)
+        item[field] = value
+        return item
+
+    monkeypatch.setattr(lookup, "_forecast_dict", inject_timestamp)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": expected_reason,
+    }
+
+
+@pytest.mark.parametrize(
+    "projection_delta,expected_ok,expected_reason",
+    [
+        (timedelta(hours=-6), True, None),
+        (timedelta(hours=-6, seconds=-1), False, "stale_projection"),
+        (timedelta(minutes=2), True, None),
+        (timedelta(minutes=2, seconds=1), False, "projection_in_future"),
+    ],
+    ids=["exactly-six-hours", "six-hours-plus-one-second",
+         "exactly-two-minutes-future", "two-minutes-plus-one-second"],
+)
+def test_lookup_exact_freshness_and_clock_skew_boundaries(
+    tmp_path, monkeypatch, projection_delta, expected_ok, expected_reason,
+):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "boundary.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    original = lookup._forecast_dict
+
+    def inject_projection_time(row):
+        item = original(row)
+        item["projection_at"] = (now + projection_delta).isoformat()
+        return item
+
+    monkeypatch.setattr(lookup, "_forecast_dict", inject_projection_time)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is expected_ok
+    assert result["reason"] == expected_reason
