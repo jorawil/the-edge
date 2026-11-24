@@ -205,11 +205,17 @@ def main(argv=None):
     if unknown:
         raise SystemExit(f"unsupported sport: {', '.join(unknown)}")
     reps = [run(sport, start, end, season_types=season_types) for sport in chosen]
-    dated = DATA / f"backfill_report_{start.isoformat()}_{end.isoformat()}.json"
-    dated.parent.mkdir(parents=True, exist_ok=True)
-    _atomic_write_text(dated, json.dumps(reps, indent=1))
-    if (start, end) == (dt.date(2026, 10, 24), dt.date(2026, 10, 31)):
-        _atomic_write_text(DATA / "backfill_report_oct24_31.json", json.dumps(reps, indent=1))
+    # One report file per sport: a single combined filename would let a later
+    # sport's run overwrite an earlier sport's report for the same window.
+    # Each file keeps the old shape (a list of reports) with one entry.
+    for sport, rep in zip(chosen, reps):
+        dated = DATA / f"backfill_report_{sport}_{start.isoformat()}_{end.isoformat()}.json"
+        dated.parent.mkdir(parents=True, exist_ok=True)
+        _atomic_write_text(dated, json.dumps([rep], indent=1))
+        if (start, end) == (dt.date(2026, 10, 24), dt.date(2026, 10, 31)):
+            _atomic_write_text(
+                DATA / f"backfill_report_{sport}_oct24_31.json", json.dumps([rep], indent=1)
+            )
     return reps
 
 

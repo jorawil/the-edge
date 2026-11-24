@@ -281,3 +281,56 @@ def test_atomic_backfill_write_replaces_file_with_complete_content(tmp_path):
     assert json.loads(path.read_text(encoding="utf-8")) == {"games": {"1": {}}}
     assert list(path.parent.glob(".games.json.*.tmp")) == []
 
+
+
+def _fake_run_factory(calls):
+    def fake_run(sport, start, end, season_types=(2,)):
+        calls.append((sport, start, end))
+        return {"sport": sport, "events_in_window": 1, "added": 1,
+                "repaired": 0, "missing": []}
+    return fake_run
+
+
+def test_main_writes_one_report_file_per_sport(tmp_path, monkeypatch):
+    module = _load()
+    monkeypatch.setattr(module, "DATA", tmp_path)
+    monkeypatch.setattr(module, "run", _fake_run_factory([]))
+    reps = module.main(["nba", "nfl", "--start", "2026-01-02", "--end", "2026-01-03"])
+    assert [rep["sport"] for rep in reps] == ["nba", "nfl"]
+    nba = json.loads(
+        (tmp_path / "backfill_report_nba_2026-01-02_2026-01-03.json").read_text(encoding="utf-8")
+    )
+    nfl = json.loads(
+        (tmp_path / "backfill_report_nfl_2026-01-02_2026-01-03.json").read_text(encoding="utf-8")
+    )
+    assert nba == [{"sport": "nba", "events_in_window": 1, "added": 1, "repaired": 0, "missing": []}]
+    assert nfl == [{"sport": "nfl", "events_in_window": 1, "added": 1, "repaired": 0, "missing": []}]
+    assert not (tmp_path / "backfill_report_2026-01-02_2026-01-03.json").exists()
+
+
+def test_separate_sport_runs_do_not_overwrite_each_other(tmp_path, monkeypatch):
+    module = _load()
+    monkeypatch.setattr(module, "DATA", tmp_path)
+    monkeypatch.setattr(module, "run", _fake_run_factory([]))
+    module.main(["nba", "--start", "2026-01-02", "--end", "2026-01-03"])
+    module.main(["nfl", "--start", "2026-01-02", "--end", "2026-01-03"])
+    nba = json.loads(
+        (tmp_path / "backfill_report_nba_2026-01-02_2026-01-03.json").read_text(encoding="utf-8")
+    )
+    nfl = json.loads(
+        (tmp_path / "backfill_report_nfl_2026-01-02_2026-01-03.json").read_text(encoding="utf-8")
+    )
+    assert nba[0]["sport"] == "nba"
+    assert nfl[0]["sport"] == "nfl"
+
+
+def test_oct24_31_alias_is_per_sport(tmp_path, monkeypatch):
+    module = _load()
+    monkeypatch.setattr(module, "DATA", tmp_path)
+    monkeypatch.setattr(module, "run", _fake_run_factory([]))
+    module.main(["nba", "nfl", "--start", "2026-10-24", "--end", "2026-10-31"])
+    nba = json.loads((tmp_path / "backfill_report_nba_oct24_31.json").read_text(encoding="utf-8"))
+    nfl = json.loads((tmp_path / "backfill_report_nfl_oct24_31.json").read_text(encoding="utf-8"))
+    assert nba[0]["sport"] == "nba"
+    assert nfl[0]["sport"] == "nfl"
+    assert not (tmp_path / "backfill_report_oct24_31.json").exists()
