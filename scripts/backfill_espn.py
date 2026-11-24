@@ -52,10 +52,22 @@ def parse_box(summ):
             keys = cat.get("keys") or cat.get("names") or []
             cname = cat.get("name") or cat.get("type") or ""
             for a in cat.get("athletes", []):
-                if not a.get("stats"): continue
+                did_not_play = a.get("didNotPlay", False)
+                stats = a.get("stats") or []
+                if not stats and not did_not_play:
+                    continue
+                # starter/reason are stored verbatim from the source, or None
+                # when the source does not report them (NFL box scores carry
+                # neither field). A DNP athlete has an empty stats list, so it
+                # used to be dropped here entirely; keeping the row lets the
+                # graders void it instead of reporting "player not in box".
+                # reason is only meaningful for a DNP row: ESPN reports
+                # "COACH'S DECISION" for every played row, and a real injury
+                # text for some DNP rows.
                 players.append({"team": tabbr, "player": a["athlete"].get("displayName"),
                                 "athlete_id": a["athlete"].get("id"), "category": cname,
-                                "stats": dict(zip(keys, a["stats"])), "dnp": a.get("didNotPlay", False)})
+                                "stats": dict(zip(keys, stats)), "dnp": did_not_play,
+                                "starter": a.get("starter"), "reason": a.get("reason")})
     teams = [{"team": t["team"].get("abbreviation"),
               "stats": {s.get("name"): s.get("displayValue") for s in t.get("statistics", [])}}
              for t in summ.get("boxscore", {}).get("teams", [])]
