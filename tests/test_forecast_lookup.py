@@ -536,4 +536,4 @@ os._exit(0)
     }
     assert _hash(path) == database_before
     assert _hash(journal) == journal_before
-\n
+
