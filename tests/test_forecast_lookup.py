@@ -424,3 +424,48 @@ def test_lookup_keeps_unrelated_sqlite_errors_as_archive_invalid(tmp_path, monke
     assert result == {
         "ok": False, "forecast": None, "reason": "archive_invalid",
     }
+
+
+
+def test_lookup_uses_journal_evidence_when_python_lacks_sqlite_error_codes(tmp_path, monkeypatch):
+    """Python 3.10 has no sqlite_errorcode/name attributes."""
+    import sqlite3
+
+    path = tmp_path / "forecast.sqlite"
+    journal = tmp_path / "forecast.sqlite-journal"
+    path.write_bytes(b"database sentinel")
+    journal.write_bytes(b"journal sentinel")
+
+    def raise_legacy_readonly(_path):
+        raise sqlite3.OperationalError("attempt to write a readonly database")
+
+    monkeypatch.setattr("betting_model.forecast_lookup._read_only_connection", raise_legacy_readonly)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {
+        "ok": False,
+        "forecast": None,
+        "reason": "archive_needs_recovery",
+        "journal_present": True,
+    }
+
+
+def test_lookup_does_not_guess_recovery_without_journal_evidence(tmp_path, monkeypatch):
+    import sqlite3
+
+    path = tmp_path / "forecast.sqlite"
+    path.write_bytes(b"database sentinel")
+
+    def raise_legacy_readonly(_path):
+        raise sqlite3.OperationalError("attempt to write a readonly database")
+
+    monkeypatch.setattr("betting_model.forecast_lookup._read_only_connection", raise_legacy_readonly)
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS",
+        as_of=datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc),
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "archive_invalid",
+    }
