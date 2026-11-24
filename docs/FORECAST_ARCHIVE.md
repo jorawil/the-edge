@@ -51,7 +51,7 @@ of rejection reasons is: `missing_identifier`, `archive_not_found`,
 `archive_invalid`, `archive_needs_recovery`, `not_found`, `invalid_event_start`,
 `invalid_projection_time`, `event_started`,
 `projection_not_before_event_start`, `projection_in_future`,
-`stale_projection`, and `ambiguous_snapshots`. Candidate timestamps are
+`stale_projection`, `ambiguous_snapshots`, and `invalid_projected_value`. Projected values must be finite, numeric, and non-negative. Candidate timestamps are
 normalized to UTC before any ordering or comparison, so the same instant
 written with a different UTC offset is treated as the same instant. Two
 snapshots sharing the newest projection instant with different projected
