@@ -1,0 +1,31 @@
+[
+ {
+  "sport": "nba",
+  "events_in_window": 13,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 10,
+  "already_covered": 10,
+  "added": 0,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401909314",
+    "name": "Detroit Pistons at Orlando Magic",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909315",
+    "name": "Boston Celtics at Washington Wizards",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909316",
+    "name": "Dallas Mavericks at Denver Nuggets",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]
