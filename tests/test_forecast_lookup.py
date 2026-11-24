@@ -368,8 +368,8 @@ def test_lookup_detects_sub_micro_projected_value_conflict(tmp_path, monkeypatch
 
 
 @pytest.mark.parametrize("error_code,error_name", [
-    (sqlite3.SQLITE_READONLY_RECOVERY, "SQLITE_READONLY_RECOVERY"),
-    (sqlite3.SQLITE_READONLY_ROLLBACK, "SQLITE_READONLY_ROLLBACK"),
+    (getattr(sqlite3, "SQLITE_READONLY_RECOVERY", 264), "SQLITE_READONLY_RECOVERY"),
+    (getattr(sqlite3, "SQLITE_READONLY_ROLLBACK", 776), "SQLITE_READONLY_ROLLBACK"),
 ])
 def test_lookup_reports_readonly_recovery_without_touching_archive_or_journal(
     tmp_path, monkeypatch, error_code, error_name,
