@@ -92,16 +92,25 @@ def _read_only_connection(path: Path) -> sqlite3.Connection:
     return conn
 
 
-def _is_readonly_recovery_error(exc: sqlite3.Error) -> bool:
-    """Identify only SQLite extended codes that explicitly require read-only recovery."""
+def _is_readonly_recovery_error(exc: sqlite3.Error, path: Path) -> bool:
+    """Identify SQLite's read-only recovery condition without broad error guessing."""
+    error_code = getattr(exc, "sqlite_errorcode", None)
+    error_name = getattr(exc, "sqlite_errorname", None)
     recovery_codes = {
         getattr(sqlite3, "SQLITE_READONLY_RECOVERY", 264),
         getattr(sqlite3, "SQLITE_READONLY_ROLLBACK", 776),
     }
     recovery_names = {"SQLITE_READONLY_RECOVERY", "SQLITE_READONLY_ROLLBACK"}
+
+    # Python 3.11+ exposes SQLite's extended result code/name. On older
+    # supported Python versions, require both SQLite's specific readonly
+    # recovery message and an existing rollback journal. In this function
+    # the only attempted operation is a SELECT on a mode=ro connection.
+    if error_code is not None or error_name is not None:
+        return error_code in recovery_codes or error_name in recovery_names
     return (
-        getattr(exc, "sqlite_errorcode", None) in recovery_codes
-        or getattr(exc, "sqlite_errorname", None) in recovery_names
+        str(exc).strip().lower() == "attempt to write a readonly database"
+        and Path(f"{path}-journal").is_file()
     )
 
 
@@ -187,7 +196,7 @@ def get_latest_forecast(
         with _read_only_connection(path) as conn:
             rows = conn.execute(sql, params).fetchall()
     except sqlite3.Error as exc:
-        if _is_readonly_recovery_error(exc):
+        if _is_readonly_recovery_error(exc, path):
             # Report journal presence without opening, modifying, or recovering it.
             journal_present = Path(f"{path}-journal").exists()
             return {
