@@ -412,7 +412,7 @@ def test_lookup_keeps_unrelated_sqlite_errors_as_archive_invalid(tmp_path, monke
 
     def raise_corrupt(_path):
         exc = sqlite3.DatabaseError("file is not a database")
-        exc.sqlite_errorcode = sqlite3.SQLITE_NOTADB
+        exc.sqlite_errorcode = getattr(sqlite3, "SQLITE_NOTADB", 26)
         exc.sqlite_errorname = "SQLITE_NOTADB"
         raise exc
 
