@@ -118,6 +118,19 @@ def _is_readonly_recovery_error(exc: sqlite3.Error, path: Path) -> bool:
     )
 
 
+def _finite_nonnegative_number(value: Any) -> float | None:
+    """Return a finite non-negative numeric value, excluding booleans."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    try:
+        number = float(value)
+    except (OverflowError, TypeError, ValueError):
+        return None
+    if not math.isfinite(number) or number < 0:
+        return None
+    return number
+
+
 def _forecast_dict(row: sqlite3.Row) -> dict[str, Any]:
     item = dict(row)
     try:
@@ -240,7 +253,9 @@ def get_latest_forecast(
 
     # Never let a newer row with a started or conflicting kickoff time be
     # bypassed by falling back to an older snapshot.
-    parsed_event_starts = {event_start for _, _, event_start in entries if event_start is not None}
+    parsed_event_starts = {
+        event_start for _, _, event_start in entries if event_start is not None
+    }
     if any(event_start <= moment for event_start in parsed_event_starts):
         return {"ok": False, "forecast": None, "reason": "event_started"}
     if len(parsed_event_starts) > 1:
@@ -251,13 +266,7 @@ def get_latest_forecast(
     first_reason: str | None = None
     valid: list[tuple[dict[str, Any], datetime, float]] = []
     for item, projection_at, event_start in entries:
-        raw_value = item.get("projected_value")
-        value_is_valid = (
-            isinstance(raw_value, (int, float))
-            and not isinstance(raw_value, bool)
-            and math.isfinite(float(raw_value))
-            and float(raw_value) >= 0
-        )
+        projected_value = _finite_nonnegative_number(item.get("projected_value"))
         if event_start is None:
             reason = "invalid_event_start"
         elif projection_at is None:
@@ -270,14 +279,14 @@ def get_latest_forecast(
             reason = "projection_in_future"
         elif moment - projection_at > MAX_PROJECTION_AGE:
             reason = "stale_projection"
-        elif not value_is_valid:
+        elif projected_value is None:
             reason = "invalid_projected_value"
         else:
             reason = None
         if first_reason is None:
             first_reason = reason
         if reason is None and projection_at is not None:
-            valid.append((item, projection_at, float(raw_value)))
+            valid.append((item, projection_at, projected_value))
 
     if not valid:
         return {"ok": False, "forecast": None, "reason": first_reason or "not_found"}
@@ -286,7 +295,10 @@ def get_latest_forecast(
     # text: the same instant written with a different offset is the
     # same instant.
     newest_projection_at = valid[0][1]
-    newest = [(item, value) for item, instant, value in valid if instant == newest_projection_at]
+    newest = [
+        (item, value) for item, instant, value in valid
+        if instant == newest_projection_at
+    ]
     distinct_values = {value for _, value in newest}
     if len(distinct_values) > 1:
         return {"ok": False, "forecast": None, "reason": "ambiguous_snapshots"}
