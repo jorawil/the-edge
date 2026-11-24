@@ -7,6 +7,7 @@ it must never write to the archive, never average projections, and never
 enable probability output.
 """
 import hashlib
+import sqlite3
 from datetime import datetime, timedelta, timezone
 
 import pytest
