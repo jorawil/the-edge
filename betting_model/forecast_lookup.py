@@ -73,6 +73,7 @@ REASONS = frozenset({
     "missing_identifier",
     "archive_not_found",
     "archive_invalid",
+    "archive_needs_recovery",
     "not_found",
     "invalid_event_start",
     "invalid_projection_time",
@@ -89,6 +90,19 @@ def _read_only_connection(path: Path) -> sqlite3.Connection:
     conn = sqlite3.connect(f"file:{quoted}?mode=ro", uri=True)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def _is_readonly_recovery_error(exc: sqlite3.Error) -> bool:
+    """Identify only SQLite extended codes that explicitly require read-only recovery."""
+    recovery_codes = {
+        getattr(sqlite3, "SQLITE_READONLY_RECOVERY", 264),
+        getattr(sqlite3, "SQLITE_READONLY_ROLLBACK", 776),
+    }
+    recovery_names = {"SQLITE_READONLY_RECOVERY", "SQLITE_READONLY_ROLLBACK"}
+    return (
+        getattr(exc, "sqlite_errorcode", None) in recovery_codes
+        or getattr(exc, "sqlite_errorname", None) in recovery_names
+    )
 
 
 def _forecast_dict(row: sqlite3.Row) -> dict[str, Any]:
@@ -172,7 +186,16 @@ def get_latest_forecast(
     try:
         with _read_only_connection(path) as conn:
             rows = conn.execute(sql, params).fetchall()
-    except sqlite3.Error:
+    except sqlite3.Error as exc:
+        if _is_readonly_recovery_error(exc):
+            # Report journal presence without opening, modifying, or recovering it.
+            journal_present = Path(f"{path}-journal").exists()
+            return {
+                "ok": False,
+                "forecast": None,
+                "reason": "archive_needs_recovery",
+                "journal_present": journal_present,
+            }
         return {"ok": False, "forecast": None, "reason": "archive_invalid"}
 
     if not rows:
@@ -236,7 +259,7 @@ def get_latest_forecast(
     # same instant.
     newest_projection_at = valid[0][1]
     newest = [item for item, instant in valid if instant == newest_projection_at]
-    distinct_values = {round(float(item["projected_value"]), 6) for item in newest}
+    distinct_values = {float(item["projected_value"]) for item in newest}
     if len(distinct_values) > 1:
         return {"ok": False, "forecast": None, "reason": "ambiguous_snapshots"}
 
