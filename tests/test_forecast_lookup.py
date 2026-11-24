@@ -7,7 +7,10 @@ it must never write to the archive, never average projections, and never
 enable probability output.
 """
 import hashlib
+import os
 import sqlite3
+import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -469,3 +472,68 @@ def test_lookup_does_not_guess_recovery_without_journal_evidence(tmp_path, monke
     assert result == {
         "ok": False, "forecast": None, "reason": "archive_invalid",
     }
+
+def test_lookup_refuses_real_crash_created_hot_journal_without_modifying_files(tmp_path, monkeypatch):
+    """A crashed writer leaves a hot rollback journal that read-only lookup must not recover."""
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "forecast.sqlite"
+    _archive(path, now)
+
+    # Add enough committed pages that the child process must spill dirty pages
+    # from its small cache before it is terminated mid-transaction.
+    conn = sqlite3.connect(path)
+    conn.execute("CREATE TABLE crash_probe (id INTEGER PRIMARY KEY, payload TEXT NOT NULL)")
+    conn.executemany(
+        "INSERT INTO crash_probe(payload) VALUES (?)",
+        [("x" * 4000,) for _ in range(200)],
+    )
+    conn.commit()
+    conn.close()
+
+    child = r"""
+import os
+import sqlite3
+import sys
+
+connection = sqlite3.connect(sys.argv[1])
+connection.execute("PRAGMA cache_size=10")
+connection.execute("BEGIN EXCLUSIVE")
+for row_id in range(1, 201):
+    connection.execute(
+        "UPDATE crash_probe SET payload=? WHERE id=?",
+        ("y" * 4000, row_id),
+    )
+# Abrupt process termination deliberately bypasses rollback and connection close.
+os._exit(0)
+"""
+    completed = subprocess.run(
+        [sys.executable, "-c", child, str(path)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
+
+    journal = tmp_path / "forecast.sqlite-journal"
+    assert journal.is_file()
+    assert journal.stat().st_size > 0
+    database_before = _hash(path)
+    journal_before = _hash(journal)
+
+    result = get_latest_forecast(
+        path,
+        event_id="game-1",
+        player_id="123",
+        market="PTS",
+        as_of=now,
+    )
+    assert result == {
+        "ok": False,
+        "forecast": None,
+        "reason": "archive_needs_recovery",
+        "journal_present": True,
+    }
+    assert _hash(path) == database_before
+    assert _hash(journal) == journal_before
+\n
