@@ -43,8 +43,10 @@ What it does not do
 Rejection reasons (stable strings, safe to branch on):
 
 - ``missing_identifier`` — event_id, player_id, or market is blank.
+  ``market`` is matched against stored forecast-archive market codes after uppercasing; no market translation is performed.
 - ``archive_not_found`` — the archive file does not exist.
 - ``archive_invalid`` — the file is not a readable forecast archive.
+- ``archive_needs_recovery`` — SQLite reports that a read-only lookup needs rollback-journal recovery.
 - ``not_found`` — no snapshot matches the triple.
 - ``invalid_event_start`` / ``invalid_projection_time`` — a stored
   timestamp on the newest candidate cannot be parsed.
@@ -56,12 +58,14 @@ Rejection reasons (stable strings, safe to branch on):
 - ``stale_projection`` — the projection is more than six hours old.
 - ``ambiguous_snapshots`` — the newest projection timestamp has more
   than one distinct projected value.
+- ``invalid_projected_value`` — a candidate projected value is not a finite, non-negative number.
 """
 from __future__ import annotations
 
 import json
+import math
 import sqlite3
-import urllib.parse
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -82,12 +86,12 @@ REASONS = frozenset({
     "projection_in_future",
     "stale_projection",
     "ambiguous_snapshots",
+    "invalid_projected_value",
 })
 
 
 def _read_only_connection(path: Path) -> sqlite3.Connection:
-    quoted = urllib.parse.quote(str(path), safe="/")
-    conn = sqlite3.connect(f"file:{quoted}?mode=ro", uri=True)
+    conn = sqlite3.connect(f"{path.resolve().as_uri()}?mode=ro", uri=True)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -193,12 +197,12 @@ def get_latest_forecast(
     sql += " ORDER BY archived_at DESC, snapshot_id ASC"
 
     try:
-        with _read_only_connection(path) as conn:
+        with closing(_read_only_connection(path)) as conn:
             rows = conn.execute(sql, params).fetchall()
     except sqlite3.Error as exc:
         if _is_readonly_recovery_error(exc, path):
             # Report journal presence without opening, modifying, or recovering it.
-            journal_present = Path(f"{path}-journal").exists()
+            journal_present = Path(f"{path}-journal").is_file()
             return {
                 "ok": False,
                 "forecast": None,
@@ -234,11 +238,26 @@ def get_latest_forecast(
         reverse=True,
     )
 
-    # Evaluate candidates newest-first. The first reason encountered on
-    # the newest candidate is the reported reason when nothing is usable.
+    # Never let a newer row with a started or conflicting kickoff time be
+    # bypassed by falling back to an older snapshot.
+    parsed_event_starts = {event_start for _, _, event_start in entries if event_start is not None}
+    if any(event_start <= moment for event_start in parsed_event_starts):
+        return {"ok": False, "forecast": None, "reason": "event_started"}
+    if len(parsed_event_starts) > 1:
+        return {"ok": False, "forecast": None, "reason": "invalid_event_start"}
+
+    # Evaluate candidates newest-first. Invalid projected values have their
+    # own stable reason and are never converted until validated.
     first_reason: str | None = None
-    valid: list[tuple[dict[str, Any], datetime]] = []
+    valid: list[tuple[dict[str, Any], datetime, float]] = []
     for item, projection_at, event_start in entries:
+        raw_value = item.get("projected_value")
+        value_is_valid = (
+            isinstance(raw_value, (int, float))
+            and not isinstance(raw_value, bool)
+            and math.isfinite(float(raw_value))
+            and float(raw_value) >= 0
+        )
         if event_start is None:
             reason = "invalid_event_start"
         elif projection_at is None:
@@ -251,14 +270,14 @@ def get_latest_forecast(
             reason = "projection_in_future"
         elif moment - projection_at > MAX_PROJECTION_AGE:
             reason = "stale_projection"
-        elif item.get("projected_value") is None:
-            reason = "invalid_projection_time"
+        elif not value_is_valid:
+            reason = "invalid_projected_value"
         else:
             reason = None
         if first_reason is None:
             first_reason = reason
         if reason is None and projection_at is not None:
-            valid.append((item, projection_at))
+            valid.append((item, projection_at, float(raw_value)))
 
     if not valid:
         return {"ok": False, "forecast": None, "reason": first_reason or "not_found"}
@@ -267,12 +286,12 @@ def get_latest_forecast(
     # text: the same instant written with a different offset is the
     # same instant.
     newest_projection_at = valid[0][1]
-    newest = [item for item, instant in valid if instant == newest_projection_at]
-    distinct_values = {float(item["projected_value"]) for item in newest}
+    newest = [(item, value) for item, instant, value in valid if instant == newest_projection_at]
+    distinct_values = {value for _, value in newest}
     if len(distinct_values) > 1:
         return {"ok": False, "forecast": None, "reason": "ambiguous_snapshots"}
 
-    forecast = newest[0]
+    forecast = newest[0][0]
     forecast["lookup_as_of"] = moment.strftime("%Y-%m-%dT%H:%M:%SZ")
     return {"ok": True, "forecast": forecast, "reason": None}
 
