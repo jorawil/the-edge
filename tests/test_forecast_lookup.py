@@ -16,6 +16,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 
 from betting_model import forecast_archive as archive
+from betting_model import forecast_lookup as lookup
 from betting_model.forecast_lookup import REASONS, get_latest_forecast
 
 
@@ -62,7 +63,10 @@ def test_lookup_returns_newest_fresh_forecast_with_provenance(tmp_path, monkeypa
     path = tmp_path / "forecast.sqlite"
     _archive(path, now, projected_value=24.5)
     monkeypatch.setattr(archive, "_now", lambda: now + timedelta(minutes=30))
-    _archive(path, now + timedelta(minutes=30), projected_value=26.5)
+    _archive(
+        path, now + timedelta(minutes=30), projected_value=26.5,
+        event_start=(now + timedelta(hours=2)).isoformat(),
+    )
 
     result = get_latest_forecast(
         path, event_id="game-1", player_id="123", market="pts",
@@ -223,6 +227,7 @@ def test_lookup_reasons_are_the_documented_set():
         "archive_needs_recovery", "not_found", "invalid_event_start", "invalid_projection_time",
         "event_started", "projection_not_before_event_start",
         "projection_in_future", "stale_projection", "ambiguous_snapshots",
+        "invalid_projected_value",
     }
 
 
@@ -563,8 +568,8 @@ def _duplicate_snapshot(path, *, snapshot_id, **changes):
 
 @pytest.mark.parametrize(
     "bad_value",
-    [float("nan"), float("inf"), -1.0, "not-a-number"],
-    ids=["nan", "infinity", "negative", "non-numeric-string"],
+    [float("nan"), float("inf"), -1.0, "not-a-number", True],
+    ids=["nan", "infinity", "negative", "non-numeric-string", "boolean"],
 )
 def test_lookup_rejects_invalid_projected_values_without_crashing(
     tmp_path, monkeypatch, bad_value,
@@ -573,15 +578,14 @@ def test_lookup_rejects_invalid_projected_values_without_crashing(
     monkeypatch.setattr(archive, "_now", lambda: now)
     path = tmp_path / "invalid-value.sqlite"
     _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
-    conn = sqlite3.connect(path)
-    try:
-        conn.execute(
-            "UPDATE forecast_snapshots SET projected_value=?", (bad_value,)
-        )
-        conn.commit()
-    finally:
-        conn.close()
+    original = lookup._forecast_dict
 
+    def inject_invalid_value(row):
+        item = original(row)
+        item["projected_value"] = bad_value
+        return item
+
+    monkeypatch.setattr(lookup, "_forecast_dict", inject_invalid_value)
     result = get_latest_forecast(
         path, event_id="game-1", player_id="123", market="PTS", as_of=now,
     )
@@ -654,13 +658,14 @@ def test_lookup_reports_timestamp_rejection_paths(
     monkeypatch.setattr(archive, "_now", lambda: now)
     path = tmp_path / "timestamp-rejection.sqlite"
     _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
-    conn = sqlite3.connect(path)
-    try:
-        conn.execute(f"UPDATE forecast_snapshots SET {field}=?", (value,))
-        conn.commit()
-    finally:
-        conn.close()
+    original = lookup._forecast_dict
 
+    def inject_timestamp(row):
+        item = original(row)
+        item[field] = value
+        return item
+
+    monkeypatch.setattr(lookup, "_forecast_dict", inject_timestamp)
     result = get_latest_forecast(
         path, event_id="game-1", player_id="123", market="PTS", as_of=now,
     )
@@ -687,16 +692,14 @@ def test_lookup_exact_freshness_and_clock_skew_boundaries(
     monkeypatch.setattr(archive, "_now", lambda: now)
     path = tmp_path / "boundary.sqlite"
     _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
-    conn = sqlite3.connect(path)
-    try:
-        conn.execute(
-            "UPDATE forecast_snapshots SET projection_at=?",
-            ((now + projection_delta).isoformat(),),
-        )
-        conn.commit()
-    finally:
-        conn.close()
+    original = lookup._forecast_dict
 
+    def inject_projection_time(row):
+        item = original(row)
+        item["projection_at"] = (now + projection_delta).isoformat()
+        return item
+
+    monkeypatch.setattr(lookup, "_forecast_dict", inject_projection_time)
     result = get_latest_forecast(
         path, event_id="game-1", player_id="123", market="PTS", as_of=now,
     )
