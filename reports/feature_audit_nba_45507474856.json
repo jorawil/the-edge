@@ -1,0 +1,104 @@
+{
+  "ok": true,
+  "sport": "nba",
+  "regular_season_games": 5190,
+  "played_player_rows": 111430,
+  "dnp_player_rows_excluded": 0,
+  "categories": {
+    "uncategorized": {
+      "played_player_rows": 111430,
+      "fields": [
+        {
+          "field": "assists",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "blocks",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "defensiveRebounds",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "fieldGoalsMade-fieldGoalsAttempted",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "fouls",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "freeThrowsMade-freeThrowsAttempted",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "minutes",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111217
+        },
+        {
+          "field": "offensiveRebounds",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "plusMinus",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 57022
+        },
+        {
+          "field": "points",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "rebounds",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "steals",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        },
+        {
+          "field": "turnovers",
+          "rows_present": 111430,
+          "coverage_pct": 100.0,
+          "numeric_rows": 111430
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Field availability is not forecast skill or feature importance.",
+    "Presence does not establish accuracy, pregame availability, or predictive value.",
+    "Only records with season_type_id=2 are counted.",
+    "Player names and athlete IDs are not included."
+  ]
+}
