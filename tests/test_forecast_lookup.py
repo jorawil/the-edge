@@ -537,3 +537,168 @@ os._exit(0)
     assert _hash(path) == database_before
     assert _hash(journal) == journal_before
 
+
+
+def _duplicate_snapshot(path, *, snapshot_id, **changes):
+    """Insert a copy of the existing snapshot with selected stored fields changed."""
+    conn = sqlite3.connect(path)
+    try:
+        cursor = conn.execute("SELECT * FROM forecast_snapshots LIMIT 1")
+        columns = [item[0] for item in cursor.description]
+        values = dict(zip(columns, cursor.fetchone()))
+        values.update(changes)
+        values["snapshot_id"] = snapshot_id
+        if "observation_key" in values:
+            values["observation_key"] = f"observation-{snapshot_id}"
+        placeholders = ", ".join("?" for _ in columns)
+        conn.execute(
+            f"INSERT INTO forecast_snapshots ({', '.join(columns)}) "
+            f"VALUES ({placeholders})",
+            [values[column] for column in columns],
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+@pytest.mark.parametrize(
+    "bad_value",
+    [float("nan"), float("inf"), -1.0, "not-a-number"],
+    ids=["nan", "infinity", "negative", "non-numeric-string"],
+)
+def test_lookup_rejects_invalid_projected_values_without_crashing(
+    tmp_path, monkeypatch, bad_value,
+):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "invalid-value.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    conn = sqlite3.connect(path)
+    try:
+        conn.execute(
+            "UPDATE forecast_snapshots SET projected_value=?", (bad_value,)
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "invalid_projected_value",
+    }
+
+
+def test_lookup_does_not_fall_back_when_newer_candidate_event_already_started(
+    tmp_path, monkeypatch,
+):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "started-newer.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    _duplicate_snapshot(
+        path,
+        snapshot_id="newer-started-snapshot",
+        archived_at=(now + timedelta(minutes=1)).isoformat(),
+        projection_at=(now - timedelta(minutes=1)).isoformat(),
+        event_start=(now - timedelta(seconds=1)).isoformat(),
+        projected_value=28.0,
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "event_started",
+    }
+
+
+def test_lookup_refuses_candidates_with_disagreeing_event_starts(tmp_path, monkeypatch):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "conflicting-starts.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    _duplicate_snapshot(
+        path,
+        snapshot_id="different-start-snapshot",
+        archived_at=(now + timedelta(minutes=1)).isoformat(),
+        event_start=(now + timedelta(hours=11)).isoformat(),
+        projection_at=now.isoformat(),
+    )
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": "invalid_event_start",
+    }
+
+
+@pytest.mark.parametrize(
+    "field,value,expected_reason",
+    [
+        ("projection_at", "not-a-timestamp", "invalid_projection_time"),
+        ("event_start", "not-a-timestamp", "invalid_event_start"),
+        (
+            "projection_at",
+            "2026-11-22T12:03:00+00:00",
+            "projection_in_future",
+        ),
+    ],
+)
+def test_lookup_reports_timestamp_rejection_paths(
+    tmp_path, monkeypatch, field, value, expected_reason,
+):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "timestamp-rejection.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    conn = sqlite3.connect(path)
+    try:
+        conn.execute(f"UPDATE forecast_snapshots SET {field}=?", (value,))
+        conn.commit()
+    finally:
+        conn.close()
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result == {
+        "ok": False, "forecast": None, "reason": expected_reason,
+    }
+
+
+@pytest.mark.parametrize(
+    "projection_delta,expected_ok,expected_reason",
+    [
+        (timedelta(hours=-6), True, None),
+        (timedelta(hours=-6, seconds=-1), False, "stale_projection"),
+        (timedelta(minutes=2), True, None),
+        (timedelta(minutes=2, seconds=1), False, "projection_in_future"),
+    ],
+    ids=["exactly-six-hours", "six-hours-plus-one-second",
+         "exactly-two-minutes-future", "two-minutes-plus-one-second"],
+)
+def test_lookup_exact_freshness_and_clock_skew_boundaries(
+    tmp_path, monkeypatch, projection_delta, expected_ok, expected_reason,
+):
+    now = datetime(2026, 11, 22, 12, 0, tzinfo=timezone.utc)
+    monkeypatch.setattr(archive, "_now", lambda: now)
+    path = tmp_path / "boundary.sqlite"
+    _archive(path, now, event_start=(now + timedelta(hours=10)).isoformat())
+    conn = sqlite3.connect(path)
+    try:
+        conn.execute(
+            "UPDATE forecast_snapshots SET projection_at=?",
+            ((now + projection_delta).isoformat(),),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    result = get_latest_forecast(
+        path, event_id="game-1", player_id="123", market="PTS", as_of=now,
+    )
+    assert result["ok"] is expected_ok
+    assert result["reason"] == expected_reason
