@@ -1,0 +1,61 @@
+[
+ {
+  "sport": "nba",
+  "events_in_window": 12,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 3,
+  "already_covered": 0,
+  "added": 3,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401909317",
+    "name": "Miami Heat at Philadelphia 76ers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909318",
+    "name": "Chicago Bulls at Charlotte Hornets",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909319",
+    "name": "Cleveland Cavaliers at New York Knicks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909320",
+    "name": "Minnesota Timberwolves at Oklahoma City Thunder",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909321",
+    "name": "LA Clippers at Memphis Grizzlies",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909322",
+    "name": "Brooklyn Nets at Milwaukee Bucks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909323",
+    "name": "Phoenix Suns at Houston Rockets",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909324",
+    "name": "Sacramento Kings at Golden State Warriors",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909325",
+    "name": "San Antonio Spurs at Portland Trail Blazers",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]

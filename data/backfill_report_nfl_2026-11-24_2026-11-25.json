@@ -1,0 +1,21 @@
+[
+ {
+  "sport": "nfl",
+  "events_in_window": 1,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 0,
+  "already_covered": 0,
+  "added": 0,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401873079",
+    "name": "Green Bay Packers at Los Angeles Rams",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]
