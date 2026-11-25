@@ -138,7 +138,7 @@ def analyze(archive_path: Path, data_root: Path) -> dict[str, Any]:
 
         starter_values = [row.get("starter") for row in rows if row.get("dnp") is not True]
         # Do not infer a role from position, category, or a missing value.
-        if not starter_values or any(value not in (True, False) for value in starter_values):
+        if not starter_values or any(type(value) is not bool for value in starter_values):
             exclusions["starter_tag_missing_or_invalid"] += 1
             continue
         if len(set(starter_values)) != 1:
