@@ -102,12 +102,18 @@ def test_analyze_groups_starters_and_bench_and_excludes_ineligible_rows(tmp_path
     by_key = {(row["market"], row["role"]): row for row in report["groups"]}
     assert by_key[("PTS", "starter")]["n_forecasts"] == 2
     assert by_key[("PTS", "starter")]["n_events"] == 2
+    assert by_key[("PTS", "starter")]["mean_actual"] == pytest.approx(15.5)
     assert by_key[("PTS", "starter")]["mae"] == pytest.approx(3.0)
+    assert by_key[("PTS", "starter")]["relative_error_pct"] == pytest.approx(
+        (3.0 / 15.5) * 100
+    )
     assert by_key[("PTS", "starter")]["rmse"] == pytest.approx((10 ** 0.5))
     assert by_key[("PTS", "starter")]["mean_signed_error"] == pytest.approx(3.0)
     assert by_key[("PTS", "bench")]["n_forecasts"] == 1
     assert by_key[("PTS", "bench")]["n_events"] == 1
     assert by_key[("PTS", "bench")]["mean_signed_error"] == pytest.approx(-2.0)
+    assert by_key[("PTS", "bench")]["mean_actual"] == pytest.approx(8.0)
+    assert by_key[("PTS", "bench")]["relative_error_pct"] == pytest.approx(25.0)
     assert report["exclusions"]["dnp"] == 1
     assert report["exclusions"]["starter_tag_missing_or_invalid"] == 2
     assert report["exclusions"]["player_not_in_box"] == 1
@@ -168,3 +174,24 @@ def test_non_nba_forecasts_are_not_included(tmp_path):
     )
     _games(tmp_path / "historical", {"g1": {"status": "Final", "players": []}})
     assert DIAGNOSTIC.analyze(archive, tmp_path / "historical")["included_forecasts"] == 0
+
+
+
+def test_relative_error_is_none_when_bucket_mean_actual_is_zero(tmp_path):
+    archive = tmp_path / "forecast.sqlite"
+    _archive(
+        archive,
+        [{"snapshot_id": "s1", "event_id": "g1", "player_id": "1",
+          "market": "PTS", "projected_value": 1}],
+        [{"result_id": "r1", "snapshot_id": "s1", "actual_stat": 0,
+          "game_status": "final"}],
+    )
+    _games(tmp_path / "historical", {
+        "g1": {"status": "Final", "players": [_player("1", "Starter", 0, True)]},
+    })
+
+    report = DIAGNOSTIC.analyze(archive, tmp_path / "historical")
+    group = report["groups"][0]
+    assert group["mean_actual"] == pytest.approx(0.0)
+    assert group["mae"] == pytest.approx(1.0)
+    assert group["relative_error_pct"] is None
