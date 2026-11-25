@@ -72,6 +72,7 @@ def test_analyze_groups_starters_and_bench_and_excludes_ineligible_rows(tmp_path
         {"snapshot_id": "s5", "event_id": "g2", "player_id": "5", "market": "PTS", "projected_value": 9},
         {"snapshot_id": "s6", "event_id": "g2", "player_id": "6", "market": "PTS", "projected_value": 9},
         {"snapshot_id": "s7", "event_id": "g2", "player_id": "7", "market": "PTS", "projected_value": 9},
+        {"snapshot_id": "s8", "event_id": "g2", "player_id": "8", "market": "PTS", "projected_value": 9},
     ]
     results = [
         {"result_id": "r1", "snapshot_id": "s1", "actual_stat": 24, "game_status": "final"},
@@ -80,6 +81,7 @@ def test_analyze_groups_starters_and_bench_and_excludes_ineligible_rows(tmp_path
         {"result_id": "r4", "snapshot_id": "s4", "actual_stat": 8, "game_status": "final"},
         {"result_id": "r5", "snapshot_id": "s5", "actual_stat": 9, "game_status": "final"},
         {"result_id": "r6", "snapshot_id": "s6", "actual_stat": 9, "game_status": "final"},
+        {"result_id": "r8", "snapshot_id": "s8", "actual_stat": 9, "game_status": "final"},
         # No result for s7: it is ungraded and must not be selected.
     ]
     _archive(archive, snapshots, results)
@@ -91,6 +93,7 @@ def test_analyze_groups_starters_and_bench_and_excludes_ineligible_rows(tmp_path
             _player("3", "Starter B", 7, True),
             _player("4", "DNP", 0, False, dnp=True),
             _player("5", "Unknown Role", 9, None),
+            _player("8", "Numeric Tag", 9, 1),
             # Player 6 intentionally absent from box score.
         ]},
     })
@@ -106,7 +109,7 @@ def test_analyze_groups_starters_and_bench_and_excludes_ineligible_rows(tmp_path
     assert by_key[("PTS", "bench")]["n_events"] == 1
     assert by_key[("PTS", "bench")]["mean_signed_error"] == pytest.approx(-2.0)
     assert report["exclusions"]["dnp"] == 1
-    assert report["exclusions"]["starter_tag_missing_or_invalid"] == 1
+    assert report["exclusions"]["starter_tag_missing_or_invalid"] == 2
     assert report["exclusions"]["player_not_in_box"] == 1
     assert report["included_forecasts"] == 3
 
