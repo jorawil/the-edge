@@ -114,16 +114,15 @@ jobs:
                       if row is None:
                           print(f"| {market} | {role.title()} | — | 0 | — | — | — | — | — |")
                       else:
+                          relative_error = (
+                              f"{row['relative_error_pct']:.2f}%"
+                              if row["relative_error_pct"] is not None else "N/A"
+                          )
                           print(
                               f"| {market} | {role.title()} | {row['n_events']} | "
                               f"{row['n_forecasts']} | {row['mean_actual']:.2f} | "
                               f"{row['mae']:.2f} | {row['rmse']:.2f} | "
-                              f"{row['mean_signed_error']:+.2f} | "
-                              f"{row['relative_error_pct']:.2f}% |"
-                              if row["relative_error_pct"] is not None else
-                              f"{row['n_forecasts']} | {row['mean_actual']:.2f} | "
-                              f"{row['mae']:.2f} | {row['rmse']:.2f} | "
-                              f"{row['mean_signed_error']:+.2f} | N/A |"
+                              f"{row['mean_signed_error']:+.2f} | {relative_error} |"
                           )
 
           exclusions = report.get("exclusions", {})
