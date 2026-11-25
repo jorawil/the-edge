@@ -102,15 +102,24 @@ def _player_rows_by_key(games: dict[str, Any]) -> dict[tuple[str, str], list[dic
     return indexed
 
 
-def _summarize(errors: list[float], event_ids: set[str]) -> dict[str, Any]:
+def _summarize(
+    errors: list[float], actuals: list[float], event_ids: set[str]
+) -> dict[str, Any]:
     if not errors:
         raise ValueError("cannot summarize an empty group")
+    mae = sum(abs(error) for error in errors) / len(errors)
+    mean_actual = sum(actuals) / len(actuals)
+    relative_error_pct = (
+        (mae / mean_actual) * 100 if mean_actual != 0 else None
+    )
     return {
         "n_forecasts": len(errors),
         "n_events": len(event_ids),
-        "mae": sum(abs(error) for error in errors) / len(errors),
+        "mean_actual": mean_actual,
+        "mae": mae,
         "rmse": math.sqrt(sum(error * error for error in errors) / len(errors)),
         "mean_signed_error": sum(errors) / len(errors),
+        "relative_error_pct": relative_error_pct,
     }
 
 
@@ -121,6 +130,7 @@ def analyze(archive_path: Path, data_root: Path) -> dict[str, Any]:
     forecasts = _load_archive_rows(archive_path)
 
     errors: dict[tuple[str, str], list[float]] = defaultdict(list)
+    actuals: dict[tuple[str, str], list[float]] = defaultdict(list)
     event_sets: dict[tuple[str, str], set[str]] = defaultdict(set)
     exclusions: dict[str, int] = defaultdict(int)
 
@@ -159,6 +169,7 @@ def analyze(archive_path: Path, data_root: Path) -> dict[str, Any]:
         error = archived_actual - float(forecast["projected_value"])
         key = (market, role)
         errors[key].append(error)
+        actuals[key].append(archived_actual)
         event_sets[key].add(event_id)
 
     groups = []
@@ -166,7 +177,7 @@ def analyze(archive_path: Path, data_root: Path) -> dict[str, Any]:
         groups.append({
             "market": market,
             "role": role,
-            **_summarize(values, event_sets[(market, role)]),
+            **_summarize(values, actuals[(market, role)], event_sets[(market, role)]),
         })
 
     return {
