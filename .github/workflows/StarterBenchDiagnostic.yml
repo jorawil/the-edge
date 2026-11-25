@@ -103,8 +103,8 @@ jobs:
           if not groups:
               print("No eligible starter- or bench-tagged forecast rows were available for this run.")
           else:
-              print("| Market | Role | Events | Forecasts | MAE | RMSE | Bias |")
-              print("|:--|:--|--:|--:|--:|--:|--:|")
+              print("| Market | Role | Events | Forecasts | Mean Actual | MAE | RMSE | Bias | Rel Err % |")
+              print("|:--|:--|--:|--:|--:|--:|--:|--:|--:|")
               by_market = {}
               for row in groups:
                   by_market.setdefault(row["market"], {})[row["role"]] = row
@@ -112,12 +112,18 @@ jobs:
                   for role in ("starter", "bench"):
                       row = by_market[market].get(role)
                       if row is None:
-                          print(f"| {market} | {role.title()} | — | 0 | — | — | — |")
+                          print(f"| {market} | {role.title()} | — | 0 | — | — | — | — | — |")
                       else:
                           print(
                               f"| {market} | {role.title()} | {row['n_events']} | "
-                              f"{row['n_forecasts']} | {row['mae']:.2f} | "
-                              f"{row['rmse']:.2f} | {row['mean_signed_error']:+.2f} |"
+                              f"{row['n_forecasts']} | {row['mean_actual']:.2f} | "
+                              f"{row['mae']:.2f} | {row['rmse']:.2f} | "
+                              f"{row['mean_signed_error']:+.2f} | "
+                              f"{row['relative_error_pct']:.2f}% |"
+                              if row["relative_error_pct"] is not None else
+                              f"{row['n_forecasts']} | {row['mean_actual']:.2f} | "
+                              f"{row['mae']:.2f} | {row['rmse']:.2f} | "
+                              f"{row['mean_signed_error']:+.2f} | N/A |"
                           )
 
           exclusions = report.get("exclusions", {})
