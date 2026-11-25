@@ -1,0 +1,132 @@
+name: NBA Starter vs Bench Diagnostic
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: starter-bench-diagnostic
+  cancel-in-progress: false
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out model code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Check out durable historical data (read-only)
+        uses: actions/checkout@v4
+        with:
+          ref: historical-data
+          path: historical-data
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Restore compressed forecast archive to runner temp
+        id: archive
+        shell: bash
+        run: |
+          if [ -s historical-data/forecasts/forecast_archive.sqlite ]; then
+            echo "path=historical-data/forecasts/forecast_archive.sqlite" >> "$GITHUB_OUTPUT"
+          elif [ -s historical-data/forecasts/forecast_archive.sqlite.gz ]; then
+            gzip -dc historical-data/forecasts/forecast_archive.sqlite.gz > "$RUNNER_TEMP/forecast_archive.sqlite"
+            test -s "$RUNNER_TEMP/forecast_archive.sqlite"
+            echo "path=$RUNNER_TEMP/forecast_archive.sqlite" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::No forecast_archive.sqlite or forecast_archive.sqlite.gz found on historical-data."
+            exit 1
+          fi
+
+      - name: Verify NBA historical box scores
+        run: test -s historical-data/data/nba/games.json
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy requests
+          pip install -e . --no-deps
+
+      - name: Run starter vs bench diagnostic
+        env:
+          ARCHIVE_PATH: ${{ steps.archive.outputs.path }}
+        run: |
+          python scripts/starter_bench_diagnostic.py \
+            --archive "$ARCHIVE_PATH" \
+            --data-root historical-data/data \
+            --out "$RUNNER_TEMP/starter_bench_diagnostic.json"
+
+      - name: Write mobile-friendly job summary
+        if: always() && steps.archive.outcome == 'success'
+        env:
+          REPORT_PATH: ${{ runner.temp }}/starter_bench_diagnostic.json
+        run: |
+          if [ ! -s "$REPORT_PATH" ]; then
+            {
+              echo "## NBA Starter vs Bench Diagnostic"
+              echo
+              echo "> **Diagnostic did not produce a report.** Review the preceding step logs."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          import os
+
+          with open(os.environ["REPORT_PATH"], encoding="utf-8") as handle:
+              report = json.load(handle)
+
+          groups = report.get("groups", [])
+          starter_n = sum(row["n_forecasts"] for row in groups if row["role"] == "starter")
+
+          print("## NBA Starter vs Bench Diagnostic")
+          print()
+          print("**Read-only report** · Forecast error = actual − projected")
+          print()
+          print(f"**Eligible forecasts:** {report.get('included_forecasts', 0)}")
+          print()
+
+          if starter_n == 0:
+              print("> **No starter-tagged graded forecasts yet.** This is expected until the next tagged NBA backfill; the diagnostic completed successfully.")
+              print()
+
+          if not groups:
+              print("No eligible starter- or bench-tagged forecast rows were available for this run.")
+          else:
+              print("| Market | Role | Events | Forecasts | MAE | RMSE | Bias |")
+              print("|:--|:--|--:|--:|--:|--:|--:|")
+              by_market = {}
+              for row in groups:
+                  by_market.setdefault(row["market"], {})[row["role"]] = row
+              for market in sorted(by_market):
+                  for role in ("starter", "bench"):
+                      row = by_market[market].get(role)
+                      if row is None:
+                          print(f"| {market} | {role.title()} | — | 0 | — | — | — |")
+                      else:
+                          print(
+                              f"| {market} | {role.title()} | {row['n_events']} | "
+                              f"{row['n_forecasts']} | {row['mae']:.2f} | "
+                              f"{row['rmse']:.2f} | {row['mean_signed_error']:+.2f} |"
+                          )
+
+          exclusions = report.get("exclusions", {})
+          print()
+          print(f"**Excluded rows:** {sum(exclusions.values())}")
+          if exclusions:
+              print()
+              for name, count in sorted(exclusions.items()):
+                  print(f"- {name.replace('_', ' ')}: {count}")
+          print()
+          print("_Historical data was checked out for reading only. The workflow does not commit or push to the historical-data branch._")
+          PY
