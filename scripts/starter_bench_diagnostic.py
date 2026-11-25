@@ -136,7 +136,8 @@ def analyze(archive_path: Path, data_root: Path) -> dict[str, Any]:
             exclusions["dnp"] += 1
             continue
 
-        starter_values = [row.get("starter") for row in rows if row.get("dnp") is not True]
+        played_rows = [row for row in rows if row.get("dnp") is not True]
+        starter_values = [row.get("starter") for row in played_rows]
         # Do not infer a role from position, category, or a missing value.
         if not starter_values or any(type(value) is not bool for value in starter_values):
             exclusions["starter_tag_missing_or_invalid"] += 1
@@ -145,7 +146,7 @@ def analyze(archive_path: Path, data_root: Path) -> dict[str, Any]:
             exclusions["starter_tag_conflict"] += 1
             continue
 
-        box_actual, _ = _market_values("nba", market, rows)
+        box_actual, _ = _market_values("nba", market, played_rows)
         if box_actual is None:
             exclusions["box_actual_missing"] += 1
             continue
