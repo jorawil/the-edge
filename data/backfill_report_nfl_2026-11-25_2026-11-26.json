@@ -1,0 +1,31 @@
+[
+ {
+  "sport": "nfl",
+  "events_in_window": 4,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 1,
+  "already_covered": 0,
+  "added": 1,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401873081",
+    "name": "Chicago Bears at Detroit Lions",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873080",
+    "name": "Philadelphia Eagles at Dallas Cowboys",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401873082",
+    "name": "Kansas City Chiefs at Buffalo Bills",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]

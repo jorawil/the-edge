@@ -1,0 +1,15 @@
+[
+ {
+  "sport": "nba",
+  "events_in_window": 9,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 9,
+  "already_covered": 0,
+  "added": 9,
+  "repaired": 0,
+  "missing": []
+ }
+]
