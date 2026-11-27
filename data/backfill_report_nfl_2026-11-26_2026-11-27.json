@@ -1,0 +1,21 @@
+[
+ {
+  "sport": "nfl",
+  "events_in_window": 4,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 3,
+  "already_covered": 0,
+  "added": 3,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401873083",
+    "name": "Denver Broncos at Pittsburgh Steelers",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]

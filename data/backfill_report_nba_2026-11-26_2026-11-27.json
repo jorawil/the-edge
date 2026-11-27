@@ -1,0 +1,71 @@
+[
+ {
+  "sport": "nba",
+  "events_in_window": 11,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 0,
+  "already_covered": 0,
+  "added": 0,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401909326",
+    "name": "Miami Heat at New York Knicks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909327",
+    "name": "Milwaukee Bucks at Detroit Pistons",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909328",
+    "name": "Philadelphia 76ers at Indiana Pacers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909329",
+    "name": "Brooklyn Nets at Toronto Raptors",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909330",
+    "name": "Atlanta Hawks at Boston Celtics",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909331",
+    "name": "Memphis Grizzlies at Minnesota Timberwolves",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909332",
+    "name": "Dallas Mavericks at Phoenix Suns",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909333",
+    "name": "Los Angeles Lakers at San Antonio Spurs",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909334",
+    "name": "Denver Nuggets at Utah Jazz",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909335",
+    "name": "New Orleans Pelicans at LA Clippers",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401909336",
+    "name": "Golden State Warriors at Portland Trail Blazers",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]
