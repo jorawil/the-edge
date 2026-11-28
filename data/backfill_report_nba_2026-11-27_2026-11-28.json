@@ -1,0 +1,41 @@
+[
+ {
+  "sport": "nba",
+  "events_in_window": 16,
+  "selected_season_types": [
+   2
+  ],
+  "skipped_season_type": [],
+  "final": 11,
+  "already_covered": 0,
+  "added": 11,
+  "repaired": 0,
+  "missing": [
+   {
+    "id": "401910046",
+    "name": "Orlando Magic at Washington Wizards",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401910047",
+    "name": "Brooklyn Nets at Charlotte Hornets",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401910048",
+    "name": "Indiana Pacers at Chicago Bulls",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401910049",
+    "name": "Oklahoma City Thunder at Milwaukee Bucks",
+    "reason": "not final (Scheduled)"
+   },
+   {
+    "id": "401910050",
+    "name": "Philadelphia 76ers at Houston Rockets",
+    "reason": "not final (Scheduled)"
+   }
+  ]
+ }
+]

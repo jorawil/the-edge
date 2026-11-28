@@ -1,0 +1,1884 @@
+{
+  "ok": true,
+  "archive": "historical-data/forecasts/forecast_archive.sqlite",
+  "groups": [
+    {
+      "sport": "nba",
+      "market": "3PM",
+      "model_version": "rolling-mean-v1:nba:3PM:w20:walk-forward-selection-2026-11-22",
+      "n_total": 713,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 149,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.060298097335263756,
+      "fit_residual_rmse": 1.2862896998665605,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8590604026845637,
+              "mean_interval_width": 3.2971869244048992,
+              "mean_interval_score": 4.386517647923347,
+              "residual_lower": -1.7088915595377134,
+              "residual_upper": 1.5882953648671858,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9328859060402684,
+              "mean_interval_width": 4.2318936023769576,
+              "mean_interval_score": 5.385480767136189,
+              "residual_lower": -2.1762448985237426,
+              "residual_upper": 2.055648703853215,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8811188811188811,
+              "mean_interval_width": 3.2971869244048992,
+              "mean_interval_score": 4.086292465656201,
+              "residual_lower": -1.7088915595377134,
+              "residual_upper": 1.5882953648671858,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9440559440559441,
+              "mean_interval_width": 4.2318936023769576,
+              "mean_interval_score": 5.003028984171815,
+              "residual_lower": -2.1762448985237426,
+              "residual_upper": 2.055648703853215,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8523489932885906,
+              "mean_interval_width": 3.4000000000000004,
+              "mean_interval_score": 4.4,
+              "residual_lower": -1.6,
+              "residual_upper": 1.8,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9261744966442953,
+              "mean_interval_width": 4.300000000000001,
+              "mean_interval_score": 5.340268456375839,
+              "residual_lower": -1.85,
+              "residual_upper": 2.45,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8741258741258742,
+              "mean_interval_width": 3.4000000000000004,
+              "mean_interval_score": 4.123776223776224,
+              "residual_lower": -1.6,
+              "residual_upper": 1.8,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9440559440559441,
+              "mean_interval_width": 4.300000000000001,
+              "mean_interval_score": 4.92937062937063,
+              "residual_lower": -1.85,
+              "residual_upper": 2.45,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "3PM",
+      "model_version": "rolling-mean-v1:nba:3PM:w20:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 714,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 150,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.06290656698648875,
+      "fit_residual_rmse": 1.2761675339356964,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8533333333333334,
+              "mean_interval_width": 3.270859594589086,
+              "mean_interval_score": 4.292489891234038,
+              "residual_lower": -1.6983363642810319,
+              "residual_upper": 1.5725232303080543,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9333333333333333,
+              "mean_interval_width": 4.198102840382074,
+              "mean_interval_score": 5.250956998206426,
+              "residual_lower": -2.1619579871775256,
+              "residual_upper": 2.036144853204548,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8601398601398601,
+              "mean_interval_width": 3.270859594589086,
+              "mean_interval_score": 4.0639647731981166,
+              "residual_lower": -1.6983363642810319,
+              "residual_upper": 1.5725232303080543,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9370629370629371,
+              "mean_interval_width": 4.198102840382074,
+              "mean_interval_score": 5.008908003912162,
+              "residual_lower": -2.1619579871775256,
+              "residual_upper": 2.036144853204548,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8466666666666667,
+              "mean_interval_width": 3.35,
+              "mean_interval_score": 4.291764705882353,
+              "residual_lower": -1.6,
+              "residual_upper": 1.75,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9333333333333333,
+              "mean_interval_width": 4.35,
+              "mean_interval_score": 5.255490196078431,
+              "residual_lower": -1.9,
+              "residual_upper": 2.45,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8671328671328671,
+              "mean_interval_width": 3.35,
+              "mean_interval_score": 4.098251748251749,
+              "residual_lower": -1.6,
+              "residual_upper": 1.75,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9440559440559441,
+              "mean_interval_width": 4.35,
+              "mean_interval_score": 4.993356643356643,
+              "residual_lower": -1.9,
+              "residual_upper": 2.45,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "AST",
+      "model_version": "opportunity-rate-v2:nba:AST:o5:e20:k0:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 714,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 150,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.07260433498567354,
+      "fit_residual_rmse": 1.7094720558692316,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8666666666666667,
+              "mean_interval_width": 4.382807886397577,
+              "mean_interval_score": 6.606971993182462,
+              "residual_lower": -2.264008278184462,
+              "residual_upper": 2.118799608213115,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9066666666666666,
+              "mean_interval_width": 5.625273022165945,
+              "mean_interval_score": 8.694887418873588,
+              "residual_lower": -2.885240846068646,
+              "residual_upper": 2.7400321760972988,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7552447552447552,
+              "mean_interval_width": 4.382807886397577,
+              "mean_interval_score": 7.0476574287378035,
+              "residual_lower": -2.264008278184462,
+              "residual_upper": 2.118799608213115,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8811188811188811,
+              "mean_interval_width": 5.625273022165945,
+              "mean_interval_score": 8.680364445192003,
+              "residual_lower": -2.885240846068646,
+              "residual_upper": 2.7400321760972988,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7866666666666666,
+              "mean_interval_width": 3.9322672064777326,
+              "mean_interval_score": 6.564034629243778,
+              "residual_lower": -1.9869230769230768,
+              "residual_upper": 1.9453441295546559,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9133333333333333,
+              "mean_interval_width": 5.347183979974969,
+              "mean_interval_score": 8.48853541561345,
+              "residual_lower": -2.4705882352941178,
+              "residual_upper": 2.876595744680851,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7062937062937062,
+              "mean_interval_width": 3.9322672064777326,
+              "mean_interval_score": 7.22737861741849,
+              "residual_lower": -1.9869230769230768,
+              "residual_upper": 1.9453441295546559,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8251748251748252,
+              "mean_interval_width": 5.347183979974969,
+              "mean_interval_score": 9.047041585459818,
+              "residual_lower": -2.4705882352941178,
+              "residual_upper": 2.876595744680851,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "AST",
+      "model_version": "rolling-mean-v1:nba:AST:w20:walk-forward-selection-2026-11-22",
+      "n_total": 713,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 149,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.0372562799627212,
+      "fit_residual_rmse": 1.7350299491192895,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8523489932885906,
+              "mean_interval_width": 4.45132508331744,
+              "mean_interval_score": 6.434276380177167,
+              "residual_lower": -2.262918821621441,
+              "residual_upper": 2.1884062616959987,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9328859060402684,
+              "mean_interval_width": 5.713213892351914,
+              "mean_interval_score": 8.422335457196386,
+              "residual_lower": -2.893863226138678,
+              "residual_upper": 2.8193506662132357,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7762237762237763,
+              "mean_interval_width": 4.45132508331744,
+              "mean_interval_score": 7.1870560465106,
+              "residual_lower": -2.262918821621441,
+              "residual_upper": 2.1884062616959987,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8671328671328671,
+              "mean_interval_width": 5.713213892351914,
+              "mean_interval_score": 8.952752239592286,
+              "residual_lower": -2.893863226138678,
+              "residual_upper": 2.8193506662132357,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8389261744966443,
+              "mean_interval_width": 3.971428571428571,
+              "mean_interval_score": 6.259419942473634,
+              "residual_lower": -1.9,
+              "residual_upper": 2.071428571428571,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9261744966442953,
+              "mean_interval_width": 5.15,
+              "mean_interval_score": 8.156711409395974,
+              "residual_lower": -2.4000000000000004,
+              "residual_upper": 2.75,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7272727272727273,
+              "mean_interval_width": 3.971428571428571,
+              "mean_interval_score": 7.382338174645868,
+              "residual_lower": -1.9,
+              "residual_upper": 2.071428571428571,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8321678321678322,
+              "mean_interval_width": 5.15,
+              "mean_interval_score": 9.408741258741259,
+              "residual_lower": -2.4000000000000004,
+              "residual_upper": 2.75,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "PRA",
+      "model_version": "opportunity-rate-v1:nba:PRA:w10:k10:walk-forward-selection-2026-11-22",
+      "n_total": 713,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 149,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.21298532113946558,
+      "fit_residual_rmse": 7.486006834113519,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8590604026845637,
+              "mean_interval_width": 19.20245953153011,
+              "mean_interval_score": 23.76331385019247,
+              "residual_lower": -9.81421508690452,
+              "residual_upper": 9.38824444462559,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9395973154362416,
+              "mean_interval_width": 24.646089986557737,
+              "mean_interval_score": 28.921448928165187,
+              "residual_lower": -12.536030314418333,
+              "residual_upper": 12.110059672139403,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8391608391608392,
+              "mean_interval_width": 19.20245953153011,
+              "mean_interval_score": 23.580367858019102,
+              "residual_lower": -9.81421508690452,
+              "residual_upper": 9.38824444462559,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9230769230769231,
+              "mean_interval_width": 24.646089986557737,
+              "mean_interval_score": 27.300640912633824,
+              "residual_lower": -12.536030314418333,
+              "residual_upper": 12.110059672139403,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8322147651006712,
+              "mean_interval_width": 17.982395659495538,
+              "mean_interval_score": 23.486422619269348,
+              "residual_lower": -9.25514039238537,
+              "residual_upper": 8.727255267110166,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9395973154362416,
+              "mean_interval_width": 23.95429582418123,
+              "mean_interval_score": 28.285307834998154,
+              "residual_lower": -11.290647111535506,
+              "residual_upper": 12.663648712645724,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8181818181818182,
+              "mean_interval_width": 17.982395659495538,
+              "mean_interval_score": 23.419333619315495,
+              "residual_lower": -9.25514039238537,
+              "residual_upper": 8.727255267110166,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9230769230769231,
+              "mean_interval_width": 23.95429582418123,
+              "mean_interval_score": 27.254369743383247,
+              "residual_lower": -11.290647111535506,
+              "residual_upper": 12.663648712645724,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "PRA",
+      "model_version": "opportunity-rate-v2:nba:PRA:o5:e20:k5:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 714,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 150,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.6741843031455075,
+      "fit_residual_rmse": 7.4863837051904465,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8533333333333334,
+              "mean_interval_width": 19.133144613138356,
+              "mean_interval_score": 25.176182377721016,
+              "residual_lower": -10.240756609714685,
+              "residual_upper": 8.89238800342367,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9266666666666666,
+              "mean_interval_width": 24.5571252519471,
+              "mean_interval_score": 30.810331291305822,
+              "residual_lower": -12.952746929119057,
+              "residual_upper": 11.604378322828042,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8531468531468531,
+              "mean_interval_width": 19.133144613138356,
+              "mean_interval_score": 23.19262261729192,
+              "residual_lower": -10.240756609714685,
+              "residual_upper": 8.89238800342367,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9370629370629371,
+              "mean_interval_width": 24.5571252519471,
+              "mean_interval_score": 27.571850703195206,
+              "residual_lower": -12.952746929119057,
+              "residual_upper": 11.604378322828042,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 18.281431330537643,
+              "mean_interval_score": 24.958564998753605,
+              "residual_lower": -9.726822972929323,
+              "residual_upper": 8.55460835760832,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9333333333333333,
+              "mean_interval_width": 24.352625063280577,
+              "mean_interval_score": 30.34376442440047,
+              "residual_lower": -12.115324241934054,
+              "residual_upper": 12.23730082134652,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8321678321678322,
+              "mean_interval_width": 18.281431330537643,
+              "mean_interval_score": 23.012415831744555,
+              "residual_lower": -9.726822972929323,
+              "residual_upper": 8.55460835760832,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9440559440559441,
+              "mean_interval_width": 24.352625063280577,
+              "mean_interval_score": 27.449077593108775,
+              "residual_lower": -12.115324241934054,
+              "residual_upper": 12.23730082134652,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "PTS",
+      "model_version": "opportunity-rate-v1:nba:PTS:w10:k20:walk-forward-selection-2026-11-22",
+      "n_total": 713,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 149,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.22710155113422792,
+      "fit_residual_rmse": 5.710642846188781,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8322147651006712,
+              "mean_interval_width": 14.64278859614241,
+              "mean_interval_score": 19.277467679003024,
+              "residual_lower": -7.548495849205433,
+              "residual_upper": 7.0942927469369765,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.912751677852349,
+              "mean_interval_width": 18.79381569856175,
+              "mean_interval_score": 22.92776049622905,
+              "residual_lower": -9.624009400415103,
+              "residual_upper": 9.169806298146648,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8531468531468531,
+              "mean_interval_width": 14.64278859614241,
+              "mean_interval_score": 17.31415476634103,
+              "residual_lower": -7.548495849205433,
+              "residual_upper": 7.0942927469369765,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9440559440559441,
+              "mean_interval_width": 18.79381569856175,
+              "mean_interval_score": 20.556618121605307,
+              "residual_lower": -9.624009400415103,
+              "residual_upper": 9.169806298146648,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.825503355704698,
+              "mean_interval_width": 13.94365092421117,
+              "mean_interval_score": 18.957771652699414,
+              "residual_lower": -6.737747501630129,
+              "residual_upper": 7.205903422581041,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9194630872483222,
+              "mean_interval_width": 18.535132037788244,
+              "mean_interval_score": 22.486989772359106,
+              "residual_lower": -8.569651227936374,
+              "residual_upper": 9.965480809851872,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8251748251748252,
+              "mean_interval_width": 13.94365092421117,
+              "mean_interval_score": 17.168118528986287,
+              "residual_lower": -6.737747501630129,
+              "residual_upper": 7.205903422581041,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.958041958041958,
+              "mean_interval_width": 18.535132037788244,
+              "mean_interval_score": 20.086550020719052,
+              "residual_lower": -8.569651227936374,
+              "residual_upper": 9.965480809851872,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "PTS",
+      "model_version": "opportunity-rate-v2:nba:PTS:o5:e20:k5:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 714,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 150,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.49687589183593434,
+      "fit_residual_rmse": 5.737206113041788,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8266666666666667,
+              "mean_interval_width": 14.667228801491927,
+              "mean_interval_score": 20.18606646005873,
+              "residual_lower": -7.8304902925818975,
+              "residual_upper": 6.836738508910029,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9066666666666666,
+              "mean_interval_width": 18.82518436252613,
+              "mean_interval_score": 24.53748791864655,
+              "residual_lower": -9.909468073099,
+              "residual_upper": 8.915716289427131,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8391608391608392,
+              "mean_interval_width": 14.667228801491927,
+              "mean_interval_score": 17.49412116799526,
+              "residual_lower": -7.8304902925818975,
+              "residual_upper": 6.836738508910029,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9440559440559441,
+              "mean_interval_width": 18.82518436252613,
+              "mean_interval_score": 20.37952399623063,
+              "residual_lower": -9.909468073099,
+              "residual_upper": 8.915716289427131,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7933333333333333,
+              "mean_interval_width": 14.034586994496026,
+              "mean_interval_score": 20.048021744987754,
+              "residual_lower": -7.3395400687441885,
+              "residual_upper": 6.6950469257518375,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9066666666666666,
+              "mean_interval_width": 18.750409959551273,
+              "mean_interval_score": 24.091293055011725,
+              "residual_lower": -9.044812302668133,
+              "residual_upper": 9.70559765688314,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8251748251748252,
+              "mean_interval_width": 14.034586994496026,
+              "mean_interval_score": 17.40085354505352,
+              "residual_lower": -7.3395400687441885,
+              "residual_upper": 6.6950469257518375,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9300699300699301,
+              "mean_interval_width": 18.750409959551273,
+              "mean_interval_score": 20.65604167123221,
+              "residual_lower": -9.044812302668133,
+              "residual_upper": 9.70559765688314,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "REB",
+      "model_version": "opportunity-rate-v1:nba:REB:w20:k20:walk-forward-selection-2026-11-22",
+      "n_total": 713,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 149,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.057918979977028766,
+      "fit_residual_rmse": 2.409956612777238,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8053691275167785,
+              "mean_interval_width": 6.182530227789241,
+              "mean_interval_score": 9.853827299485648,
+              "residual_lower": -3.149184093871649,
+              "residual_upper": 3.0333461339175916,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8859060402684564,
+              "mean_interval_width": 7.935191639826631,
+              "mean_interval_score": 12.610090466228462,
+              "residual_lower": -4.025514799890344,
+              "residual_upper": 3.909676839936287,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8041958041958042,
+              "mean_interval_width": 6.182530227789241,
+              "mean_interval_score": 8.608209857449296,
+              "residual_lower": -3.149184093871649,
+              "residual_upper": 3.0333461339175916,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9230769230769231,
+              "mean_interval_width": 7.935191639826631,
+              "mean_interval_score": 10.64995085491744,
+              "residual_lower": -4.025514799890344,
+              "residual_upper": 3.909676839936287,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7516778523489933,
+              "mean_interval_width": 5.780777723510765,
+              "mean_interval_score": 9.858873972068613,
+              "residual_lower": -2.686002837993819,
+              "residual_upper": 3.0947748855169452,
+              "n": 149
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8523489932885906,
+              "mean_interval_width": 7.997885145948583,
+              "mean_interval_score": 12.224110090039215,
+              "residual_lower": -3.4067786250774925,
+              "residual_upper": 4.591106520871091,
+              "n": 149
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7902097902097902,
+              "mean_interval_width": 5.780777723510765,
+              "mean_interval_score": 8.581353533346798,
+              "residual_lower": -2.686002837993819,
+              "residual_upper": 3.0947748855169452,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9230769230769231,
+              "mean_interval_width": 7.997885145948583,
+              "mean_interval_score": 10.785502828543434,
+              "residual_lower": -3.4067786250774925,
+              "residual_upper": 4.591106520871091,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nba",
+      "market": "REB",
+      "model_version": "opportunity-rate-v2:nba:REB:o5:e20:k20:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 714,
+      "n_events_total": 33,
+      "n_train": 421,
+      "n_train_events": 19,
+      "n_validation": 150,
+      "n_validation_events": 7,
+      "n_test": 143,
+      "n_test_events": 7,
+      "fit_residual_mean": -0.09969152259092337,
+      "fit_residual_rmse": 2.418491761639255,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8,
+              "mean_interval_width": 6.200944159699945,
+              "mean_interval_score": 9.749838972536262,
+              "residual_lower": -3.2001636024408957,
+              "residual_upper": 3.000780557259049,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.88,
+              "mean_interval_width": 7.958825665568613,
+              "mean_interval_score": 12.342901427933665,
+              "residual_lower": -4.07910435537523,
+              "residual_upper": 3.8797213101933834,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8461538461538461,
+              "mean_interval_width": 6.200944159699945,
+              "mean_interval_score": 8.500808626983272,
+              "residual_lower": -3.2001636024408957,
+              "residual_upper": 3.000780557259049,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9230769230769231,
+              "mean_interval_width": 7.958825665568613,
+              "mean_interval_score": 10.579496930341774,
+              "residual_lower": -4.07910435537523,
+              "residual_upper": 3.8797213101933834,
+              "n": 143
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7666666666666667,
+              "mean_interval_width": 5.858524858893189,
+              "mean_interval_score": 9.733491235339676,
+              "residual_lower": -2.7390054836590485,
+              "residual_upper": 3.11951937523414,
+              "n": 150
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8733333333333333,
+              "mean_interval_width": 8.016554047630883,
+              "mean_interval_score": 11.911911278930639,
+              "residual_lower": -3.5041342807981803,
+              "residual_upper": 4.512419766832703,
+              "n": 150
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8251748251748252,
+              "mean_interval_width": 5.858524858893189,
+              "mean_interval_score": 8.449978466954422,
+              "residual_lower": -2.7390054836590485,
+              "residual_upper": 3.11951937523414,
+              "n": 143
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.916083916083916,
+              "mean_interval_width": 8.016554047630883,
+              "mean_interval_score": 10.731972618494124,
+              "residual_lower": -3.5041342807981803,
+              "residual_upper": 4.512419766832703,
+              "n": 143
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nfl",
+      "market": "PASS_YDS",
+      "model_version": "opportunity-rate-v1:nfl:PASS_YDS:w20:k20:walk-forward-selection-2026-11-22",
+      "n_total": 12,
+      "n_events_total": 6,
+      "n_train": 6,
+      "n_train_events": 3,
+      "n_validation": 2,
+      "n_validation_events": 1,
+      "n_test": 4,
+      "n_test_events": 2,
+      "fit_residual_mean": 11.622698211497598,
+      "fit_residual_rmse": 82.91402414942831,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 230.5023305416865,
+              "mean_interval_score": 723.6662069525738,
+              "residual_lower": -103.62846705934565,
+              "residual_upper": 126.87386348234084,
+              "n": 2
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 295.846538372525,
+              "mean_interval_score": 955.453252040107,
+              "residual_lower": -136.3005709747649,
+              "residual_upper": 159.5459673977601,
+              "n": 2
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.75,
+              "mean_interval_width": 230.5023305416865,
+              "mean_interval_score": 365.8879597367486,
+              "residual_lower": -103.62846705934565,
+              "residual_upper": 126.87386348234084,
+              "n": 4
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.75,
+              "mean_interval_width": 295.846538372525,
+              "mean_interval_score": 403.257277185553,
+              "residual_lower": -136.3005709747649,
+              "residual_upper": 159.5459673977601,
+              "n": 4
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 189.78881377443872,
+              "mean_interval_score": 824.1655069692972,
+              "residual_lower": -91.15751364889212,
+              "residual_upper": 98.63130012554662,
+              "n": 2
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 215.304434271836,
+              "mean_interval_score": 1436.8969926867576,
+              "residual_lower": -111.95705134880983,
+              "residual_upper": 103.34738292302615,
+              "n": 2
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 189.78881377443872,
+              "mean_interval_score": 361.5626997870962,
+              "residual_lower": -91.15751364889212,
+              "residual_upper": 98.63130012554662,
+              "n": 4
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.75,
+              "mean_interval_width": 215.304434271836,
+              "mean_interval_score": 444.43277121463933,
+              "residual_lower": -111.95705134880983,
+              "residual_upper": 103.34738292302615,
+              "n": 4
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nfl",
+      "market": "PASS_YDS",
+      "model_version": "opportunity-rate-v2:nfl:PASS_YDS:o20:e20:k20:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 12,
+      "n_events_total": 6,
+      "n_train": 6,
+      "n_train_events": 3,
+      "n_validation": 2,
+      "n_validation_events": 1,
+      "n_test": 4,
+      "n_test_events": 2,
+      "fit_residual_mean": 11.623168766851952,
+      "fit_residual_rmse": 82.9139791214637,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 230.50201580105318,
+              "mean_interval_score": 723.6773970434099,
+              "residual_lower": -103.62783913367464,
+              "residual_upper": 126.87417666737853,
+              "n": 2
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 295.84613440729555,
+              "mean_interval_score": 955.4763038607969,
+              "residual_lower": -136.29989843679581,
+              "residual_upper": 159.54623597049974,
+              "n": 2
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.75,
+              "mean_interval_width": 230.50201580105318,
+              "mean_interval_score": 365.88659360581823,
+              "residual_lower": -103.62783913367464,
+              "residual_upper": 126.87417666737853,
+              "n": 4
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.75,
+              "mean_interval_width": 295.84613440729555,
+              "mean_interval_score": 403.25499350121976,
+              "residual_lower": -136.29989843679581,
+              "residual_upper": 159.54623597049974,
+              "n": 4
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 189.78845331434178,
+              "mean_interval_score": 824.1764652936107,
+              "residual_lower": -91.15680279434571,
+              "residual_upper": 98.63165051999607,
+              "n": 2
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 215.30442428525166,
+              "mean_interval_score": 1436.9161107102689,
+              "residual_lower": -111.9563400119035,
+              "residual_upper": 103.34808427334815,
+              "n": 2
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.5,
+              "mean_interval_width": 189.78845331434178,
+              "mean_interval_score": 361.5606370433591,
+              "residual_lower": -91.15680279434571,
+              "residual_upper": 98.63165051999607,
+              "n": 4
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.75,
+              "mean_interval_width": 215.30442428525166,
+              "mean_interval_score": 444.4310755036374,
+              "residual_lower": -111.9563400119035,
+              "residual_upper": 103.34808427334815,
+              "n": 4
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nfl",
+      "market": "REC",
+      "model_version": "opportunity-rate-v1:nfl:REC:w20:k20:walk-forward-selection-2026-11-22",
+      "n_total": 91,
+      "n_events_total": 6,
+      "n_train": 48,
+      "n_train_events": 3,
+      "n_validation": 12,
+      "n_validation_events": 1,
+      "n_test": 31,
+      "n_test_events": 2,
+      "fit_residual_mean": 0.1627740912284701,
+      "fit_residual_rmse": 1.9880814621782374,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 5.132292470196452,
+              "mean_interval_score": 8.262500871665017,
+              "residual_lower": -2.4033721438697557,
+              "residual_upper": 2.7289203263266963,
+              "n": 12
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9166666666666666,
+              "mean_interval_width": 6.587226071227933,
+              "mean_interval_score": 10.695758353884466,
+              "residual_lower": -3.1308389443854963,
+              "residual_upper": 3.456387126842437,
+              "n": 12
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7096774193548387,
+              "mean_interval_width": 5.132292470196452,
+              "mean_interval_score": 7.633073846039515,
+              "residual_lower": -2.4033721438697557,
+              "residual_upper": 2.7289203263266963,
+              "n": 31
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8387096774193549,
+              "mean_interval_width": 6.587226071227933,
+              "mean_interval_score": 8.660932119721151,
+              "residual_lower": -3.1308389443854963,
+              "residual_upper": 3.456387126842437,
+              "n": 31
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 4.804048046302825,
+              "mean_interval_score": 8.207793467682746,
+              "residual_lower": -2.093520286063915,
+              "residual_upper": 2.71052776023891,
+              "n": 12
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 6.470429667747499,
+              "mean_interval_score": 10.50061780809955,
+              "residual_lower": -2.865925843956689,
+              "residual_upper": 3.604503823790811,
+              "n": 12
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.6774193548387096,
+              "mean_interval_width": 4.804048046302825,
+              "mean_interval_score": 8.127785608234529,
+              "residual_lower": -2.093520286063915,
+              "residual_upper": 2.71052776023891,
+              "n": 31
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8387096774193549,
+              "mean_interval_width": 6.470429667747499,
+              "mean_interval_score": 9.132223267703203,
+              "residual_lower": -2.865925843956689,
+              "residual_upper": 3.604503823790811,
+              "n": 31
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nfl",
+      "market": "REC",
+      "model_version": "opportunity-rate-v2:nfl:REC:o20:e20:k20:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 91,
+      "n_events_total": 6,
+      "n_train": 48,
+      "n_train_events": 3,
+      "n_validation": 12,
+      "n_validation_events": 1,
+      "n_test": 31,
+      "n_test_events": 2,
+      "fit_residual_mean": 0.16289082767576094,
+      "fit_residual_rmse": 1.988076017328208,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 5.132253470008248,
+              "mean_interval_score": 8.26250144576016,
+              "residual_lower": -2.403235907328363,
+              "residual_upper": 2.7290175626798847,
+              "n": 12
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9166666666666666,
+              "mean_interval_width": 6.587176015028289,
+              "mean_interval_score": 10.69588123754518,
+              "residual_lower": -3.130697179838384,
+              "residual_upper": 3.4564788351899054,
+              "n": 12
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.7096774193548387,
+              "mean_interval_width": 5.132253470008248,
+              "mean_interval_score": 7.473699713811309,
+              "residual_lower": -2.403235907328363,
+              "residual_upper": 2.7290175626798847,
+              "n": 31
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8387096774193549,
+              "mean_interval_width": 6.587176015028289,
+              "mean_interval_score": 8.503550914849548,
+              "residual_lower": -3.130697179838384,
+              "residual_upper": 3.4564788351899054,
+              "n": 31
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 4.804033844187023,
+              "mean_interval_score": 8.207798174789955,
+              "residual_lower": -2.0934992554315808,
+              "residual_upper": 2.710534588755442,
+              "n": 12
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 6.4704707795823,
+              "mean_interval_score": 10.500604548462702,
+              "residual_lower": -2.8658250944393178,
+              "residual_upper": 3.604645685142982,
+              "n": 12
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.6774193548387096,
+              "mean_interval_width": 4.804033844187023,
+              "mean_interval_score": 7.968121825268495,
+              "residual_lower": -2.0934992554315808,
+              "residual_upper": 2.710534588755442,
+              "n": 31
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8387096774193549,
+              "mean_interval_width": 6.4704707795823,
+              "mean_interval_score": 8.974795028850776,
+              "residual_lower": -2.8658250944393178,
+              "residual_upper": 3.604645685142982,
+              "n": 31
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nfl",
+      "market": "REC_YDS",
+      "model_version": "opportunity-rate-v1:nfl:REC_YDS:w20:k20:walk-forward-selection-2026-11-22",
+      "n_total": 89,
+      "n_events_total": 6,
+      "n_train": 46,
+      "n_train_events": 3,
+      "n_validation": 12,
+      "n_validation_events": 1,
+      "n_test": 31,
+      "n_test_events": 2,
+      "fit_residual_mean": 2.7155924437436316,
+      "fit_residual_rmse": 30.232372026324654,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 78.02824467291002,
+              "mean_interval_score": 160.33722900653686,
+              "residual_lower": -36.29852989271138,
+              "residual_upper": 41.72971478019864,
+              "n": 12
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9166666666666666,
+              "mean_interval_width": 100.1481678190235,
+              "mean_interval_score": 239.127120908256,
+              "residual_lower": -47.35849146576812,
+              "residual_upper": 52.78967635325538,
+              "n": 12
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.9032258064516129,
+              "mean_interval_width": 78.02824467291002,
+              "mean_interval_score": 85.43146236077307,
+              "residual_lower": -36.29852989271138,
+              "residual_upper": 41.72971478019864,
+              "n": 31
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.967741935483871,
+              "mean_interval_width": 100.1481678190235,
+              "mean_interval_score": 104.03738696853617,
+              "residual_lower": -47.35849146576812,
+              "residual_upper": 52.78967635325538,
+              "n": 31
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 72.47248458363578,
+              "mean_interval_score": 152.425565266051,
+              "residual_lower": -23.019063224130996,
+              "residual_upper": 49.45342135950479,
+              "n": 12
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 91.85883494499176,
+              "mean_interval_score": 219.45441237422892,
+              "residual_lower": -29.334672743752144,
+              "residual_upper": 62.52416220123961,
+              "n": 12
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.6129032258064516,
+              "mean_interval_width": 72.47248458363578,
+              "mean_interval_score": 113.32576079570795,
+              "residual_lower": -23.019063224130996,
+              "residual_upper": 49.45342135950479,
+              "n": 31
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.7741935483870968,
+              "mean_interval_width": 91.85883494499176,
+              "mean_interval_score": 131.3091086418429,
+              "residual_lower": -29.334672743752144,
+              "residual_upper": 62.52416220123961,
+              "n": 31
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nfl",
+      "market": "REC_YDS",
+      "model_version": "opportunity-rate-v2:nfl:REC_YDS:o20:e20:k20:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 89,
+      "n_events_total": 6,
+      "n_train": 46,
+      "n_train_events": 3,
+      "n_validation": 12,
+      "n_validation_events": 1,
+      "n_test": 31,
+      "n_test_events": 2,
+      "fit_residual_mean": 2.7163382572919317,
+      "fit_residual_rmse": 30.23236069104708,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 78.02804084568334,
+              "mean_interval_score": 160.33814076358152,
+              "residual_lower": -36.29768216554974,
+              "residual_upper": 41.7303586801336,
+              "n": 12
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.9166666666666666,
+              "mean_interval_width": 100.14790620961028,
+              "mean_interval_score": 239.1279922889735,
+              "residual_lower": -47.35761484751321,
+              "residual_upper": 52.79029136209707,
+              "n": 12
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.9032258064516129,
+              "mean_interval_width": 78.02804084568334,
+              "mean_interval_score": 84.09925681295547,
+              "residual_lower": -36.29768216554974,
+              "residual_upper": 41.7303586801336,
+              "n": 31
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.967741935483871,
+              "mean_interval_width": 100.14790620961028,
+              "mean_interval_score": 104.03684880606512,
+              "residual_lower": -47.35761484751321,
+              "residual_upper": 52.79029136209707,
+              "n": 31
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 72.47312049121024,
+              "mean_interval_score": 152.42571810946697,
+              "residual_lower": -23.019306078771688,
+              "residual_upper": 49.45381441243855,
+              "n": 12
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 91.8599960433489,
+              "mean_interval_score": 219.4537320262979,
+              "residual_lower": -29.334873862464043,
+              "residual_upper": 62.52512218088485,
+              "n": 12
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.6129032258064516,
+              "mean_interval_width": 72.47312049121024,
+              "mean_interval_score": 112.11553082687011,
+              "residual_lower": -23.019306078771688,
+              "residual_upper": 49.45381441243855,
+              "n": 31
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 0.7741935483870968,
+              "mean_interval_width": 91.8599960433489,
+              "mean_interval_score": 128.64059849654612,
+              "residual_lower": -29.334873862464043,
+              "residual_upper": 62.52512218088485,
+              "n": 31
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nfl",
+      "market": "RUSH_YDS",
+      "model_version": "opportunity-rate-v1:nfl:RUSH_YDS:w5:k20:walk-forward-selection-2026-11-22",
+      "n_total": 40,
+      "n_events_total": 6,
+      "n_train": 23,
+      "n_train_events": 3,
+      "n_validation": 6,
+      "n_validation_events": 1,
+      "n_test": 11,
+      "n_test_events": 2,
+      "fit_residual_mean": 5.066895863471981,
+      "fit_residual_rmse": 35.45938005303751,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 91.97506574514622,
+              "mean_interval_score": 91.97506574514621,
+              "residual_lower": -40.92063700910113,
+              "residual_upper": 51.0544287360451,
+              "n": 6
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 118.04871887126484,
+              "mean_interval_score": 118.04871887126484,
+              "residual_lower": -53.957463572160435,
+              "residual_upper": 64.0912552991044,
+              "n": 6
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 91.97506574514622,
+              "mean_interval_score": 91.97506574514622,
+              "residual_lower": -40.92063700910113,
+              "residual_upper": 51.0544287360451,
+              "n": 11
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 118.04871887126484,
+              "mean_interval_score": 118.04871887126484,
+              "residual_lower": -53.957463572160435,
+              "residual_upper": 64.0912552991044,
+              "n": 11
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 56.1481495956509,
+              "mean_interval_score": 73.47265218316927,
+              "residual_lower": -23.928282934408713,
+              "residual_upper": 32.219866661242186,
+              "n": 6
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 122.62836659503921,
+              "mean_interval_score": 122.62836659503921,
+              "residual_lower": -39.67384549019776,
+              "residual_upper": 82.95452110484145,
+              "n": 6
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.9090909090909091,
+              "mean_interval_width": 56.1481495956509,
+              "mean_interval_score": 58.763858854263965,
+              "residual_lower": -23.928282934408713,
+              "residual_upper": 32.219866661242186,
+              "n": 11
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 122.62836659503921,
+              "mean_interval_score": 122.62836659503922,
+              "residual_lower": -39.67384549019776,
+              "residual_upper": 82.95452110484145,
+              "n": 11
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    },
+    {
+      "sport": "nfl",
+      "market": "RUSH_YDS",
+      "model_version": "opportunity-rate-v2:nfl:RUSH_YDS:o5:e5:k20:walk-forward-separate-window-selection-2026-11-23",
+      "n_total": 40,
+      "n_events_total": 6,
+      "n_train": 23,
+      "n_train_events": 3,
+      "n_validation": 6,
+      "n_validation_events": 1,
+      "n_test": 11,
+      "n_test_events": 2,
+      "fit_residual_mean": 5.067825971813621,
+      "fit_residual_rmse": 35.459543599322295,
+      "minimum_sample_gate_passed": false,
+      "candidates": {
+        "normal": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 91.97514684578405,
+              "mean_interval_score": 91.97514684578407,
+              "residual_lower": -40.91974745107841,
+              "residual_upper": 51.055399394705645,
+              "n": 6
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 118.04882296280661,
+              "mean_interval_score": 118.0488229628066,
+              "residual_lower": -53.95658550958968,
+              "residual_upper": 64.09223745321692,
+              "n": 6
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 91.97514684578405,
+              "mean_interval_score": 91.97514684578405,
+              "residual_lower": -40.91974745107841,
+              "residual_upper": 51.055399394705645,
+              "n": 11
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 118.04882296280661,
+              "mean_interval_score": 118.04882296280661,
+              "residual_lower": -53.95658550958968,
+              "residual_upper": 64.09223745321692,
+              "n": 11
+            }
+          }
+        },
+        "empirical": {
+          "validation": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8333333333333334,
+              "mean_interval_width": 56.14715981074522,
+              "mean_interval_score": 73.47321303766434,
+              "residual_lower": -23.92672654048393,
+              "residual_upper": 32.22043327026129,
+              "n": 6
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 122.62765722567408,
+              "mean_interval_score": 122.6276572256741,
+              "residual_lower": -39.67242767175606,
+              "residual_upper": 82.95522955391803,
+              "n": 6
+            }
+          },
+          "test": {
+            "80": {
+              "target_coverage": 0.8,
+              "observed_coverage": 0.8181818181818182,
+              "mean_interval_width": 56.14715981074522,
+              "mean_interval_score": 68.85300627989507,
+              "residual_lower": -23.92672654048393,
+              "residual_upper": 32.22043327026129,
+              "n": 11
+            },
+            "90": {
+              "target_coverage": 0.9,
+              "observed_coverage": 1.0,
+              "mean_interval_width": 122.62765722567408,
+              "mean_interval_score": 122.62765722567407,
+              "residual_lower": -39.67242767175606,
+              "residual_upper": 82.95522955391803,
+              "n": 11
+            }
+          }
+        }
+      },
+      "promotion_status": "NOT_PROMOTED",
+      "reason": "need at least 30 fit rows and 30 validation rows across 30 events"
+    }
+  ],
+  "scored_forecasts": 7599,
+  "distribution_registry_changed": false,
+  "sigma_defaults_changed": false,
+  "qualified_promotions": 0,
+  "probability_calibration_claim": false,
+  "method": "60/20/20 chronological event split; residual intervals fit on train only; validation compares candidates; test is untouched; no automatic promotion"
+}
